@@ -1,0 +1,596 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Design System — Global Growth Industries</title>
+<meta name="description" content="Internal design system reference for the Global Growth Industries corporate site. Not part of the public navigation.">
+<meta name="robots" content="noindex, nofollow">
+
+<!-- Fonts are self-hosted; preload the two faces used above the fold -->
+<link rel="preload" href="/assets/fonts/inter-tight-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/inter-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- CSS load order is fixed across every page in this project:
+     tokens -> bootstrap -> overrides -> base -> components -> sections -> animations -> pages -->
+<link rel="stylesheet" href="/assets/css/tokens.css">
+<link rel="stylesheet" href="/assets/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/assets/css/bootstrap-overrides.css">
+<link rel="stylesheet" href="/assets/css/base.css">
+<link rel="stylesheet" href="/assets/css/components.css">
+<link rel="stylesheet" href="/assets/css/sections.css">
+<link rel="stylesheet" href="/assets/css/animations.css">
+<link rel="stylesheet" href="/assets/css/pages.css">
+
+<link rel="icon" href="/assets/icons/favicon/favicon.ico" sizes="32x32">
+<link rel="icon" href="/assets/images/logo/global-growth-mark.png" type="image/png" sizes="160x160">
+<link rel="apple-touch-icon" href="/assets/icons/favicon/icon-180.png">
+<link rel="manifest" href="/assets/icons/favicon/site.webmanifest">
+</head>
+
+<body class="page-styleguide" data-page="styleguide" data-cursor>
+
+<a class="gg-skip-link" href="#sg-main">Skip to content</a>
+
+<!-- Scroll progress bar — filled with the accent gradient -->
+<div class="gg-progress" data-progress-bar aria-hidden="true">
+  <span class="gg-progress__fill"></span>
+</div>
+
+<!-- The real site header. navbar.js renders it from nav.js + sectors.js -->
+<header class="gg-nav" data-navbar></header>
+
+<!-- ======================================================================
+     HEADER
+     ====================================================================== -->
+<header class="sg-header">
+  <div class="gg-container">
+    <img class="sg-header__logo"
+         src="/assets/images/logo/global-growth-logo-white.png"
+         alt="Global Growth Industries Private Limited"
+         width="480" height="358">
+    <p class="gg-eyebrow">Phase 1 · Core Components</p>
+    <h1>The Global Growth design system</h1>
+    <p class="gg-lead" style="max-width:60ch" data-sg="brand-line"></p>
+    <p class="sg-header__note">
+      Internal reference. Every value below is read live from
+      <code style="color:inherit;background:none;border:0;padding:0">tokens.css</code>,
+      and every component from its real template — this page cannot drift from the system.
+    </p>
+  </div>
+</header>
+
+<!-- ======================================================================
+     TABLE OF CONTENTS
+     ====================================================================== -->
+<nav class="sg-toc" aria-label="Design system sections">
+  <a href="#colour">Colour</a>
+  <a href="#type">Typography</a>
+  <a href="#spacing">Spacing</a>
+  <a href="#radii">Radii</a>
+  <a href="#shadows">Elevation</a>
+  <a href="#buttons">Buttons</a>
+  <a href="#badges">Badges</a>
+  <a href="#navigation">Navigation</a>
+  <a href="#cards">Cards</a>
+  <a href="#forms">Forms</a>
+  <a href="#chrome">Chrome</a>
+  <a href="#data">Data audit</a>
+  <a href="#sectors">Sector inventory</a>
+</nav>
+
+<main id="sg-main">
+
+  <!-- ====================================================================
+       COLOUR
+       ==================================================================== -->
+  <section class="sg-section" id="colour">
+    <div class="gg-container">
+      <p class="gg-eyebrow">01 — Colour</p>
+      <h2>Palette</h2>
+      <p class="gg-lead sg-section__intro">
+        Sampled from the client logo. Navy carries the site; green is an accent reserved for
+        arrows, underlines, active states, stat figures and primary calls to action. Contrast
+        ratios below are measured against white and graded to WCAG 2.1.
+      </p>
+      <div data-sg="colours"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       TYPOGRAPHY
+       ==================================================================== -->
+  <section class="sg-section" id="type">
+    <div class="gg-container">
+      <p class="gg-eyebrow">02 — Typography</p>
+      <h2>Type scale</h2>
+      <p class="gg-lead sg-section__intro">
+        Inter Tight for display, Inter for body and interface. Every step is fluid — resize the
+        window and the rendered sizes reported below will move with it. No heading anywhere in
+        this project uses a fixed pixel size.
+      </p>
+      <div data-sg="type"></div>
+
+      <h3 class="gg-mt-8 gg-mb-3">Eyebrow label</h3>
+      <div class="sg-demo">
+        <p class="gg-eyebrow" style="margin:0">Our Sectors</p>
+      </div>
+      <div class="sg-demo sg-demo--dark gg-dark">
+        <p class="gg-eyebrow" style="margin:0">Our Sectors</p>
+      </div>
+
+      <h3 class="gg-mt-6 gg-mb-3">Gradient text</h3>
+      <div class="sg-demo">
+        <p class="gg-h2 gg-grad-text" style="margin:0">15 Sectors</p>
+        <p class="gg-h2 gg-grad-text gg-grad-text--brand" style="margin:0">93 Divisions</p>
+      </div>
+
+      <h3 class="gg-mt-6 gg-mb-3">Section header pattern</h3>
+      <div class="sg-demo" style="display:block">
+        <div class="gg-shead" style="margin:0">
+          <p class="gg-eyebrow">Our Sectors</p>
+          <h2 class="gg-shead__title">Fifteen sectors, one operating standard</h2>
+          <p class="gg-lead">
+            Eyebrow, heading and lead. Every section on the site opens with this component, so
+            the page has a consistent entry rhythm from top to bottom.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SPACING
+       ==================================================================== -->
+  <section class="sg-section" id="spacing">
+    <div class="gg-container">
+      <p class="gg-eyebrow">03 — Spacing</p>
+      <h2>The 8-pixel scale</h2>
+      <p class="gg-lead sg-section__intro">
+        Every margin, padding and gap in the project resolves to one of these steps. Section
+        padding is fluid at <code>clamp(72px, 9vw, 140px)</code>.
+      </p>
+      <div data-sg="spacing"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       RADII
+       ==================================================================== -->
+  <section class="sg-section" id="radii">
+    <div class="gg-container">
+      <p class="gg-eyebrow">04 — Radii</p>
+      <h2>Corner radius</h2>
+      <p class="gg-lead sg-section__intro">
+        Small radii on inputs and chips, medium on cards, large on feature panels, pill on
+        buttons and badges.
+      </p>
+      <div data-sg="radii"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       ELEVATION
+       ==================================================================== -->
+  <section class="sg-section" id="shadows">
+    <div class="gg-container">
+      <p class="gg-eyebrow">05 — Elevation</p>
+      <h2>Shadows</h2>
+      <p class="gg-lead sg-section__intro">
+        Shadows are tinted with the brand navy rather than neutral black, so elevation reads as
+        part of the palette. The glow is reserved for the primary call to action on hover.
+      </p>
+      <div class="sg-shadows" data-sg="shadows"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       BUTTONS
+       ==================================================================== -->
+  <section class="sg-section" id="buttons">
+    <div class="gg-container">
+      <p class="gg-eyebrow">06 — Buttons</p>
+      <h2>Button system</h2>
+      <p class="gg-lead sg-section__intro">
+        Four variants, three sizes. Hover, active and disabled states are shown; focus is
+        keyboard-only — tab through this section to see the ring.
+      </p>
+
+      <div class="sg-demo">
+        <span class="sg-demo__label">Primary — gradient fill</span>
+        <button type="button" class="gg-btn gg-btn--primary gg-btn--lg">
+          Explore Our Sectors
+          <svg class="gg-btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </button>
+        <button type="button" class="gg-btn gg-btn--primary">Partner With Us</button>
+        <button type="button" class="gg-btn gg-btn--primary gg-btn--sm">Read more</button>
+        <button type="button" class="gg-btn gg-btn--primary" disabled>Disabled</button>
+      </div>
+
+      <div class="sg-demo">
+        <span class="sg-demo__label">Secondary — navy outline</span>
+        <button type="button" class="gg-btn gg-btn--secondary gg-btn--lg">About the Group</button>
+        <button type="button" class="gg-btn gg-btn--secondary">View Roadmap</button>
+        <button type="button" class="gg-btn gg-btn--secondary gg-btn--sm">Download profile</button>
+        <button type="button" class="gg-btn gg-btn--secondary" disabled>Disabled</button>
+      </div>
+
+      <div class="sg-demo">
+        <span class="sg-demo__label">Ghost &amp; icon</span>
+        <button type="button" class="gg-btn gg-btn--ghost">
+          All 15 sectors
+          <svg class="gg-btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </button>
+        <button type="button" class="gg-btn gg-btn--icon" aria-label="Next sector">
+          <svg class="gg-btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </button>
+        <button type="button" class="gg-btn gg-btn--icon" aria-label="Back to top">
+          <svg class="gg-btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
+        </button>
+      </div>
+
+      <div class="sg-demo sg-demo--dark gg-dark">
+        <span class="sg-demo__label">On dark</span>
+        <button type="button" class="gg-btn gg-btn--primary gg-btn--lg">Partner With Us</button>
+        <button type="button" class="gg-btn gg-btn--secondary gg-btn--lg">Contact the Group</button>
+        <button type="button" class="gg-btn gg-btn--ghost">Careers</button>
+        <button type="button" class="gg-btn gg-btn--icon" aria-label="Next">
+          <svg class="gg-btn__icon" aria-hidden="true" focusable="false"><use href="#i-arrow-right"></use></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       BADGES
+       ==================================================================== -->
+  <section class="sg-section" id="badges">
+    <div class="gg-container">
+      <p class="gg-eyebrow">07 — Badges</p>
+      <h2>Status badges</h2>
+      <p class="gg-lead sg-section__intro">
+        The planned badge is a compliance control, not decoration. It is applied automatically
+        from <code>status: 'planned'</code> in the sector data, and the same flag hides every
+        call to action on that entity.
+      </p>
+
+      <div class="sg-demo">
+        <span class="sg-demo__label">On light</span>
+        <span class="gg-badge gg-badge--active"><span class="gg-badge__dot"></span>Active</span>
+        <span class="gg-badge gg-badge--planned">Planned — subject to regulatory approval</span>
+        <span class="gg-badge gg-badge--number">07</span>
+        <span class="gg-badge gg-badge--meta">Full-time</span>
+      </div>
+
+      <div class="sg-demo sg-demo--dark gg-dark">
+        <span class="sg-demo__label">On dark</span>
+        <span class="gg-badge gg-badge--active"><span class="gg-badge__dot"></span>Active</span>
+        <span class="gg-badge gg-badge--planned">Planned — subject to regulatory approval</span>
+        <span class="gg-badge gg-badge--number">11</span>
+      </div>
+
+      <h3 class="gg-mt-6 gg-mb-3">Planned treatment applied to a surface</h3>
+      <div class="gg-card is-planned" style="max-width:420px">
+        <span class="gg-badge gg-badge--planned gg-mb-2">Planned — subject to regulatory approval</span>
+        <h4 class="gg-mt-2">Banking</h4>
+        <p class="gg-small gg-muted gg-mt-1">
+          A licensed activity under the Reserve Bank of India. Shown for transparency about the
+          group's direction; not offered, solicited or operated.
+        </p>
+        <!-- This button is present in the markup and suppressed by .is-planned —
+             it must never reach a user. -->
+        <button type="button" class="gg-btn gg-btn--primary gg-mt-3">Contact us for services</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       NAVIGATION
+       ==================================================================== -->
+  <section class="sg-section" id="navigation">
+    <div class="gg-container">
+      <p class="gg-eyebrow">08 — Navigation</p>
+      <h2>Navbar, mega-menu and drawer</h2>
+      <p class="gg-lead sg-section__intro">
+        The header at the top of this page is the real component, rendered from
+        <code>nav.js</code> and <code>sectors.js</code>. Scroll down and it solidifies to navy
+        with a blur past 80px.
+      </p>
+
+      <div class="sg-note">
+        <svg class="gg-icon" aria-hidden="true" focusable="false"><use href="#i-alert-circle"></use></svg>
+        <span>
+          <strong>To review it:</strong> hover <em>Our Sectors</em> in the header for the
+          three-column mega-menu of all 15 sectors, and <em>Divisions</em> for the 12 with
+          dedicated pages. Narrow the window below 1100px for the full-screen drawer with its
+          staggered reveal. Tab through the header to confirm the menus open on keyboard, close
+          on <kbd>Esc</kbd>, and that focus is trapped inside the open drawer.
+        </span>
+      </div>
+
+      <div class="sg-demo" style="display:block">
+        <span class="sg-demo__label">Behaviour contract</span>
+        <ul class="gg-small gg-muted" style="list-style:disc;padding-inline-start:1.2em;display:grid;gap:6px">
+          <li>Transparent over a dark hero; <code>.is-solid</code> past 80px. A page with no dark hero adds <code>.gg-nav--solid</code> to start solid.</li>
+          <li>Mega-menu opens on hover for a fine pointer, on click for touch and keyboard, and closes on <kbd>Esc</kbd> or focus leaving the item.</li>
+          <li>Planned sectors appear in the menu de-emphasised and labelled, never as a plain link.</li>
+          <li>The drawer traps focus, locks background scroll, returns focus to the toggle on close, and closes itself if the viewport widens past the desktop breakpoint.</li>
+        </ul>
+      </div>
+
+      <h3 class="gg-mt-6 gg-mb-3">Footer</h3>
+      <p class="gg-lead sg-section__intro">
+        Four columns — brand, group pages, all 12 divisions, and the contact block — with the
+        regulatory notice and bottom bar beneath. It is rendered at the foot of this page.
+      </p>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       CARDS
+       ==================================================================== -->
+  <section class="sg-section" id="cards">
+    <div class="gg-container">
+      <p class="gg-eyebrow">09 — Cards</p>
+      <h2>Card system</h2>
+      <p class="gg-lead sg-section__intro">
+        Every card below is rendered by the real template in
+        <code>assets/js/modules/cards.js</code> from the real data. The pages in later phases
+        call the same functions, so nothing here is a mock-up.
+      </p>
+      <div data-sg="cards"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       FORMS
+       ==================================================================== -->
+  <section class="sg-section" id="forms">
+    <div class="gg-container">
+      <p class="gg-eyebrow">10 — Forms</p>
+      <h2>Form controls</h2>
+      <p class="gg-lead sg-section__intro">
+        Inputs, textarea, select, file upload and checkbox, with their error and success
+        states. Validation and the <code>submitForm()</code> stub arrive in Phase 5.
+      </p>
+
+      <div class="sg-demo" style="display:block">
+        <span class="sg-demo__label">Controls</span>
+        <div style="display:grid;gap:0;max-width:620px">
+
+          <div class="gg-field">
+            <label class="gg-label" for="sg-name">Full name <span class="gg-label__req" aria-hidden="true">*</span></label>
+            <input class="gg-input" id="sg-name" type="text" placeholder="e.g. Priya Sharma" autocomplete="name">
+          </div>
+
+          <div class="gg-field" data-sg-field-error>
+            <label class="gg-label" for="sg-email">Work email <span class="gg-label__req" aria-hidden="true">*</span></label>
+            <input class="gg-input" id="sg-email" type="email" placeholder="name@company.com" autocomplete="email"
+                   value="not-an-email" aria-describedby="sg-email-error">
+            <span class="gg-error" id="sg-email-error">
+              <svg class="gg-icon gg-icon--sm" aria-hidden="true" focusable="false"><use href="#i-alert-circle"></use></svg>
+              Enter a valid email address so we can reply to you.
+            </span>
+          </div>
+
+          <div class="gg-field" data-sg-field-success>
+            <label class="gg-label" for="sg-phone">Phone</label>
+            <input class="gg-input" id="sg-phone" type="tel" value="+91 98765 43210" autocomplete="tel">
+            <span class="gg-success-msg">
+              <svg class="gg-icon gg-icon--sm" aria-hidden="true" focusable="false"><use href="#i-check-circle"></use></svg>
+              Looks good.
+            </span>
+          </div>
+
+          <div class="gg-field">
+            <label class="gg-label" for="sg-dept">Route my enquiry to</label>
+            <select class="gg-select" id="sg-dept">
+              <option>General enquiries</option>
+              <option>Business enquiries</option>
+              <option>Recruitment</option>
+              <option>Finance &amp; accounts</option>
+            </select>
+            <span class="gg-help">We route your message to the department that can actually answer it.</span>
+          </div>
+
+          <div class="gg-field">
+            <label class="gg-label" for="sg-msg">Message <span class="gg-label__req" aria-hidden="true">*</span></label>
+            <textarea class="gg-textarea" id="sg-msg" placeholder="Tell us what you need and the timeline you are working to."></textarea>
+          </div>
+
+          <div class="gg-field">
+            <span class="gg-label" id="sg-file-label">Attach your CV</span>
+            <div class="gg-file" data-sg-file>
+              <input type="file" id="sg-file" accept=".pdf,.doc,.docx" aria-labelledby="sg-file-label">
+              <span class="gg-file__box">
+                <svg class="gg-icon gg-icon--lg" aria-hidden="true" focusable="false"><use href="#i-upload"></use></svg>
+                <span class="gg-file__text">
+                  <span class="gg-file__name">Choose a file or drag it here</span>
+                  <span class="gg-file__hint">PDF or Word, up to 5 MB</span>
+                </span>
+              </span>
+            </div>
+          </div>
+
+          <div class="gg-field">
+            <label class="gg-check">
+              <input type="checkbox" checked>
+              <span class="gg-check__box">
+                <svg class="gg-icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+              </span>
+              <span class="gg-check__label">
+                I consent to Global Growth Industries contacting me about this enquiry.
+              </span>
+            </label>
+          </div>
+
+          <div class="gg-field">
+            <label class="gg-check gg-check--radio">
+              <input type="radio" name="sg-radio" checked>
+              <span class="gg-check__box">
+                <svg class="gg-icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+              </span>
+              <span class="gg-check__label">Radio variant — same control, round box</span>
+            </label>
+          </div>
+
+          <button class="gg-btn gg-btn--secondary gg-btn--sm" type="button" data-sg-validate
+                  style="justify-self:start">
+            Toggle error / success states
+          </button>
+        </div>
+      </div>
+
+      <h3 class="gg-mt-6 gg-mb-3">Form-level messages</h3>
+      <div class="sg-demo" style="display:grid;gap:var(--sp-2)">
+        <p class="gg-form-note gg-form-note--success">
+          <svg class="gg-icon" aria-hidden="true" focusable="false"><use href="#i-check-circle"></use></svg>
+          Thank you — your enquiry has reached us. Our team responds within two working days.
+        </p>
+        <p class="gg-form-note gg-form-note--error">
+          <svg class="gg-icon" aria-hidden="true" focusable="false"><use href="#i-alert-circle"></use></svg>
+          We could not send that. Please check the highlighted fields and try again.
+        </p>
+        <p class="gg-form-note gg-form-note--info">
+          <svg class="gg-icon" aria-hidden="true" focusable="false"><use href="#i-alert-circle"></use></svg>
+          Forms are not yet connected to a backend. Submissions are logged to the console.
+        </p>
+      </div>
+
+      <div class="sg-demo sg-demo--dark gg-dark" style="display:block">
+        <span class="sg-demo__label">On dark</span>
+        <div style="max-width:520px">
+          <div class="gg-field">
+            <label class="gg-label" for="sg-dark-email">Work email</label>
+            <input class="gg-input" id="sg-dark-email" type="email" placeholder="name@company.com">
+          </div>
+          <label class="gg-check">
+            <input type="checkbox">
+            <span class="gg-check__box">
+              <svg class="gg-icon" aria-hidden="true" focusable="false"><use href="#i-check"></use></svg>
+            </span>
+            <span class="gg-check__label">Subscribe to group updates</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       CHROME
+       ==================================================================== -->
+  <section class="sg-section" id="chrome">
+    <div class="gg-container">
+      <p class="gg-eyebrow">11 — Chrome</p>
+      <h2>Preloader, progress, cursor, back-to-top</h2>
+      <p class="gg-lead sg-section__intro">
+        Four pieces of site furniture. All four are removed entirely — not merely stilled — under
+        <code>prefers-reduced-motion</code>.
+      </p>
+
+      <h3 class="gg-mb-2">Preloader</h3>
+      <p class="gg-small gg-muted gg-mb-3">
+        Shown once per session and hard-capped at 1.8 seconds, with a backstop timer so a stalled
+        asset can never leave a visitor staring at an overlay. Bounded here so it can be inspected;
+        in production it is full-screen and wipes upward to reveal the hero.
+      </p>
+      <div class="sg-preloader-demo">
+        <div class="gg-preloader">
+          <div class="gg-preloader__inner">
+            <svg class="gg-preloader__mark" viewBox="0 0 64 64" aria-hidden="true">
+              <rect data-draw class="gg-pl-bar gg-pl-bar--1" x="3"  y="36" width="11" height="20" rx="3.5"/>
+              <rect data-draw class="gg-pl-bar gg-pl-bar--2" x="18" y="28" width="11" height="28" rx="3.5"/>
+              <rect data-draw class="gg-pl-bar gg-pl-bar--3" x="33" y="20" width="11" height="36" rx="3.5"/>
+              <rect data-draw class="gg-pl-bar gg-pl-bar--4" x="48" y="17" width="11" height="39" rx="3.5"/>
+              <path  data-draw class="gg-pl-head" d="M53.5 2.5 L62.6 14.2 a1.6 1.6 0 0 1 -1.26 2.58 H45.66 a1.6 1.6 0 0 1 -1.26 -2.58 Z"/>
+            </svg>
+            <span class="gg-preloader__bar"><span class="gg-preloader__fill" style="inline-size:68%"></span></span>
+            <span class="gg-preloader__count">068</span>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="gg-mt-6 gg-mb-2">Scroll progress</h3>
+      <p class="gg-small gg-muted gg-mb-3">
+        Three pixels of accent gradient, fixed to the very top of the viewport. The live one is
+        running at the top of this page — scroll and watch it fill.
+      </p>
+      <div class="sg-progress-demo"><span class="gg-progress__fill"></span></div>
+
+      <h3 class="gg-mt-6 gg-mb-2">Custom cursor</h3>
+      <p class="gg-small gg-muted gg-mb-3">
+        A dot that tracks the pointer exactly and a ring that lags behind it, scaling up over
+        interactive elements. Live on this page if you are on a desktop with a mouse; never created
+        at all on a touch device.
+      </p>
+      <div class="sg-cursor-demo">
+        <figure>
+          <span class="gg-cursor"></span>
+          <figcaption class="gg-xs gg-muted">Dot</figcaption>
+        </figure>
+        <figure>
+          <span class="gg-cursor__ring"></span>
+          <figcaption class="gg-xs gg-muted">Ring — resting</figcaption>
+        </figure>
+        <figure>
+          <span class="gg-cursor__ring is-active"></span>
+          <figcaption class="gg-xs gg-muted">Ring — over a link</figcaption>
+        </figure>
+      </div>
+
+      <h3 class="gg-mt-6 gg-mb-2">Back to top</h3>
+      <p class="gg-small gg-muted gg-mb-3">
+        Appears after 60% of a viewport height of scrolling. The live one is bottom-right of this
+        page.
+      </p>
+      <div class="sg-totop-demo">
+        <button type="button" class="gg-to-top" aria-label="Back to top (demo)">
+          <svg class="gg-icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       DATA AUDIT
+       ==================================================================== -->
+  <section class="sg-section" id="data">
+    <div class="gg-container">
+      <p class="gg-eyebrow">12 — Data</p>
+      <h2>Sector data audit</h2>
+      <p class="gg-lead sg-section__intro">
+        Computed live from <code>assets/js/data/sectors.js</code>. The integrity check validates
+        unique slugs, legal status values, a regulator on every planned entity, and a matching
+        mailbox for each of the twelve division pages.
+      </p>
+      <div data-sg="data"></div>
+    </div>
+  </section>
+
+  <!-- ====================================================================
+       SECTOR INVENTORY
+       ==================================================================== -->
+  <section class="sg-section" id="sectors">
+    <div class="gg-container">
+      <p class="gg-eyebrow">13 — Inventory</p>
+      <h2>All 15 sectors</h2>
+      <p class="gg-lead sg-section__intro">
+        Rendered from the data file, exactly as the site will render it. Green chips have a
+        dedicated division page; dashed amber chips are regulated and planned.
+      </p>
+      <div data-sg="sectors"></div>
+    </div>
+  </section>
+
+</main>
+
+<!-- The real site footer. footer.js renders it from nav.js + sectors.js + site.js -->
+<footer class="gg-footer" data-footer></footer>
+
+<button type="button" class="gg-to-top" data-to-top aria-label="Back to top">
+  <svg class="gg-icon" aria-hidden="true" focusable="false"><use href="#i-arrow-up"></use></svg>
+</button>
+
+<script type="module" src="/assets/js/main.js"></script>
+</body>
+</html>

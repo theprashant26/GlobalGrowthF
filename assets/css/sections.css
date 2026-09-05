@@ -1,0 +1,1774 @@
+/* ==========================================================================
+   GLOBAL GROWTH — SECTIONS
+   Hero, trust strip, split panel, sector grid, stats band, feature grid,
+   roadmap teaser, division marquee, careers teaser, CTA band.
+   Consumes tokens.css only. No colour literals.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. HERO
+   Dark, full-height, with a mesh of drifting blurred blobs on the brand ramp.
+   No video, no image — the background is pure CSS so it costs nothing and
+   never blocks the largest contentful paint.
+   ========================================================================== */
+.gg-hero {
+  position: relative;
+  min-block-size: 100svh;
+  display: grid;
+  align-items: center;
+  padding-block: calc(var(--gg-nav-h) + var(--sp-8)) var(--sp-12);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--gg-navy-900);
+  color: var(--gg-on-dark-mute);
+}
+
+/* --- Mesh background ------------------------------------------------------ */
+.gg-mesh {
+  position: absolute;
+  inset: -25%;
+  z-index: -2;
+  filter: blur(90px);
+  /* Kept low on purpose: navy must hold roughly 60% of the visual field, so
+     the ramp tints the background rather than becoming it. */
+  opacity: .42;
+  pointer-events: none;
+}
+.gg-mesh__blob {
+  position: absolute;
+  border-radius: 50%;
+  will-change: transform;
+}
+.gg-mesh__blob--1 {
+  inline-size: 40%; block-size: 40%;
+  inset-block-start: 6%; inset-inline-start: -6%;
+  background: var(--gg-blue-500);
+  opacity: .8;
+  animation: gg-drift-a 26s var(--gg-ease) infinite;
+}
+.gg-mesh__blob--2 {
+  inline-size: 32%; block-size: 32%;
+  inset-block-start: 34%; inset-inline-start: 30%;
+  background: var(--gg-teal-500);
+  opacity: .7;
+  animation: gg-drift-b 32s var(--gg-ease) infinite;
+}
+.gg-mesh__blob--3 {
+  inline-size: 24%; block-size: 24%;
+  inset-block-end: 10%; inset-inline-end: 12%;
+  background: var(--gg-green-500);
+  opacity: .55;
+  animation: gg-drift-a 38s var(--gg-ease) infinite reverse;
+}
+.gg-mesh__blob--4 {
+  inline-size: 62%; block-size: 62%;
+  inset-block-start: -12%; inset-inline-end: -10%;
+  background: var(--gg-navy-600);
+  animation: gg-drift-b 44s var(--gg-ease) infinite;
+}
+
+/* A fine grid over the mesh — keeps the gradient from reading as a smear and
+   gives the section an engineering-drawing texture. */
+.gg-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(to right, var(--gg-glass-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--gg-glass-border) 1px, transparent 1px);
+  background-size: 96px 96px;
+  -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 78%);
+  mask-image: radial-gradient(ellipse 90% 70% at 50% 40%, black 30%, transparent 78%);
+  opacity: .5;
+  pointer-events: none;
+}
+/* Darkens the lower half so the CTAs and scroll cue keep their contrast */
+.gg-hero::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 40%;
+  inset-inline: 0;
+  inset-block-end: 0;
+  z-index: -1;
+  background: linear-gradient(to bottom, transparent, var(--gg-scrim));
+  pointer-events: none;
+}
+
+/* --- Hero layout ---------------------------------------------------------- */
+.gg-hero__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+  align-items: center;
+}
+@media (min-width: 1100px) {
+  .gg-hero__grid { grid-template-columns: 1.15fr .85fr; gap: var(--sp-8); }
+}
+
+.gg-hero__title {
+  color: var(--gg-white);
+  margin-block-end: var(--sp-3);
+  /* Capped below --fs-hero: at four lines the full scale pushes the lead,
+     the CTAs and the proof row past the fold on a laptop. */
+  font-size: clamp(2.5rem, 5.2vw, 4.25rem);
+}
+/* The word that carries the brand gradient in the headline */
+.gg-hero__title em { font-style: normal; }
+
+.gg-hero__lead { max-inline-size: 58ch; margin-block-end: var(--sp-5); }
+
+.gg-hero__actions { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
+
+/* Small proof row beneath the CTAs */
+.gg-hero__proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2) var(--sp-4);
+  margin-block-start: var(--sp-6);
+  padding-block-start: var(--sp-4);
+  border-block-start: 1px solid var(--gg-glass-border);
+}
+.gg-hero__proof-item { display: flex; flex-direction: column; gap: 2px; }
+.gg-hero__proof-value {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h3);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--gg-white);
+  font-variant-numeric: tabular-nums;
+}
+.gg-hero__proof-label {
+  font-size: var(--fs-xs);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gg-on-dark-soft);
+}
+
+/* --- Ascending-arrow figure ----------------------------------------------- */
+.gg-hero__figure { display: none; }
+@media (min-width: 1100px) {
+  .gg-hero__figure { display: block; justify-self: center; inline-size: 100%; max-inline-size: 460px; }
+}
+.gg-ascent { inline-size: 100%; block-size: auto; overflow: visible; }
+/* Bars rise from the baseline */
+.gg-ascent__bar { transform-box: fill-box; transform-origin: bottom center; }
+/* The path draws itself on load.
+   It is fully drawn by default and only hidden once JS has booted, so a
+   failed or skipped animation can never leave the line permanently
+   invisible — the same contract as [data-reveal]. */
+.gg-ascent__path {
+  fill: none;
+  stroke: var(--gg-green-400);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+}
+.js-ready .gg-ascent__path {
+  stroke-dashoffset: 1000;
+  animation: gg-draw 2s var(--gg-ease) .4s forwards;
+}
+.gg-ascent__head { fill: var(--gg-green-400); }
+.gg-ascent__grid { stroke: var(--gg-glass-border); stroke-width: 1; }
+.gg-ascent__label {
+  font-family: var(--gg-font-body);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: .14em;
+  fill: var(--gg-on-dark-soft);
+  text-transform: uppercase;
+}
+
+/* --- Scroll cue ----------------------------------------------------------- */
+.gg-scroll-cue {
+  position: absolute;
+  inset-block-end: var(--sp-3);
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-on-dark-soft);
+}
+.gg-scroll-cue__rail {
+  position: relative;
+  inline-size: 22px;
+  block-size: 36px;
+  border: 1.5px solid var(--gg-glass-border);
+  border-radius: var(--gg-r-pill);
+  overflow: hidden;
+}
+.gg-scroll-cue__rail::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 7px;
+  inset-inline-start: 50%;
+  margin-inline-start: -2px;
+  inline-size: 4px;
+  block-size: 7px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-green-400);
+  animation: gg-scroll-cue 1.9s var(--gg-ease) infinite;
+}
+@media (max-height: 700px) { .gg-scroll-cue { display: none; } }
+
+/* ==========================================================================
+   2. TRUST STRIP
+   ========================================================================== */
+.gg-trust {
+  background: var(--gg-navy-900);
+  color: var(--gg-on-dark-mute);
+  border-block-start: 1px solid var(--gg-glass-border);
+  padding-block: var(--sp-5);
+}
+.gg-trust__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2) var(--sp-4);
+  text-align: center;
+}
+.gg-trust__item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--fs-lead);
+}
+.gg-trust__value {
+  font-family: var(--gg-font-display);
+  font-weight: 800;
+  letter-spacing: var(--ls-display);
+  color: var(--gg-white);
+  font-variant-numeric: tabular-nums;
+}
+.gg-trust__sep { color: var(--gg-green-400); }
+/* The ascending-arrow motif that closes the strip */
+.gg-trust__mark {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 3px;
+  block-size: 22px;
+}
+.gg-trust__mark span {
+  inline-size: 5px;
+  border-radius: 2px;
+  background: var(--gg-green-400);
+  transform-origin: bottom;
+}
+.gg-trust__mark span:nth-child(1) { block-size: 30%; opacity: .45; }
+.gg-trust__mark span:nth-child(2) { block-size: 55%; opacity: .65; }
+.gg-trust__mark span:nth-child(3) { block-size: 80%; opacity: .85; }
+.gg-trust__mark span:nth-child(4) { block-size: 100%; }
+
+/* ==========================================================================
+   3. SPLIT PANEL  (about preview, careers teaser)
+   ========================================================================== */
+.gg-split {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+  align-items: center;
+}
+/* Grid items default to min-width:auto, so a single long unbreakable string
+   inside one can force the whole column wider than the viewport. Note that
+   overflow-wrap: break-word does NOT prevent this — it changes where text
+   wraps, not the min-content width used to size the track. */
+.gg-split > * { min-inline-size: 0; }
+@media (min-width: 992px) {
+  .gg-split { grid-template-columns: repeat(2, 1fr); gap: var(--sp-8); }
+  /* Media first in source for reading order, visually right when reversed */
+  .gg-split--reverse .gg-split__media { order: 2; }
+}
+
+.gg-split__body { max-inline-size: 58ch; }
+
+/* --- Composed visual panel ------------------------------------------------
+   Stands in for photography. Built from the brand ramp and the ascent motif
+   so it reads as a deliberate graphic rather than a missing image. Replace
+   the inner content with a <picture> when real photography arrives. */
+.gg-visual {
+  position: relative;
+  aspect-ratio: 5 / 4;
+  border-radius: var(--gg-r-xl);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--gg-grad-dark);
+  box-shadow: var(--gg-shadow-lg);
+}
+.gg-visual__mesh { position: absolute; inset: -20%; z-index: -1; filter: blur(70px); opacity: .85; }
+.gg-visual__grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--gg-glass-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--gg-glass-border) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: .55;
+}
+.gg-visual__content {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--sp-4);
+}
+.gg-visual__mark { inline-size: 64px; block-size: 64px; }
+.gg-visual__caption {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h3);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--ls-heading);
+  color: var(--gg-white);
+  max-inline-size: 18ch;
+}
+.gg-visual__note {
+  font-size: var(--fs-xs);
+  color: var(--gg-on-dark-soft);
+  margin-block-start: var(--sp-1);
+  /* Carries {{PLACEHOLDER}} tokens with no break opportunity of their own. */
+  overflow-wrap: anywhere;
+}
+
+/* Floating stat card overlapping the visual */
+.gg-visual-stat {
+  position: absolute;
+  inset-block-end: var(--sp-3);
+  inset-inline-end: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  box-shadow: var(--gg-shadow-lg);
+  max-inline-size: 200px;
+}
+.gg-visual-stat__value {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h3);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+}
+.gg-visual-stat__label { font-size: var(--fs-xs); color: var(--gg-grey-500); margin-block-start: 2px; }
+
+/* --- Inline stat row ------------------------------------------------------ */
+.gg-stat-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--sp-3);
+  margin-block: var(--sp-5);
+  padding-block: var(--sp-3);
+  border-block: 1px solid var(--gg-line);
+}
+.gg-dark .gg-stat-row { border-block-color: var(--gg-glass-border); }
+.gg-stat-row__value {
+  display: block;
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h2);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  font-variant-numeric: tabular-nums;
+}
+.gg-stat-row__label { display: block; font-size: var(--fs-xs); color: var(--gg-grey-500); margin-block-start: 6px; }
+
+/* ==========================================================================
+   4. SECTOR GRID
+   ========================================================================== */
+.gg-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  margin-block-end: var(--sp-5);
+}
+.gg-filter__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--gg-grey-700);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-pill);
+  transition: color var(--gg-dur-fast) var(--gg-ease),
+              background var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-filter__btn:hover { border-color: var(--gg-navy-700); color: var(--gg-navy-700); }
+.gg-filter__btn[aria-pressed="true"] {
+  color: var(--gg-white);
+  background: var(--gg-grad-cta);
+  border-color: transparent;
+}
+.gg-filter__count {
+  font-size: var(--fs-xs);
+  padding: 1px 7px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-off);
+  color: var(--gg-grey-500);
+  font-variant-numeric: tabular-nums;
+}
+.gg-filter__btn[aria-pressed="true"] .gg-filter__count {
+  background: rgba(255,255,255,.22);
+  color: var(--gg-white);
+}
+
+.gg-sector-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+}
+@media (min-width: 640px)  { .gg-sector-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-sector-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* Cards filtered out are removed from layout and from the tab order */
+.gg-sector-grid > [hidden] { display: none; }
+
+.gg-grid-empty {
+  padding: var(--sp-6);
+  text-align: center;
+  color: var(--gg-grey-500);
+  border: 1px dashed var(--gg-line);
+  border-radius: var(--gg-r-md);
+}
+
+/* ==========================================================================
+   5. STATS BAND
+   ========================================================================== */
+.gg-stats-band {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.gg-stats-band__grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--sp-5) var(--sp-3);
+}
+@media (min-width: 992px) { .gg-stats-band__grid { grid-template-columns: repeat(4, 1fr); } }
+
+/* Hairline rules between figures on wide screens */
+@media (min-width: 992px) {
+  .gg-stats-band__grid > * + * {
+    padding-inline-start: var(--sp-4);
+    border-inline-start: 1px solid var(--gg-glass-border);
+  }
+}
+
+/* ==========================================================================
+   6. FEATURE GRID  (Why Global Growth)
+   ========================================================================== */
+.gg-features {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+}
+@media (min-width: 640px)  { .gg-features { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-features { grid-template-columns: repeat(3, 1fr); } }
+
+.gg-feature {
+  position: relative;
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  overflow: hidden;
+  transition: transform var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease);
+}
+/* The accent rule that grows across the top on hover */
+.gg-feature::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: 3px;
+  background: var(--gg-grad-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--gg-dur) var(--gg-ease);
+}
+.gg-feature:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--gg-shadow-md);
+  border-color: transparent;
+}
+.gg-feature:hover::before { transform: scaleX(1); }
+
+.gg-feature__icon {
+  inline-size: 48px;
+  block-size: 48px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--gg-r-md);
+  background: var(--gg-off);
+  color: var(--gg-navy-700);
+  margin-block-end: var(--sp-3);
+}
+.gg-feature__icon .gg-icon { inline-size: 24px; block-size: 24px; }
+.gg-feature__title { font-size: var(--fs-h4); margin-block-end: var(--sp-1); }
+.gg-feature__text { font-size: var(--fs-sm); color: var(--gg-grey-500); }
+
+/* ==========================================================================
+   7. ROADMAP TEASER
+   ========================================================================== */
+.gg-phases {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+}
+@media (min-width: 900px) { .gg-phases { grid-template-columns: repeat(3, 1fr); } }
+
+.gg-phase {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  transition: transform var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease),
+              background var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-phase:hover {
+  transform: translateY(-4px);
+  border-color: var(--gg-green-400);
+  background: var(--gg-glass-hover);
+}
+.gg-phase__num {
+  font-family: var(--gg-font-display);
+  font-size: 2.5rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  color: var(--gg-green-400);
+  font-variant-numeric: tabular-nums;
+}
+.gg-phase__name { color: var(--gg-white); font-size: var(--fs-h3); }
+.gg-phase__text { font-size: var(--fs-sm); color: var(--gg-on-dark-mute); }
+.gg-phase__focus { display: flex; flex-wrap: wrap; gap: 6px; margin-block-start: auto; padding-block-start: var(--sp-2); }
+.gg-phase__chip {
+  font-size: var(--fs-xs);
+  padding: 3px 9px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  color: var(--gg-on-dark-mute);
+}
+/* The connecting rail between phases on wide screens */
+@media (min-width: 900px) {
+  .gg-phases > * + *::after {
+    content: "";
+    position: absolute;
+    inset-block-start: calc(var(--sp-4) + 20px);
+    inset-inline-start: calc(var(--sp-3) * -1);
+    inline-size: var(--sp-3);
+    block-size: 1px;
+    background: var(--gg-glass-border);
+  }
+}
+
+/* ==========================================================================
+   8. DIVISION MARQUEE
+   ========================================================================== */
+.gg-marquee {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--sp-4);
+  border-block: 1px solid var(--gg-line);
+  background: var(--gg-white);
+  /* Fades the ends so items enter and leave rather than being cut */
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+.gg-dark .gg-marquee,
+.gg-marquee--dark { background: transparent; border-block-color: var(--gg-glass-border); }
+
+.gg-marquee__track {
+  display: flex;
+  align-items: center;
+  inline-size: max-content;
+  gap: var(--sp-5);
+  animation: gg-marquee var(--gg-marquee-dur, 44s) linear infinite;
+  will-change: transform;
+}
+.gg-marquee:hover .gg-marquee__track { animation-play-state: paused; }
+
+.gg-marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--gg-font-display);
+  font-size: clamp(1.25rem, 2.4vw, 1.9rem);
+  font-weight: 700;
+  letter-spacing: var(--ls-heading);
+  color: var(--gg-ink);
+  white-space: nowrap;
+  transition: color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-marquee__item:hover { color: var(--gg-green-700); }
+.gg-marquee__item .gg-icon { color: var(--gg-green-500); inline-size: 18px; block-size: 18px; }
+.gg-marquee--dark .gg-marquee__item { color: var(--gg-on-dark); }
+.gg-marquee--dark .gg-marquee__item:hover { color: var(--gg-green-300); }
+
+/* ==========================================================================
+   9. CTA BAND
+   ========================================================================== */
+.gg-cta {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  text-align: center;
+}
+.gg-cta__mesh { position: absolute; inset: -30%; z-index: -1; filter: blur(80px); opacity: .7; }
+.gg-cta__inner { max-inline-size: 760px; margin-inline: auto; }
+.gg-cta__title { color: var(--gg-white); margin-block-end: var(--sp-3); }
+.gg-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-5);
+}
+.gg-cta__note {
+  margin-block-start: var(--sp-4);
+  font-size: var(--fs-xs);
+  color: var(--gg-on-dark-soft);
+}
+
+/* ==========================================================================
+   10. CAREERS TEASER
+   ========================================================================== */
+.gg-careers-list { display: grid; gap: var(--sp-1); margin-block: var(--sp-4); }
+.gg-careers-row {
+  position: relative;
+  /* Grid rather than flex: title and meta stack the same way on every row
+     regardless of how long the job title is, so the list reads as a column
+     instead of wrapping unevenly. */
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 2px var(--sp-2);
+  padding: var(--sp-2) 0;
+  border-block-end: 1px solid var(--gg-line);
+  transition: padding-inline-start var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-careers-row__title { grid-column: 1; grid-row: 1; }
+.gg-careers-row__meta  { grid-column: 1; grid-row: 2; }
+.gg-careers-row__arrow { grid-column: 2; grid-row: 1 / span 2; }
+.gg-careers-row:hover { padding-inline-start: 8px; }
+.gg-careers-row__title { font-family: var(--gg-font-display); font-weight: 600; font-size: var(--fs-h4); color: var(--gg-ink); }
+.gg-careers-row__meta { font-size: var(--fs-xs); color: var(--gg-grey-500); }
+.gg-careers-row__arrow { color: var(--gg-grey-500); transition: transform var(--gg-dur-fast) var(--gg-ease), color var(--gg-dur-fast) var(--gg-ease); }
+.gg-careers-row:hover .gg-careers-row__arrow { transform: translateX(4px); color: var(--gg-green-700); }
+.gg-careers-row__link::after { content: ""; position: absolute; inset: 0; }
+
+/* ==========================================================================
+   11. SECTION EYEBROW NUMBER
+   A quiet index in the corner of major sections, on the engineering-drawing
+   logic of the hero grid.
+   ========================================================================== */
+.gg-section-index {
+  position: absolute;
+  inset-block-start: var(--sp-4);
+  inset-inline-end: var(--gg-gutter);
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .18em;
+  color: var(--gg-line);
+  font-variant-numeric: tabular-nums;
+}
+.gg-dark .gg-section-index { color: var(--gg-on-dark-soft); opacity: .5; }
+@media (max-width: 767px) { .gg-section-index { display: none; } }
+
+/* ==========================================================================
+   12. PAGE HERO
+   The compact dark header used by every page except the homepage.
+   ========================================================================== */
+.gg-page-hero {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--gg-navy-900);
+  color: var(--gg-on-dark-mute);
+  padding-block: calc(var(--gg-nav-h) + var(--sp-8)) var(--sp-9);
+}
+.gg-page-hero__mesh { position: absolute; inset: -30%; z-index: -2; filter: blur(90px); opacity: .38; }
+.gg-page-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(to right, var(--gg-glass-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--gg-glass-border) 1px, transparent 1px);
+  background-size: 96px 96px;
+  -webkit-mask-image: radial-gradient(ellipse 80% 90% at 30% 40%, black 20%, transparent 76%);
+  mask-image: radial-gradient(ellipse 80% 90% at 30% 40%, black 20%, transparent 76%);
+  opacity: .5;
+}
+.gg-page-hero__inner { max-inline-size: 900px; }
+.gg-page-hero__title { color: var(--gg-white); margin-block-end: var(--sp-3); }
+.gg-page-hero__lead { max-inline-size: 62ch; }
+
+/* Breadcrumb */
+.gg-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-block-end: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--gg-on-dark-soft);
+}
+.gg-crumbs a:hover { color: var(--gg-white); }
+.gg-crumbs .gg-icon { inline-size: 13px; block-size: 13px; }
+.gg-crumbs [aria-current="page"] { color: var(--gg-green-300); }
+
+/* ==========================================================================
+   13. VALUES GRID
+   ========================================================================== */
+.gg-values {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+}
+@media (min-width: 640px)  { .gg-values { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-values { grid-template-columns: repeat(3, 1fr); } }
+
+.gg-value {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-block-start: 3px solid var(--gg-green-500);
+}
+.gg-value__icon { color: var(--gg-green-700); margin-block-end: var(--sp-1); }
+.gg-value__icon .gg-icon { inline-size: 26px; block-size: 26px; }
+.gg-value__title { font-size: var(--fs-h4); }
+.gg-value__text { font-size: var(--fs-sm); color: var(--gg-grey-500); }
+
+/* ==========================================================================
+   14. VISION / MISSION PAIR
+   ========================================================================== */
+.gg-vm { display: grid; grid-template-columns: 1fr; gap: var(--sp-3); }
+@media (min-width: 900px) { .gg-vm { grid-template-columns: repeat(2, 1fr); } }
+
+.gg-vm__card {
+  position: relative;
+  padding: var(--sp-5);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+.gg-vm__card::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  inline-size: 3px;
+  block-size: 100%;
+  background: var(--gg-grad-accent);
+}
+.gg-vm__label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-green-300);
+  margin-block-end: var(--sp-2);
+}
+.gg-vm__statement {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: var(--ls-heading);
+  color: var(--gg-white);
+  margin-block-end: var(--sp-2);
+}
+.gg-vm__detail { font-size: var(--fs-sm); color: var(--gg-on-dark-mute); }
+
+/* ==========================================================================
+   15. ORG TREE
+   The group structure. Built on <details> so expand and collapse work with
+   the keyboard and without JavaScript.
+   ========================================================================== */
+.gg-tree { position: relative; }
+
+.gg-tree__root {
+  position: relative;
+  max-inline-size: 420px;
+  margin-inline: auto;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-grad-cta);
+  color: var(--gg-white);
+  text-align: center;
+  box-shadow: var(--gg-shadow-md);
+}
+.gg-tree__root strong { display: block; font-family: var(--gg-font-display); font-size: var(--fs-h3); font-weight: 700; }
+.gg-tree__root span { font-size: var(--fs-xs); opacity: .82; }
+
+/* The stem dropping from the root into the sector grid */
+.gg-tree__stem {
+  inline-size: 2px;
+  block-size: var(--sp-5);
+  margin-inline: auto;
+  background: linear-gradient(to bottom, var(--gg-green-500), var(--gg-line));
+}
+
+.gg-tree__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-2);
+  /* Each node sizes to its own content. Without this, expanding one sector
+     stretches every other card in its row to match. */
+  align-items: start;
+}
+@media (min-width: 700px)  { .gg-tree__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-tree__grid { grid-template-columns: repeat(3, 1fr); } }
+
+.gg-node {
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  overflow: hidden;
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-node[open] { border-color: var(--gg-green-500); box-shadow: var(--gg-shadow-sm); }
+.gg-node.is-planned { opacity: .8; }
+
+.gg-node__head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: var(--sp-2) var(--sp-3);
+  cursor: pointer;
+  list-style: none;
+  font-weight: 600;
+  color: var(--gg-ink);
+}
+/* Hide the native disclosure triangle in every engine */
+.gg-node__head::-webkit-details-marker { display: none; }
+.gg-node__head::marker { content: ""; }
+
+.gg-node__icon {
+  inline-size: 34px; block-size: 34px; flex: none;
+  display: grid; place-items: center;
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-off);
+  color: var(--gg-navy-700);
+}
+.gg-node__name { font-size: var(--fs-sm); line-height: 1.3; }
+.gg-node__count {
+  margin-inline-start: auto;
+  font-size: var(--fs-xs);
+  color: var(--gg-grey-500);
+  font-variant-numeric: tabular-nums;
+}
+.gg-node__chev { color: var(--gg-grey-500); transition: transform var(--gg-dur-fast) var(--gg-ease); }
+.gg-node[open] .gg-node__chev { transform: rotate(180deg); }
+
+.gg-node__body { padding: 0 var(--sp-3) var(--sp-3); }
+.gg-node__list { display: grid; gap: 2px; }
+.gg-node__item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-700);
+  border-block-start: 1px solid var(--gg-line);
+}
+.gg-node__item .gg-icon { inline-size: 13px; block-size: 13px; color: var(--gg-green-500); }
+/* A division with its own page reads as a link; one without stays plain text,
+   so the two are not visually indistinguishable. */
+.gg-node__item a { color: var(--gg-ink); font-weight: 500; text-decoration: underline; text-decoration-color: var(--gg-line); text-underline-offset: 3px; }
+.gg-node__item a:hover { color: var(--gg-green-700); text-decoration-color: currentColor; }
+.gg-node__item .gg-badge { margin-inline-start: auto; }
+.gg-node__item.is-planned { color: var(--gg-grey-500); }
+
+/* ==========================================================================
+   16. MILESTONES
+   ========================================================================== */
+.gg-milestones { position: relative; display: grid; gap: var(--sp-4); }
+.gg-milestones::before {
+  content: "";
+  position: absolute;
+  inset-block: 8px;
+  inset-inline-start: 7px;
+  inline-size: 2px;
+  background: var(--gg-line);
+}
+.gg-milestone { position: relative; padding-inline-start: var(--sp-5); }
+.gg-milestone::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-start: 0;
+  inline-size: 16px;
+  block-size: 16px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-white);
+  border: 3px solid var(--gg-green-500);
+}
+.gg-milestone__year {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--gg-green-700);
+  /* Placeholder tokens have no break opportunity at all, so break-word is not
+     enough — they need permission to break mid-token. */
+  overflow-wrap: anywhere;
+}
+.gg-milestone__title { font-size: var(--fs-h4); margin-block: 4px 6px; }
+.gg-milestone__text { font-size: var(--fs-sm); color: var(--gg-grey-500); max-inline-size: 62ch; }
+
+/* ==========================================================================
+   17. SECTORS PAGE — sticky sidebar + detail blocks
+   ========================================================================== */
+.gg-sectors-layout { display: grid; grid-template-columns: 1fr; gap: var(--sp-6); }
+@media (min-width: 1100px) {
+  .gg-sectors-layout { grid-template-columns: 264px 1fr; gap: var(--sp-8); align-items: start; }
+}
+
+.gg-sector-nav { display: none; }
+@media (min-width: 1100px) {
+  .gg-sector-nav {
+    display: block;
+    position: sticky;
+    inset-block-start: calc(var(--gg-nav-h-sm) + var(--sp-3));
+    max-block-size: calc(100svh - var(--gg-nav-h-sm) - var(--sp-6));
+    overflow-y: auto;
+    padding-inline-end: var(--sp-1);
+    scrollbar-width: thin;
+  }
+}
+.gg-sector-nav__title {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-grey-500);
+  margin-block-end: var(--sp-2);
+}
+.gg-sector-nav__list { display: grid; gap: 1px; }
+.gg-sector-nav__link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: var(--gg-r-sm);
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-700);
+  border-inline-start: 2px solid transparent;
+  transition: background var(--gg-dur-fast) var(--gg-ease),
+              color var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-sector-nav__link:hover { background: var(--gg-off); color: var(--gg-navy-700); }
+.gg-sector-nav__link.is-current {
+  background: var(--gg-success-soft);
+  border-inline-start-color: var(--gg-green-500);
+  color: var(--gg-green-700);
+  font-weight: 600;
+}
+.gg-sector-nav__num { font-size: var(--fs-xs); color: var(--gg-grey-500); font-variant-numeric: tabular-nums; }
+.gg-sector-nav__link.is-current .gg-sector-nav__num { color: var(--gg-green-700); }
+
+/* --- Detail block --------------------------------------------------------- */
+.gg-sector-detail {
+  padding-block: var(--sp-6);
+  border-block-start: 1px solid var(--gg-line);
+  scroll-margin-block-start: calc(var(--gg-nav-h-sm) + var(--sp-3));
+}
+.gg-sector-detail:first-child { border-block-start: 0; padding-block-start: 0; }
+.gg-sector-detail.is-planned { opacity: .78; }
+
+.gg-sector-detail__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-2);
+}
+.gg-sector-detail__icon {
+  inline-size: 52px; block-size: 52px; flex: none;
+  display: grid; place-items: center;
+  border-radius: var(--gg-r-md);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  color: var(--gg-navy-700);
+}
+.gg-sector-detail__icon .gg-icon { inline-size: 26px; block-size: 26px; }
+.gg-sector-detail__num {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--gg-grey-500);
+  font-variant-numeric: tabular-nums;
+}
+.gg-sector-detail__title { font-size: var(--fs-h2); }
+.gg-sector-detail__intro { max-inline-size: 72ch; margin-block-end: var(--sp-3); }
+
+.gg-division-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-1);
+  margin-block-start: var(--sp-3);
+}
+@media (min-width: 700px) { .gg-division-list { grid-template-columns: repeat(2, 1fr); } }
+
+.gg-division-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px var(--sp-2);
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  font-size: var(--fs-sm);
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              background var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-division-item:hover { border-color: var(--gg-green-500); background: var(--gg-off); }
+.gg-division-item__name { font-weight: 500; color: var(--gg-ink); }
+.gg-division-item__link::after { content: ""; position: absolute; inset: 0; }
+.gg-division-item .gg-icon { color: var(--gg-green-500); flex: none; }
+.gg-division-item__tail { margin-inline-start: auto; display: flex; align-items: center; gap: 8px; }
+.gg-division-item.is-planned { background: var(--gg-planned-soft); border-color: rgba(161,98,7,.24); }
+.gg-division-item.is-planned:hover { border-color: rgba(161,98,7,.4); background: var(--gg-planned-soft); }
+.gg-division-item.is-planned .gg-icon { color: var(--gg-planned); }
+.gg-division-item__page {
+  /* inline-flex, not a plain span: the base reset makes every <svg> a block
+     element, which would drop the trailing arrow onto its own line. */
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--gg-green-700);
+  white-space: nowrap;
+}
+
+/* Regulatory footnote block */
+.gg-reg-note {
+  margin-block-start: var(--sp-6);
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-planned-soft);
+  border: 1px solid rgba(161,98,7,.24);
+  border-inline-start: 3px solid var(--gg-planned);
+}
+.gg-reg-note h3 { font-size: var(--fs-h4); color: var(--gg-planned); margin-block-end: var(--sp-1); }
+.gg-reg-note p { font-size: var(--fs-sm); color: var(--gg-grey-700); max-inline-size: 90ch; }
+.gg-reg-note__list { display: flex; flex-wrap: wrap; gap: 6px; margin-block-start: var(--sp-2); }
+
+/* ==========================================================================
+   18. ROADMAP TIMELINE
+   A vertical rail whose fill is driven by scroll position. animations.js sets
+   --gg-timeline-progress; the rail is fully filled by default so a failure
+   leaves a complete line rather than an empty one.
+   ========================================================================== */
+.gg-timeline { position: relative; display: grid; gap: var(--sp-8); }
+
+.gg-timeline__rail {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 19px;
+  inline-size: 2px;
+  background: var(--gg-glass-border);
+}
+.gg-timeline__fill {
+  display: block;
+  inline-size: 100%;
+  block-size: 100%;
+  transform-origin: top center;
+  transform: scaleY(var(--gg-timeline-progress, 1));
+  background: linear-gradient(to bottom, var(--gg-blue-500), var(--gg-teal-500), var(--gg-green-400));
+}
+@media (min-width: 900px) {
+  .gg-timeline__rail { inset-inline-start: 50%; margin-inline-start: -1px; }
+}
+
+.gg-tl-item { position: relative; padding-inline-start: var(--sp-7); }
+@media (min-width: 900px) {
+  .gg-tl-item { inline-size: calc(50% - var(--sp-5)); padding-inline-start: 0; }
+  .gg-tl-item:nth-child(odd)  { justify-self: start; text-align: end; }
+  .gg-tl-item:nth-child(even) { justify-self: end; }
+}
+
+/* The node on the rail */
+.gg-tl-item__node {
+  position: absolute;
+  inset-block-start: 6px;
+  inset-inline-start: 8px;
+  inline-size: 24px; block-size: 24px;
+  display: grid; place-items: center;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-navy-900);
+  border: 2px solid var(--gg-green-400);
+  color: var(--gg-green-300);
+  font-size: 10px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  z-index: var(--z-base);
+}
+@media (min-width: 900px) {
+  .gg-tl-item:nth-child(odd) .gg-tl-item__node  { inset-inline-start: auto; inset-inline-end: calc(var(--sp-5) * -1 - 12px); }
+  .gg-tl-item:nth-child(even) .gg-tl-item__node { inset-inline-start: calc(var(--sp-5) * -1 - 12px); }
+}
+
+.gg-tl-card {
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.gg-tl-card__label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-green-300);
+}
+.gg-tl-card__title { color: var(--gg-white); font-size: var(--fs-h2); margin-block: 6px var(--sp-2); }
+.gg-tl-card__text { font-size: var(--fs-sm); color: var(--gg-on-dark-mute); }
+.gg-tl-card__focus { display: flex; flex-wrap: wrap; gap: 6px; margin-block-start: var(--sp-3); }
+.gg-tl-item:nth-child(odd) .gg-tl-card__focus { justify-content: flex-end; }
+@media (max-width: 899px) {
+  .gg-tl-item:nth-child(odd) .gg-tl-card__focus { justify-content: flex-start; }
+}
+
+/* ==========================================================================
+   19. DIVISION PAGES
+   One skeleton for all twelve. The only variation is the sector icon and an
+   accent tint taken from the existing brand ramp — set as --gg-accent on the
+   page root by divisionPage.js. No division gets a colour scheme of its own.
+   ========================================================================== */
+.page-division { --gg-accent: var(--gg-teal-500); }
+
+/* --- Hero ----------------------------------------------------------------- */
+.gg-div-hero { position: relative; }
+.gg-div-hero__mark {
+  inline-size: 72px;
+  block-size: 72px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  color: var(--gg-accent);
+  margin-block-end: var(--sp-3);
+}
+.gg-div-hero__mark .gg-icon { inline-size: 36px; block-size: 36px; }
+
+/* The accent shows only as a thin rule under the hero — never as a fill */
+.gg-div-hero::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  block-size: 3px;
+  background: linear-gradient(90deg, var(--gg-accent), transparent 70%);
+}
+
+.gg-div-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1) var(--sp-3);
+  margin-block-start: var(--sp-5);
+  padding-block-start: var(--sp-4);
+  border-block-start: 1px solid var(--gg-glass-border);
+  font-size: var(--fs-sm);
+}
+.gg-div-hero__meta dt {
+  font-size: var(--fs-xs);
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gg-on-dark-soft);
+  font-weight: 600;
+}
+.gg-div-hero__meta dd { margin: 2px 0 0; color: var(--gg-white); font-weight: 500; }
+.gg-div-hero__meta > div { min-inline-size: 140px; }
+
+/* --- Capability grid ------------------------------------------------------ */
+.gg-caps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+}
+@media (min-width: 640px)  { .gg-caps { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-caps { grid-template-columns: repeat(3, 1fr); } }
+
+.gg-cap {
+  position: relative;
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  transition: transform var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-cap:hover { transform: translateY(-3px); box-shadow: var(--gg-shadow-md); border-color: var(--gg-accent); }
+.gg-cap__num {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .12em;
+  color: var(--gg-accent);
+  font-variant-numeric: tabular-nums;
+}
+.gg-cap__title { font-size: var(--fs-h4); margin-block: 6px var(--sp-1); }
+.gg-cap__text { font-size: var(--fs-sm); color: var(--gg-grey-500); }
+
+/* --- Service list --------------------------------------------------------- */
+.gg-services {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2px var(--sp-4);
+}
+@media (min-width: 640px)  { .gg-services { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-services { grid-template-columns: repeat(2, 1fr); } }
+
+.gg-service {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 0;
+  border-block-end: 1px solid var(--gg-line);
+  font-size: var(--fs-body);
+  color: var(--gg-grey-700);
+}
+.gg-service .gg-icon { color: var(--gg-accent); flex: none; }
+.gg-dark .gg-service { border-block-end-color: var(--gg-glass-border); color: var(--gg-on-dark-mute); }
+
+/* --- Process steps -------------------------------------------------------- */
+.gg-steps {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-4);
+  counter-reset: gg-step;
+}
+@media (min-width: 900px) { .gg-steps { grid-template-columns: repeat(4, 1fr); gap: var(--sp-3); } }
+
+.gg-step { position: relative; padding-block-start: var(--sp-4); }
+.gg-step::before {
+  counter-increment: gg-step;
+  content: counter(gg-step, decimal-leading-zero);
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h3);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--gg-accent);
+  font-variant-numeric: tabular-nums;
+}
+/* The rule connecting one step to the next */
+.gg-step::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 10px;
+  inset-inline-start: 44px;
+  inline-size: calc(100% - 44px);
+  block-size: 1px;
+  background: var(--gg-glass-border);
+}
+.gg-step:last-child::after { display: none; }
+@media (max-width: 899px) { .gg-step::after { display: none; } }
+
+.gg-step__title { color: var(--gg-white); font-size: var(--fs-h4); margin-block: var(--sp-2) 6px; }
+.gg-step__text { font-size: var(--fs-sm); color: var(--gg-on-dark-mute); }
+
+/* --- Related divisions rail ----------------------------------------------- */
+.gg-related {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 1fr);
+  gap: var(--sp-2);
+  overflow-x: auto;
+  padding-block-end: var(--sp-2);
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  /* Bleeds to the viewport edge on mobile so the rail reads as scrollable */
+  margin-inline: calc(var(--gg-gutter) * -1);
+  padding-inline: var(--gg-gutter);
+}
+.gg-related > * { scroll-snap-align: start; }
+@media (min-width: 1100px) {
+  .gg-related {
+    grid-auto-flow: row;
+    grid-template-columns: repeat(4, 1fr);
+    overflow: visible;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+}
+
+/* --- Division contact strip ----------------------------------------------- */
+.gg-div-contact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+  align-items: center;
+  padding: var(--sp-5);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-inline-start: 3px solid var(--gg-accent);
+}
+@media (min-width: 900px) { .gg-div-contact { grid-template-columns: 1.4fr 1fr; gap: var(--sp-6); } }
+
+.gg-div-contact__title { color: var(--gg-white); font-size: var(--fs-h3); margin-block-end: var(--sp-1); }
+.gg-div-contact__text { font-size: var(--fs-sm); color: var(--gg-on-dark-mute); max-inline-size: 56ch; }
+.gg-div-contact__actions { display: grid; gap: var(--sp-2); }
+.gg-div-contact__mail {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  font-size: var(--fs-sm);
+  color: var(--gg-white);
+  word-break: break-all;
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              background var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-div-contact__mail:hover { border-color: var(--gg-accent); background: var(--gg-glass-hover); }
+.gg-div-contact__mail .gg-icon { color: var(--gg-accent); flex: none; }
+
+/* ==========================================================================
+   20. CAREERS
+   ========================================================================== */
+.gg-job-filters {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  margin-block-end: var(--sp-3);
+}
+@media (min-width: 700px) { .gg-job-filters { grid-template-columns: repeat(3, 1fr); } }
+.gg-job-filters .gg-label { margin-block-end: 4px; display: block; }
+
+.gg-jobs { display: grid; gap: var(--sp-2); }
+.gg-jobs > [hidden] { display: none; }
+
+.gg-jobs-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-block-end: var(--sp-2);
+}
+.gg-jobs-count { font-size: var(--fs-sm); font-weight: 600; color: var(--gg-grey-500); }
+
+/* Expandable role detail, on <details> so it works without JavaScript */
+.gg-job-details { margin-block-start: var(--sp-1); border-block-start: 1px solid var(--gg-line); }
+.gg-job-details__toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-block: var(--sp-2);
+  cursor: pointer;
+  list-style: none;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--gg-green-700);
+}
+.gg-job-details__toggle::-webkit-details-marker { display: none; }
+.gg-job-details__toggle::marker { content: ""; }
+.gg-job-details__toggle .gg-icon { transition: transform var(--gg-dur-fast) var(--gg-ease); }
+.gg-job-details[open] .gg-job-details__toggle .gg-icon { transform: rotate(180deg); }
+.gg-job-details__body { padding-block-end: var(--sp-3); }
+
+.gg-bullets { display: grid; gap: 8px; margin-block-start: var(--sp-1); padding-inline-start: 0; }
+.gg-bullets li {
+  position: relative;
+  padding-inline-start: var(--sp-3);
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-500);
+  list-style: none;
+}
+.gg-bullets li::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 9px;
+  inset-inline-start: 4px;
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-green-500);
+}
+.gg-dark .gg-bullets li { color: var(--gg-on-dark-mute); }
+
+/* ==========================================================================
+   21. FORM LAYOUT
+   ========================================================================== */
+.gg-form {
+  padding: var(--sp-5);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  box-shadow: var(--gg-shadow-sm);
+}
+.gg-dark .gg-form {
+  background: var(--gg-glass-bg);
+  border-color: var(--gg-glass-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: none;
+}
+.gg-form-grid { display: grid; grid-template-columns: 1fr; gap: 0 var(--sp-3); }
+@media (min-width: 700px) {
+  .gg-form-grid { grid-template-columns: repeat(2, 1fr); }
+  .gg-form-grid .gg-field--full { grid-column: 1 / -1; }
+}
+.gg-form__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-2);
+}
+.gg-form__foot .gg-help { flex: 1 1 220px; }
+
+/* The routing target line under the department dropdown */
+.gg-routing-target {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-block-start: 6px;
+  padding: 8px 12px;
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-success-soft);
+  border: 1px solid rgba(76,168,63,.24);
+  font-size: var(--fs-xs);
+  color: var(--gg-green-700);
+}
+.gg-routing-target .gg-icon { color: var(--gg-green-700); flex: none; }
+.gg-routing-target[hidden] { display: none; }
+.gg-dark .gg-routing-target {
+  background: rgba(76,168,63,.14);
+  border-color: rgba(143,212,106,.28);
+  color: var(--gg-green-300);
+}
+.gg-dark .gg-routing-target .gg-icon { color: var(--gg-green-300); }
+
+/* ==========================================================================
+   22. CONTACT — directory table, mailboxes, office, map
+   ========================================================================== */
+.gg-table-wrap { overflow-x: auto; border-radius: var(--gg-r-md); border: 1px solid var(--gg-line); }
+.gg-table { inline-size: 100%; min-inline-size: 640px; border-collapse: collapse; background: var(--gg-white); }
+.gg-table th, .gg-table td {
+  padding: var(--sp-2) var(--sp-3);
+  text-align: start;
+  border-block-end: 1px solid var(--gg-line);
+  font-size: var(--fs-sm);
+  vertical-align: top;
+}
+.gg-table thead th {
+  background: var(--gg-off);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-grey-500);
+  white-space: nowrap;
+}
+.gg-table tbody th { font-weight: 600; color: var(--gg-ink); white-space: nowrap; }
+.gg-table tbody tr:last-child th, .gg-table tbody tr:last-child td { border-block-end: 0; }
+.gg-table tbody tr:hover { background: var(--gg-success-soft); }
+.gg-table a { color: var(--gg-green-700); font-weight: 500; }
+.gg-table a:hover { text-decoration: underline; }
+.gg-table__note { color: var(--gg-grey-500); }
+
+.gg-maillinks { display: grid; grid-template-columns: 1fr; gap: var(--sp-1); }
+@media (min-width: 700px)  { .gg-maillinks { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-maillinks { grid-template-columns: repeat(3, 1fr); } }
+
+.gg-maillink {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px var(--sp-2);
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  font-size: var(--fs-sm);
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              background var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-maillink:hover { border-color: var(--gg-green-500); background: var(--gg-off); }
+.gg-maillink .gg-icon { color: var(--gg-green-500); flex: none; }
+.gg-maillink strong { display: block; color: var(--gg-ink); font-weight: 600; }
+.gg-maillink__addr { font-size: var(--fs-xs); color: var(--gg-grey-500); overflow-wrap: anywhere; }
+
+.gg-office { padding: var(--sp-4); border-radius: var(--gg-r-lg); background: var(--gg-off); border: 1px solid var(--gg-line); }
+.gg-office__address { font-size: var(--fs-sm); color: var(--gg-grey-700); margin-block: var(--sp-2); line-height: 1.8; }
+.gg-office__address strong { color: var(--gg-ink); }
+.gg-office__meta { display: grid; gap: var(--sp-2); margin-block-start: var(--sp-3); padding-block-start: var(--sp-3); border-block-start: 1px solid var(--gg-line); }
+.gg-office__meta dt {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--gg-grey-500);
+}
+.gg-office__meta dd { margin: 2px 0 0; font-size: var(--fs-sm); color: var(--gg-ink); overflow-wrap: anywhere; }
+
+.gg-map-placeholder {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  border-radius: var(--gg-r-lg);
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--gg-grad-dark);
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+.gg-map-placeholder__body { position: relative; padding: var(--sp-4); max-inline-size: 42ch; }
+.gg-map-placeholder__body .gg-icon { color: var(--gg-green-300); margin-inline: auto; margin-block-end: var(--sp-2); }
+.gg-map-placeholder__title { font-family: var(--gg-font-display); font-size: var(--fs-h4); font-weight: 600; color: var(--gg-white); }
+.gg-map-placeholder__note { font-size: var(--fs-xs); color: var(--gg-on-dark-soft); margin-block-start: var(--sp-1); overflow-wrap: anywhere; }
+
+/* ==========================================================================
+   23. CSR
+   ========================================================================== */
+.gg-csr-measure {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-block-start: var(--sp-2);
+  padding-block-start: var(--sp-2);
+  border-block-start: 1px solid var(--gg-line);
+  font-size: var(--fs-xs);
+  color: var(--gg-green-700);
+}
+.gg-csr-measure .gg-icon { flex: none; margin-block-start: 2px; }
+
+/* --- Metric awaiting verification ----------------------------------------- */
+.gg-metrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-2);
+}
+@media (min-width: 640px)  { .gg-metrics { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-metrics { grid-template-columns: repeat(4, 1fr); } }
+
+.gg-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--sp-1);
+  min-inline-size: 0;
+  padding: var(--sp-3);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-block-start: 3px solid var(--gg-planned);
+}
+.gg-metric__label {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--gg-ink);
+}
+.gg-metric__token {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--fs-xs);
+  color: var(--gg-grey-500);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  border-radius: 6px;
+  padding: 3px 7px;
+  margin-block-start: auto;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
+}
+
+/* ==========================================================================
+   24. 404
+   ========================================================================== */
+.gg-404 {
+  min-block-size: 100svh;
+  display: grid;
+  align-items: center;
+  padding-block: calc(var(--gg-nav-h) + var(--sp-8)) var(--sp-10);
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--gg-navy-900);
+  color: var(--gg-on-dark-mute);
+}
+.gg-404__grid { display: grid; grid-template-columns: 1fr; gap: var(--sp-6); align-items: center; }
+@media (min-width: 900px) { .gg-404__grid { grid-template-columns: 1.1fr .9fr; gap: var(--sp-8); } }
+
+.gg-404__code {
+  font-family: var(--gg-font-display);
+  font-size: clamp(4rem, 12vw, 8rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  margin-block-end: var(--sp-2);
+}
+.gg-404__title { color: var(--gg-white); margin-block-end: var(--sp-2); }
+.gg-404__links {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-1);
+  margin-block-start: var(--sp-5);
+  padding-block-start: var(--sp-4);
+  border-block-start: 1px solid var(--gg-glass-border);
+}
+@media (min-width: 640px) { .gg-404__links { grid-template-columns: repeat(2, 1fr); } }
+.gg-404__link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px var(--sp-2);
+  border-radius: var(--gg-r-sm);
+  border: 1px solid var(--gg-glass-border);
+  background: var(--gg-glass-bg);
+  color: var(--gg-on-dark);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  transition: background var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-404__link:hover { background: var(--gg-glass-hover); border-color: var(--gg-green-400); }
+.gg-404__link .gg-icon { color: var(--gg-green-300); flex: none; }
+
+/* The ascent motif, derailed — the illustration for a page that is not there */
+.gg-404__figure { justify-self: center; inline-size: 100%; max-inline-size: 420px; }
+.gg-404__bar { transform-box: fill-box; transform-origin: bottom center; }
+.gg-404__path {
+  fill: none;
+  stroke: var(--gg-green-400);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.gg-404__path--lost { stroke: var(--gg-on-dark-soft); stroke-dasharray: 6 8; }
+
+/* ==========================================================================
+   25. PHOTOGRAPHY
+   ========================================================================== */
+
+/* A photograph filling a .gg-visual panel, replacing the placeholder graphic.
+   The navy scrim keeps the caption legible over whatever the frame contains. */
+.gg-visual--photo { background: var(--gg-navy-900); }
+/* Direct-child only. An unscoped `img` here also matches .gg-visual__mark —
+   the small corner logo — and stretches it to fill the whole panel. */
+.gg-visual--photo > picture,
+.gg-visual--photo > picture > img {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+.gg-visual--photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--gg-scrim) 0%, rgba(4,24,47,.35) 45%, transparent 75%);
+}
+.gg-visual--photo .gg-visual__content { z-index: var(--z-base); }
+.gg-visual--photo .gg-visual__grid { opacity: .25; z-index: var(--z-base); }
+
+/* --- Workspace gallery ---------------------------------------------------- */
+.gg-gallery {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-2);
+}
+@media (min-width: 700px)  { .gg-gallery { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) {
+  /* Five frames tile a 4x2 grid exactly when the first takes a 2x2 block and
+     the remaining four sit 1x1 around it — no empty cell. */
+  .gg-gallery {
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: 216px;
+  }
+  .gg-gallery > :nth-child(1) { grid-column: span 2; grid-row: span 2; }
+  /* The lead frame carries a larger caption than the supporting tiles. */
+  .gg-gallery > :nth-child(1) .gg-shot__caption { font-size: var(--fs-sm); padding: var(--sp-3); }
+}
+
+.gg-shot {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--gg-r-md);
+  background: var(--gg-navy-800);
+  min-block-size: 200px;
+  isolation: isolate;
+}
+.gg-shot > picture, .gg-shot > picture > img {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+  transition: transform var(--gg-dur-slow) var(--gg-ease);
+}
+.gg-shot:hover img { transform: scale(1.04); }
+.gg-shot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--gg-scrim), transparent 60%);
+  pointer-events: none;
+}
+.gg-shot__caption {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline: 0;
+  z-index: var(--z-base);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--gg-white);
+  text-shadow: 0 1px 12px rgba(4,24,47,.7);
+}

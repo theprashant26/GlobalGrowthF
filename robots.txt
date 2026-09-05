@@ -1,0 +1,15 @@
+# Global Growth Industries Private Limited
+# https://www.globalgrowthindustries.com
+
+User-agent: *
+Allow: /
+
+# Development and reference pages — not part of the public site.
+Disallow: /styleguide.html
+Disallow: /division-template.html
+
+# The legal notices are withheld from the index until they have been reviewed
+# by the company's legal adviser. Remove this line once that is done.
+Disallow: /legal
+
+Sitemap: https://www.globalgrowthindustries.com/sitemap.xml

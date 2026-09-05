@@ -1,0 +1,342 @@
+/* ==========================================================================
+   GLOBAL GROWTH — PAGE OVERRIDES
+   Page-scoped rules only, keyed off a body class (e.g. .page-about).
+   Loaded last so it wins. Extended from Phase 2 onward.
+   ========================================================================== */
+
+/* ==========================================================================
+   STYLEGUIDE  (development reference — never linked from site navigation)
+   ========================================================================== */
+.page-styleguide { background: var(--gg-off); }
+
+.sg-header {
+  background: var(--gg-grad-dark);
+  color: var(--gg-on-dark-mute);
+  padding-block: calc(var(--gg-nav-h) + var(--sp-8)) var(--sp-10);
+}
+.sg-header h1 { color: var(--gg-white); margin-bottom: var(--sp-2); }
+.sg-header__logo { inline-size: 260px; max-inline-size: 70%; margin-bottom: var(--sp-4); }
+.sg-header__note {
+  display: inline-flex; gap: var(--sp-1); align-items: center;
+  margin-top: var(--sp-3); padding: 8px 14px;
+  border: 1px solid var(--gg-glass-border);
+  background: var(--gg-glass-bg);
+  /* Not a pill — this note wraps to several lines on mobile, and a 999px
+     radius turns wrapped text into an oval blob. */
+  border-radius: var(--gg-r-md);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+}
+
+/* --- Section shell -------------------------------------------------------- */
+.sg-section { padding-block: var(--sp-10); border-bottom: 1px solid var(--gg-line); }
+.sg-section:last-of-type { border-bottom: 0; }
+.sg-section > .gg-container > h2 { margin-bottom: var(--sp-1); }
+.sg-section__intro { max-inline-size: 680px; margin-bottom: var(--sp-6); }
+
+.sg-group-head { margin-block: var(--sp-6) var(--sp-3); }
+.sg-group-head:first-child { margin-block-start: 0; }
+.sg-group-head h3 { margin-bottom: 4px; }
+
+/* --- Colour swatches ------------------------------------------------------ */
+.sg-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--sp-2);
+}
+.sg-swatch { margin: 0; }
+.sg-swatch__chip {
+  display: flex; align-items: flex-end;
+  block-size: 108px;
+  padding: var(--sp-2);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+  box-shadow: var(--gg-shadow-sm);
+}
+.sg-swatch__hex {
+  font-family: var(--gg-font-body);
+  font-size: var(--fs-xs); font-weight: 600; letter-spacing: .04em;
+}
+.sg-swatch figcaption {
+  display: flex; flex-direction: column; gap: 3px;
+  padding-block-start: var(--sp-1);
+}
+.sg-swatch code, .sg-scale-row code, .sg-type-meta code, .sg-gradient code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: var(--fs-xs);
+  color: var(--gg-navy-700);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-radius: 6px;
+  padding: 2px 6px;
+  align-self: flex-start;
+}
+.sg-swatch__meta { margin-block-start: 2px; }
+
+.sg-ratio {
+  align-self: flex-start;
+  font-size: var(--fs-xs); font-weight: 600;
+  padding: 2px 8px; border-radius: var(--gg-r-pill);
+  border: 1px solid transparent;
+}
+.sg-ratio--pass { color: var(--gg-green-700); background: var(--gg-success-soft); border-color: rgba(76,168,63,.24); }
+.sg-ratio--warn { color: var(--gg-planned); background: var(--gg-planned-soft); border-color: rgba(161,98,7,.24); }
+.sg-ratio--fail { color: var(--gg-danger); background: var(--gg-danger-soft); border-color: rgba(192,57,43,.24); }
+.sg-ratio--na   { color: var(--gg-grey-500); background: var(--gg-off); border-color: var(--gg-line); }
+
+/* --- Gradients ------------------------------------------------------------ */
+.sg-gradients { display: grid; gap: var(--sp-3); }
+.sg-gradient { margin: 0; }
+.sg-gradient__band {
+  block-size: 84px;
+  border-radius: var(--gg-r-md);
+  box-shadow: var(--gg-shadow-sm);
+}
+.sg-gradient__band--text {
+  display: flex; align-items: center; justify-content: center;
+  color: var(--gg-white);
+  font-size: var(--fs-sm); font-weight: 600;
+  text-align: center; padding-inline: var(--sp-2);
+}
+.sg-gradient figcaption {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1);
+  padding-block-start: var(--sp-1);
+}
+
+/* --- Type scale ----------------------------------------------------------- */
+.sg-type-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-1);
+  padding-block: var(--sp-3);
+  border-block-start: 1px solid var(--gg-line);
+}
+.sg-type-row:first-child { border-block-start: 0; }
+.sg-type-meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-1); }
+.sg-type-meta strong { min-inline-size: 64px; }
+.sg-type-sample > * { margin: 0; }
+
+@media (min-width: 992px) {
+  .sg-type-row { grid-template-columns: 260px 1fr; gap: var(--sp-4); align-items: baseline; }
+  .sg-type-meta { flex-direction: column; align-items: flex-start; gap: 4px; }
+  .sg-gradients { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* --- Spacing & radii ------------------------------------------------------ */
+.sg-scale-row {
+  display: flex; align-items: center; gap: var(--sp-2);
+  padding-block: 10px;
+  border-block-start: 1px solid var(--gg-line);
+}
+.sg-scale-row:first-child { border-block-start: 0; }
+.sg-scale-row code { min-inline-size: 92px; text-align: center; }
+.sg-scale-value { min-inline-size: 52px; }
+.sg-space-demo {
+  block-size: 22px;
+  border-radius: 4px;
+  background: var(--gg-grad-accent);
+  flex: none;
+}
+.sg-radius-demo {
+  inline-size: 96px; block-size: 56px;
+  background: var(--gg-white);
+  border: 2px solid var(--gg-navy-700);
+  flex: none;
+}
+
+/* --- Shadows -------------------------------------------------------------- */
+.sg-shadows {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--sp-4);
+  padding: var(--sp-4) 0;
+}
+.sg-shadow { margin: 0; text-align: center; }
+.sg-shadow__box {
+  block-size: 110px;
+  background: var(--gg-white);
+  border-radius: var(--gg-r-md);
+  margin-bottom: var(--sp-2);
+}
+
+/* --- Component demo rows -------------------------------------------------- */
+.sg-demo {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-4);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+  margin-bottom: var(--sp-3);
+}
+.sg-demo--dark { background: var(--gg-grad-dark); border-color: transparent; }
+.sg-demo__label {
+  inline-size: 100%;
+  font-size: var(--fs-xs); font-weight: 600;
+  text-transform: uppercase; letter-spacing: var(--ls-eyebrow);
+  color: var(--gg-grey-500);
+  margin-bottom: var(--sp-1);
+}
+.sg-demo--dark .sg-demo__label { color: var(--gg-on-dark-soft); }
+
+/* --- Data audit ----------------------------------------------------------- */
+.sg-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--sp-2);
+}
+.sg-stat {
+  display: flex; flex-direction: column; gap: 2px;
+  padding: var(--sp-3);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+}
+.sg-stat__value {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h2); font-weight: 800;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.sg-stat__label { color: var(--gg-grey-500); text-transform: uppercase; letter-spacing: .08em; }
+
+.sg-planned-list { display: grid; gap: var(--sp-1); }
+.sg-planned-item {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-left: 3px solid var(--gg-planned);
+  border-radius: var(--gg-r-sm);
+}
+.sg-planned-item strong { min-inline-size: 160px; color: var(--gg-ink); }
+.sg-planned-item .gg-badge { margin-inline-start: auto; }
+
+.sg-audit {
+  padding: var(--sp-3);
+  border-radius: var(--gg-r-sm);
+  font-weight: 500;
+  margin: 0;
+}
+.sg-audit--pass { color: var(--gg-green-700); background: var(--gg-success-soft); border: 1px solid rgba(76,168,63,.24); }
+.sg-audit--fail { color: var(--gg-danger); background: var(--gg-danger-soft); border: 1px solid rgba(192,57,43,.24); padding-inline-start: var(--sp-5); }
+
+/* --- Sector inventory ----------------------------------------------------- */
+.sg-sector {
+  padding: var(--sp-3);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+  margin-bottom: var(--sp-2);
+}
+.sg-sector__head { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin-bottom: var(--sp-1); }
+.sg-sector__head h4 { margin-inline-end: auto; }
+.sg-sector__divisions { display: flex; flex-wrap: wrap; gap: 6px; margin-block-start: var(--sp-2); }
+
+.sg-chip {
+  font-size: var(--fs-xs);
+  padding: 4px 10px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  color: var(--gg-grey-700);
+}
+.sg-chip--page {
+  border-color: var(--gg-green-700);
+  color: var(--gg-green-700);
+  background: var(--gg-success-soft);
+  font-weight: 600;
+}
+.sg-chip--planned {
+  border-style: dashed;
+  border-color: var(--gg-planned);
+  color: var(--gg-planned);
+  background: var(--gg-planned-soft);
+}
+
+/* --- Styleguide table of contents ----------------------------------------- */
+.sg-toc {
+  position: sticky;
+  inset-block-start: var(--gg-nav-h-sm);
+  z-index: var(--z-sticky);
+  display: flex; gap: var(--sp-1);
+  overflow-x: auto;
+  padding: var(--sp-1) var(--gg-gutter);
+  background: rgba(255,255,255,.86);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--gg-line);
+  scrollbar-width: none;
+}
+.sg-toc::-webkit-scrollbar { display: none; }
+.sg-toc a {
+  flex: none;
+  font-size: var(--fs-xs); font-weight: 600;
+  padding: 8px 14px;
+  border-radius: var(--gg-r-pill);
+  color: var(--gg-grey-500);
+  white-space: nowrap;
+}
+.sg-toc a:hover { color: var(--gg-navy-700); background: var(--gg-off); }
+
+
+/* --- Card demo grids ------------------------------------------------------ */
+.sg-grid { display: grid; gap: var(--sp-3); }
+.sg-grid--2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.sg-grid--3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+.sg-grid--4 { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
+.sg-stack-cards { display: grid; gap: var(--sp-2); }
+
+/* --- Chrome demos --------------------------------------------------------- */
+/* The preloader is fixed in production; bounded here so it can be inspected. */
+.sg-preloader-demo {
+  position: relative;
+  block-size: 320px;
+  border-radius: var(--gg-r-md);
+  overflow: hidden;
+  border: 1px solid var(--gg-line);
+}
+.sg-preloader-demo .gg-preloader { position: absolute; }
+
+/* The progress bar is fixed too; this shows the fill at a fixed percentage. */
+.sg-progress-demo {
+  position: relative;
+  block-size: 3px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-line);
+  overflow: hidden;
+}
+.sg-progress-demo .gg-progress__fill { position: absolute; inset: 0; transform: scaleX(.42); }
+
+/* Cursor preview — the real one is pointer-driven and cannot be screenshotted */
+.sg-cursor-demo {
+  display: flex; align-items: center; gap: var(--sp-4);
+  padding: var(--sp-4);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+}
+.sg-cursor-demo figure { margin: 0; display: grid; justify-items: center; gap: var(--sp-1); }
+.sg-cursor-demo .gg-cursor,
+.sg-cursor-demo .gg-cursor__ring { position: relative; margin: 0; opacity: 1; }
+
+/* Back-to-top is fixed; force it visible inside the demo box */
+.sg-totop-demo { position: relative; block-size: 90px; }
+.sg-totop-demo .gg-to-top {
+  position: absolute;
+  inset-block-end: var(--sp-2);
+  inset-inline-end: var(--sp-2);
+  opacity: 1; visibility: visible; transform: none;
+}
+
+/* --- Navbar state note ---------------------------------------------------- */
+.sg-note {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-info-soft);
+  border: 1px solid rgba(30,111,184,.22);
+  color: var(--gg-navy-700);
+  font-size: var(--fs-sm);
+  margin-block-end: var(--sp-3);
+}
+.sg-note .gg-icon { color: var(--gg-info); margin-block-start: 2px; }

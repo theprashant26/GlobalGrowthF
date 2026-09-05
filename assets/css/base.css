@@ -1,0 +1,301 @@
+/* ==========================================================================
+   GLOBAL GROWTH — BASE
+   Self-hosted fonts, modern reset, typography, layout primitives, utilities.
+   Consumes tokens.css only. Contains no colour literals.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. SELF-HOSTED VARIABLE FONTS
+   Google serves Inter and Inter Tight as variable fonts, so one file per
+   family per subset covers every weight we use (400-800).
+   -------------------------------------------------------------------------- */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/assets/fonts/inter-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/assets/fonts/inter-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/assets/fonts/inter-tight-var-latin.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter Tight';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/assets/fonts/inter-tight-var-latin-ext.woff2') format('woff2');
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* --------------------------------------------------------------------------
+   2. MODERN RESET
+   -------------------------------------------------------------------------- */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--gg-font-body);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-weight: 400;
+  color: var(--gg-grey-700);
+  background: var(--gg-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip; /* kills stray horizontal scroll without breaking sticky */
+  /* Long unbreakable strings — email addresses, URLs, {{PLACEHOLDER}} tokens —
+     must wrap rather than push the layout wider than the viewport. */
+  overflow-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd { margin: 0; }
+ul[class], ol[class] { list-style: none; margin: 0; padding: 0; }
+
+img, picture, svg, video, canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+input, button, textarea, select { font: inherit; color: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+address { font-style: normal; }
+table { border-collapse: collapse; width: 100%; }
+:where(hr) { border: 0; border-top: 1px solid var(--gg-line); margin: 0; }
+
+/* --------------------------------------------------------------------------
+   3. TYPOGRAPHY
+   -------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6, .gg-display {
+  font-family: var(--gg-font-display);
+  color: var(--gg-ink);
+  text-wrap: balance;
+}
+
+h1, .gg-h1 {
+  font-size: var(--fs-h1);
+  font-weight: 800;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+.gg-hero-title {
+  font-size: var(--fs-hero);
+  font-weight: 800;
+  line-height: var(--lh-display);
+  letter-spacing: var(--ls-display);
+}
+h2, .gg-h2 {
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-display);
+}
+h3, .gg-h3 {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+}
+h4, .gg-h4 {
+  font-size: var(--fs-h4);
+  font-weight: 600;
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-heading);
+}
+h5, h6 { font-size: var(--fs-body); font-weight: 600; line-height: var(--lh-heading); }
+
+p { text-wrap: pretty; }
+
+.gg-lead {
+  font-size: var(--fs-lead);
+  line-height: 1.6;
+  color: var(--gg-grey-500);
+  font-weight: 400;
+}
+.gg-small { font-size: var(--fs-sm); }
+.gg-xs    { font-size: var(--fs-xs); }
+
+/* Eyebrow label — uppercase, tracked out, brand green */
+.gg-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-family: var(--gg-font-body);
+  font-size: var(--fs-eyebrow);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-green-700);
+  margin: 0 0 var(--sp-2);
+}
+.gg-eyebrow::before {
+  content: "";
+  inline-size: 28px;
+  block-size: 2px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-grad-accent);
+  flex: none;
+}
+.gg-eyebrow--center { justify-content: center; }
+
+/* Text painted with the brand gradient. A solid colour is declared first so
+   unsupported browsers still render legible text. */
+.gg-grad-text {
+  color: var(--gg-green-700);
+  /* background-image, never the `background` shorthand — the shorthand resets
+     background-clip back to border-box and the text renders as a solid block. */
+  background-image: var(--gg-grad-accent-deep);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+@supports (-webkit-text-fill-color: transparent) {
+  .gg-grad-text { -webkit-text-fill-color: transparent; }
+}
+.gg-grad-text--brand { background-image: var(--gg-grad-brand); }
+
+/* On a dark surface the text-safe ramp is too dark to read. Dark backgrounds
+   flip to the light ramp, where green-400/teal-500 clear contrast easily. */
+.gg-dark .gg-grad-text,
+.gg-hero .gg-grad-text {
+  color: var(--gg-green-300);
+  background-image: var(--gg-grad-accent);
+}
+
+/* --------------------------------------------------------------------------
+   4. ON-DARK CONTEXT
+   Any section with .gg-dark flips the text ramp for its whole subtree.
+   -------------------------------------------------------------------------- */
+.gg-dark {
+  color: var(--gg-on-dark-mute);
+  background: var(--gg-grad-dark);
+}
+.gg-dark h1, .gg-dark h2, .gg-dark h3,
+.gg-dark h4, .gg-dark h5, .gg-dark h6 { color: var(--gg-on-dark); }
+.gg-dark .gg-lead { color: var(--gg-on-dark-mute); }
+.gg-dark .gg-eyebrow { color: var(--gg-green-300); }
+.gg-dark hr { border-top-color: var(--gg-glass-border); }
+
+/* Flat navy variant for surfaces that must not carry the gradient */
+.gg-dark--flat { background: var(--gg-navy-900); }
+
+/* --------------------------------------------------------------------------
+   5. LAYOUT PRIMITIVES
+   -------------------------------------------------------------------------- */
+.gg-container {
+  width: 100%;
+  max-inline-size: var(--gg-container);
+  margin-inline: auto;
+  padding-inline: var(--gg-gutter);
+}
+.gg-container--narrow { max-inline-size: var(--gg-container-narrow); }
+
+.gg-section { padding-block: var(--gg-section-y); position: relative; }
+.gg-section--tight { padding-block: clamp(48px, 6vw, 88px); }
+.gg-section--light { background: var(--gg-off); }
+.gg-section--white { background: var(--gg-white); }
+
+/* Section header pattern: eyebrow + H2 + lead */
+.gg-section-head { max-inline-size: 720px; margin-bottom: var(--sp-8); }
+.gg-section-head--center { margin-inline: auto; text-align: center; }
+.gg-section-head > h2 { margin-bottom: var(--sp-2); }
+
+/* --------------------------------------------------------------------------
+   6. UTILITIES
+   Prefixed so they never collide with Bootstrap.
+   -------------------------------------------------------------------------- */
+.gg-stack > * + * { margin-block-start: var(--sp-2); }
+.gg-stack-lg > * + * { margin-block-start: var(--sp-4); }
+.gg-flex   { display: flex; }
+.gg-center { display: flex; align-items: center; justify-content: center; }
+.gg-between{ display: flex; align-items: center; justify-content: space-between; }
+.gg-wrap   { flex-wrap: wrap; }
+.gg-gap-1  { gap: var(--sp-1); }
+.gg-gap-2  { gap: var(--sp-2); }
+.gg-gap-3  { gap: var(--sp-3); }
+.gg-gap-4  { gap: var(--sp-4); }
+
+.gg-mt-1 { margin-block-start: var(--sp-1); }
+.gg-mt-2 { margin-block-start: var(--sp-2); }
+.gg-mt-3 { margin-block-start: var(--sp-3); }
+.gg-mt-4 { margin-block-start: var(--sp-4); }
+.gg-mt-6 { margin-block-start: var(--sp-6); }
+.gg-mt-8 { margin-block-start: var(--sp-8); }
+.gg-mb-2 { margin-block-end: var(--sp-2); }
+.gg-mb-3 { margin-block-end: var(--sp-3); }
+.gg-mb-4 { margin-block-end: var(--sp-4); }
+.gg-mb-6 { margin-block-end: var(--sp-6); }
+
+.gg-text-center { text-align: center; }
+.gg-muted   { color: var(--gg-grey-500); }
+.gg-dark .gg-muted { color: var(--gg-on-dark-mute); }
+.gg-accent  { color: var(--gg-green-700); }
+.gg-relative{ position: relative; }
+.gg-full    { inline-size: 100%; }
+
+/* Visually hidden but available to assistive technology */
+.gg-sr-only {
+  position: absolute;
+  inline-size: 1px; block-size: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%);
+  white-space: nowrap; border: 0;
+}
+
+/* Skip link — first focusable element on every page */
+.gg-skip-link {
+  position: absolute;
+  inset-block-start: -100%;
+  inset-inline-start: var(--sp-2);
+  z-index: var(--z-overlay);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--gg-navy-700);
+  color: var(--gg-white);
+  border-radius: var(--gg-r-sm);
+  font-weight: 600;
+  transition: inset-block-start var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-skip-link:focus { inset-block-start: var(--sp-2); }
+
+/* --------------------------------------------------------------------------
+   7. FOCUS
+   Never remove the outline — replace it with something better.
+   -------------------------------------------------------------------------- */
+:focus { outline: none; }
+:focus-visible {
+  outline: none;
+  box-shadow: var(--gg-focus-ring);
+  border-radius: var(--gg-r-sm);
+}
+.gg-dark :focus-visible { box-shadow: var(--gg-focus-ring-dark); }
+
+/* --------------------------------------------------------------------------
+   8. SELECTION & SCROLLBAR
+   -------------------------------------------------------------------------- */
+::selection { background: var(--gg-green-500); color: var(--gg-white); }
+
+@supports (scrollbar-color: auto) {
+  html { scrollbar-color: var(--gg-navy-500) var(--gg-off); scrollbar-width: thin; }
+}

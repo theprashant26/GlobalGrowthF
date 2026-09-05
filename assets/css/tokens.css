@@ -1,0 +1,204 @@
+/* ==========================================================================
+   GLOBAL GROWTH INDUSTRIES — DESIGN TOKENS
+   Single source of truth. Every colour, size, shadow and easing in this
+   project is declared here and consumed with var(). No hardcoded hex value
+   may appear in any other stylesheet, HTML file or JS module.
+   ========================================================================== */
+
+:root {
+
+  /* ---------------------------------------------------------------------
+     1. BRAND COLOUR — NAVY
+     Sampled from the logo mark and wordmark. Navy is the dominant colour
+     and should occupy roughly 60% of the visual field.
+     --------------------------------------------------------------------- */
+  --gg-navy-900:  #04182F;   /* deepest — hero and footer backgrounds */
+  --gg-navy-800:  #071F3D;
+  --gg-navy-700:  #0A2A52;   /* PRIMARY brand navy (logo mark + wordmark) */
+  --gg-navy-600:  #0E3768;
+  --gg-navy-500:  #14477F;
+
+  /* ---------------------------------------------------------------------
+     2. THE ASCENT RAMP
+     The logo's arrow rises navy -> blue -> teal -> green. Every gradient
+     in the site follows this same ascent. Do not invent new ramps.
+     --------------------------------------------------------------------- */
+  --gg-blue-500:  #1E6FB8;   /* first bar in the logo chart */
+  --gg-teal-500:  #17998B;   /* gradient midpoint */
+  --gg-green-500: #4CA83F;   /* PRIMARY brand green (arrowhead + "GROWTH") */
+  --gg-green-400: #6BC24A;   /* hover / highlight */
+  --gg-green-300: #8FD46A;   /* subtle accents on dark */
+
+  /* --- Text-safe ramp (accessibility) ---------------------------------
+     The brand green is 3.01:1 on white — fine for graphics, but below the
+     4.5:1 AA threshold for text. These are the SAME hues darkened along
+     their own value axis, so they read as the brand while passing AA.
+
+     RULE: on a light background, text and text-bearing gradients use the
+     -700 stops. Fills, arrows, icons and decorative surfaces keep -500.
+     On dark backgrounds the -300/-400/-500 stops all pass and are used
+     as-is.
+       --gg-green-700 as text on white ....... 4.87:1  (AA)
+       --gg-green-700 as text on --gg-off .... 4.58:1  (AA)
+       white on --gg-teal-700 ................ 5.41:1  (AA)
+       white on --gg-green-700 ............... 4.87:1  (AA)
+     --------------------------------------------------------------------- */
+  --gg-teal-700:  #12776C;   /* text-safe teal  */
+  --gg-green-700: #3A8030;   /* text-safe green */
+
+  /* ---------------------------------------------------------------------
+     3. NEUTRALS
+     --------------------------------------------------------------------- */
+  --gg-white:     #FFFFFF;
+  --gg-off:       #F6F8FB;   /* light section background */
+  --gg-line:      #E2E8F0;   /* borders on light */
+  --gg-grey-500:  #64748B;   /* body text on light */
+  --gg-grey-700:  #334155;
+  --gg-ink:       #0B1220;   /* headings on light */
+
+  /* ---------------------------------------------------------------------
+     4. SIGNATURE GRADIENTS
+     Permitted surfaces only: hero mesh, eyebrow underline, primary CTA,
+     sector card hover overlay, stat counters, scroll progress bar.
+     --------------------------------------------------------------------- */
+  --gg-grad-brand:  linear-gradient(135deg, var(--gg-navy-700) 0%, var(--gg-blue-500) 45%, var(--gg-teal-500) 72%, var(--gg-green-500) 100%);
+  --gg-grad-accent: linear-gradient(90deg, var(--gg-teal-500) 0%, var(--gg-green-400) 100%);
+  --gg-grad-dark:   linear-gradient(160deg, var(--gg-navy-900) 0%, var(--gg-navy-700) 55%, #0C3A52 100%);
+
+  /* Text-bearing variants of the two ramps above. Identical hue order,
+     darkened tail, so white label text clears 4.5:1 at every stop.
+     Use these wherever text sits ON the gradient (primary buttons, CTA
+     fills). The -brand and -accent ramps stay for decorative surfaces:
+     hero mesh, card hover overlays, rules and the progress bar. */
+  --gg-grad-cta:         linear-gradient(135deg, var(--gg-navy-700) 0%, var(--gg-blue-500) 45%, var(--gg-teal-700) 72%, var(--gg-green-700) 100%);
+  --gg-grad-accent-deep: linear-gradient(90deg, var(--gg-teal-700) 0%, var(--gg-green-700) 100%);
+
+  /* ---------------------------------------------------------------------
+     5. GLASS SURFACES (dark backgrounds only)
+     --------------------------------------------------------------------- */
+  --gg-glass-bg:     rgba(255,255,255,0.06);
+  --gg-glass-border: rgba(255,255,255,0.12);
+  --gg-glass-hover:  rgba(255,255,255,0.10);
+
+  /* Navy scrims — translucent layers of --gg-navy-900. Declared here so no
+     other stylesheet has to restate the navy as an rgba() literal. */
+  --gg-scrim:      rgba(4,24,47,.72);   /* gradient overlay on the hero */
+  --gg-scrim-nav:  rgba(4,24,47,.92);   /* solid navbar behind its blur */
+  --gg-scrim-mega: rgba(4,24,47,.94);   /* mega-menu panel */
+
+  /* On-dark text ramp — derived from white, kept here so no component
+     hardcodes an rgba() of its own. */
+  --gg-on-dark:      rgba(255,255,255,0.94);
+  --gg-on-dark-mute: rgba(255,255,255,0.68);
+  --gg-on-dark-soft: rgba(255,255,255,0.46);
+
+  /* ---------------------------------------------------------------------
+     6. ELEVATION
+     --------------------------------------------------------------------- */
+  --gg-shadow-sm:   0 2px 8px rgba(4,24,47,.06);
+  --gg-shadow-md:   0 12px 32px rgba(4,24,47,.10);
+  --gg-shadow-lg:   0 28px 70px rgba(4,24,47,.16);
+  --gg-shadow-glow: 0 0 40px rgba(76,168,63,.28);
+
+  /* ---------------------------------------------------------------------
+     7. RADII
+     --------------------------------------------------------------------- */
+  --gg-r-sm:   10px;
+  --gg-r-md:   16px;
+  --gg-r-lg:   24px;
+  --gg-r-xl:   32px;
+  --gg-r-pill: 999px;
+
+  /* ---------------------------------------------------------------------
+     8. MOTION
+     Weighted and confident. Nothing bouncy.
+     --------------------------------------------------------------------- */
+  --gg-ease:      cubic-bezier(.22,1,.36,1);
+  --gg-ease-out:  cubic-bezier(.16,1,.3,1);
+  --gg-ease-in:   cubic-bezier(.5,0,.75,0);
+  --gg-dur:       .6s;
+  --gg-dur-fast:  .28s;
+  --gg-dur-slow:  .9s;
+
+  /* ---------------------------------------------------------------------
+     9. TYPOGRAPHY
+     Inter Tight for display, Inter for body and UI.
+     --------------------------------------------------------------------- */
+  --gg-font-display: 'Inter Tight', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  --gg-font-body:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+
+  /* Fluid type scale — no fixed pixel headings anywhere */
+  --fs-hero: clamp(2.75rem, 6.5vw, 5.5rem);
+  --fs-h1:   clamp(2.25rem, 4.5vw, 3.75rem);
+  --fs-h2:   clamp(1.85rem, 3.2vw, 2.85rem);
+  --fs-h3:   clamp(1.35rem, 2vw, 1.75rem);
+  --fs-h4:   clamp(1.15rem, 1.5vw, 1.35rem);
+  --fs-lead: clamp(1.05rem, 1.3vw, 1.25rem);
+  --fs-body: 1rem;
+  --fs-sm:   .9rem;
+  --fs-xs:   .8rem;
+  --fs-eyebrow: .75rem;
+
+  --lh-display: 1.05;
+  --lh-heading: 1.18;
+  --lh-body:    1.65;
+
+  --ls-display: -0.03em;
+  --ls-heading: -0.02em;
+  --ls-eyebrow: .18em;
+
+  /* ---------------------------------------------------------------------
+     10. SPACING — 8px base scale
+     --------------------------------------------------------------------- */
+  --sp-1:   8px;
+  --sp-2:  16px;
+  --sp-3:  24px;
+  --sp-4:  32px;
+  --sp-5:  40px;
+  --sp-6:  48px;
+  --sp-7:  56px;
+  --sp-8:  64px;
+  --sp-9:  72px;
+  --sp-10: 80px;
+  --sp-12: 96px;
+  --sp-14: 112px;
+  --sp-16: 128px;
+
+  /* ---------------------------------------------------------------------
+     11. LAYOUT
+     --------------------------------------------------------------------- */
+  --gg-container:  1320px;
+  --gg-container-narrow: 880px;
+  --gg-gutter:     clamp(20px, 5vw, 64px);
+  --gg-section-y:  clamp(72px, 9vw, 140px);
+  --gg-nav-h:      76px;
+  --gg-nav-h-sm:   64px;
+
+  /* ---------------------------------------------------------------------
+     12. Z-INDEX LAYERS — declared once so nothing fights
+     --------------------------------------------------------------------- */
+  --z-base:       1;
+  --z-sticky:    100;
+  --z-nav:       800;
+  --z-drawer:    900;
+  --z-progress: 1000;
+  --z-cursor:   1100;
+  --z-overlay:  1200;
+  --z-preload:  1300;
+
+  /* ---------------------------------------------------------------------
+     13. STATE / SEMANTIC
+     Derived from the brand ramp — no new hues introduced.
+     --------------------------------------------------------------------- */
+  --gg-success:      var(--gg-green-500);
+  --gg-success-soft: rgba(76,168,63,.10);
+  --gg-info:         var(--gg-blue-500);
+  --gg-info-soft:    rgba(30,111,184,.10);
+  --gg-danger:       #C0392B;                 /* error text — contrast-safe on white */
+  --gg-danger-soft:  rgba(192,57,43,.09);
+  --gg-planned:      #A16207;                 /* "planned" amber, AA on white */
+  --gg-planned-soft: rgba(161,98,7,.10);
+
+  --gg-focus-ring:   0 0 0 3px var(--gg-white), 0 0 0 6px var(--gg-green-500);
+  --gg-focus-ring-dark: 0 0 0 3px var(--gg-navy-900), 0 0 0 6px var(--gg-green-400);
+}

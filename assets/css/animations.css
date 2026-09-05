@@ -1,0 +1,210 @@
+/* ==========================================================================
+   GLOBAL GROWTH — ANIMATIONS
+   Keyframes, motion primitives and the reduced-motion contract.
+   The GSAP timelines live in /assets/js/modules/animations.js; this file
+   holds only CSS-driven motion and the accessibility fallback.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. KEYFRAMES
+   ========================================================================== */
+@keyframes gg-fade-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes gg-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Hero mesh — slow drifting blobs on the brand ramp */
+@keyframes gg-drift-a {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  33%      { transform: translate3d(6%, -8%, 0) scale(1.12); }
+  66%      { transform: translate3d(-5%, 6%, 0) scale(.94); }
+}
+@keyframes gg-drift-b {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1.05); }
+  40%      { transform: translate3d(-8%, 5%, 0) scale(.92); }
+  75%      { transform: translate3d(5%, 7%, 0) scale(1.15); }
+}
+
+/* Marquee — the track is duplicated in markup, so 50% is one full loop */
+@keyframes gg-marquee {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(-50%, 0, 0); }
+}
+
+/* Scroll cue */
+@keyframes gg-scroll-cue {
+  0%       { transform: translateY(0); opacity: 0; }
+  30%      { opacity: 1; }
+  100%     { transform: translateY(14px); opacity: 0; }
+}
+
+/* Preloader counter shimmer */
+@keyframes gg-pulse {
+  0%, 100% { opacity: .5; }
+  50%      { opacity: 1; }
+}
+
+/* Ascending-arrow stroke draw (also driven by GSAP where finer control is
+   needed; the CSS version covers the no-JS case) */
+@keyframes gg-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ==========================================================================
+   2. MOTION PRIMITIVES
+   ========================================================================== */
+
+/* --- Scroll reveal -------------------------------------------------------
+   Elements flagged for reveal start hidden, but only once JS has booted and
+   can be relied on to bring them back. animations.js adds .is-revealed when
+   the element enters the viewport. If JS never runs, section 3 restores
+   visibility; under reduced motion, section 4 does. */
+[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+.js-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity var(--gg-dur-slow) var(--gg-ease),
+              transform var(--gg-dur-slow) var(--gg-ease);
+  will-change: transform, opacity;
+}
+.js-ready [data-reveal].is-revealed {
+  opacity: 1;
+  transform: none;
+  will-change: auto;
+}
+
+/* When GSAP drives the reveal it owns opacity and transform outright. Leaving
+   the CSS transition in place makes the two ease against each other, which
+   reads as a laggy double animation. animations.js sets this class only once
+   GSAP has actually loaded. */
+html.gsap-reveal [data-reveal] { transition: none; }
+
+/* Line-reveal mask used by splitTextIntoLines() */
+.gg-line-mask { display: block; overflow: hidden; }
+.gg-line-mask > span { display: block; }
+
+/* --- Drawer link stagger --------------------------------------------------
+   Each item carries --i from navbar.js and steps in behind the one above it. */
+.gg-drawer__body > * {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity var(--gg-dur) var(--gg-ease),
+              transform var(--gg-dur) var(--gg-ease);
+}
+.gg-drawer.is-open .gg-drawer__body > * {
+  opacity: 1;
+  transform: none;
+  transition-delay: calc(60ms + var(--i, 0) * 45ms);
+}
+/* Reduced motion, or no JS: the drawer contents are simply present */
+.gg-drawer.is-static .gg-drawer__body > * { opacity: 1; transform: none; transition: none; }
+
+/* --- Preloader ------------------------------------------------------------
+   The document cannot scroll while the overlay is up. */
+html.is-preloading, html.is-preloading body { overflow: hidden; }
+
+/* --- Page transition wipe --------------------------------------------------
+   A gradient panel that sweeps across before an internal navigation. It sits
+   above everything except the preloader, and is never interactive. */
+.gg-wipe {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  pointer-events: none;
+  background: var(--gg-grad-brand);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform .42s var(--gg-ease-in);
+}
+.gg-wipe.is-active {
+  transform: scaleX(1);
+  transform-origin: left center;
+}
+
+/* --- Hero line reveal ------------------------------------------------------
+   splitTextIntoLines() wraps each line in an overflow-hidden mask; GSAP moves
+   the inner span. The mask must clip, and descenders need a little room or
+   they are shaved off by the clip. */
+[data-hero-title] .gg-line-mask { padding-block-end: .08em; margin-block-end: -.08em; }
+.js-ready [data-hero-title] .gg-line { will-change: transform; }
+
+/* --- Marquee ---------------------------------------------------------------
+   The track's playbackRate is modulated from scroll velocity, so it must be a
+   real running animation rather than a paused one. */
+.gg-marquee__track { animation-play-state: running; }
+
+.gg-anim-fade-up { animation: gg-fade-up var(--gg-dur) var(--gg-ease) both; }
+.gg-anim-fade-in { animation: gg-fade-in var(--gg-dur) var(--gg-ease) both; }
+
+/* ==========================================================================
+   3. NO-JS FALLBACK
+   If the module never boots, nothing may stay invisible.
+   ========================================================================== */
+html:not(.js-ready) [data-reveal] { opacity: 1; transform: none; }
+
+/* ==========================================================================
+   4. REDUCED MOTION
+   A hard stop. Every animation, transition and transform-based reveal is
+   disabled, and anything animated into view is forced visible. This block
+   is deliberately last and deliberately broad.
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+
+  html { scroll-behavior: auto; }
+
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Nothing may be left hidden by a reveal that will never run */
+  [data-reveal],
+  .js-ready [data-reveal],
+  .gg-line-mask > span,
+  .gg-drawer__body > * {
+    opacity: 1 !important;
+    transform: none !important;
+    visibility: visible !important;
+    clip-path: none !important;
+    transition-delay: 0s !important;
+  }
+
+  /* Decorative motion is switched off entirely */
+  .gg-mesh__blob,
+  .gg-marquee__track,
+  .gg-scroll-cue::after { animation: none !important; }
+
+  /* The marquee becomes a static wrapped list, so the edge fade — which
+     exists to let items scroll in and out — would just clip the first and
+     last names. Remove it. */
+  .gg-marquee {
+    -webkit-mask-image: none !important;
+    mask-image: none !important;
+  }
+
+  /* The ascent path is shown fully drawn rather than animating in */
+  .js-ready .gg-ascent__path {
+    animation: none !important;
+    stroke-dashoffset: 0 !important;
+  }
+
+  /* The custom cursor, preloader and page-transition wipe are removed,
+     not merely stilled */
+  .gg-cursor, .gg-cursor__ring, .gg-preloader, .gg-wipe { display: none !important; }
+
+  /* Hero lines are never split under reduced motion, but guard anyway */
+  [data-hero-title] .gg-line { transform: none !important; }
+
+  /* Parallax layers sit flat */
+  [data-parallax] { transform: none !important; }
+}

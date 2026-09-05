@@ -1,0 +1,1372 @@
+/* ==========================================================================
+   GLOBAL GROWTH — COMPONENTS
+   Icons, buttons, badges, navbar, mega-menu, drawer, footer, cards, forms,
+   preloader, progress bar, cursor, back-to-top.
+   Consumes tokens.css only. No colour literals.
+   ========================================================================== */
+
+/* ==========================================================================
+   0. ICONS
+   Sprite symbols inherit currentColor. main.js injects the sprite inline
+   because Safari will not resolve an external <use> reference.
+   ========================================================================== */
+.gg-icon {
+  inline-size: 20px;
+  block-size: 20px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  pointer-events: none;
+}
+.gg-icon--sm { inline-size: 16px; block-size: 16px; }
+.gg-icon--lg { inline-size: 28px; block-size: 28px; }
+.gg-icon--xl { inline-size: 36px; block-size: 36px; }
+/* Social marks are solid, not stroked */
+.gg-icon--solid { fill: currentColor; stroke: none; }
+
+/* ==========================================================================
+   1. BUTTONS
+   Variants: .gg-btn--primary (gradient), --secondary (navy outline),
+             --ghost, --icon. Size modifiers: --lg, --sm.
+   ========================================================================== */
+.gg-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-1);
+  padding: 14px var(--sp-3);
+  font-family: var(--gg-font-body);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .01em;
+  line-height: 1.2;
+  border-radius: var(--gg-r-pill);
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-align: center;
+  white-space: nowrap;
+  isolation: isolate;
+  overflow: hidden;
+  /* A button can never be wider than the column that holds it. */
+  max-inline-size: 100%;
+  transition:
+    transform    var(--gg-dur-fast) var(--gg-ease),
+    box-shadow   var(--gg-dur-fast) var(--gg-ease),
+    background   var(--gg-dur-fast) var(--gg-ease),
+    border-color var(--gg-dur-fast) var(--gg-ease),
+    color        var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-btn:active { transform: translateY(1px); }
+
+/* nowrap keeps labels on one line where there is room, but on a small phone a
+   long label ("See all of Education & Skill Development") would otherwise push
+   past the viewport. Below 480px the label wraps instead. */
+@media (max-width: 480px) {
+  .gg-btn { white-space: normal; }
+}
+
+.gg-btn--lg { padding: 18px var(--sp-4); font-size: var(--fs-body); }
+.gg-btn--sm { padding: 10px var(--sp-2); font-size: var(--fs-xs); }
+.gg-btn--block { display: flex; inline-size: 100%; }
+
+/* The arrow that trails a button label */
+.gg-btn__icon {
+  inline-size: 18px;
+  block-size: 18px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  transition: transform var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-btn:hover .gg-btn__icon { transform: translateX(4px); }
+
+/* --- Primary: gradient fill ---------------------------------------------
+   Uses the text-bearing ramp so the white label clears 4.5:1 at every stop.
+   The hover state is a second gradient layered underneath and faded in,
+   because gradients themselves cannot be transitioned. */
+.gg-btn--primary {
+  color: var(--gg-white);
+  background: var(--gg-grad-cta);
+  background-size: 160% 160%;
+  background-position: 0% 50%;
+  box-shadow: var(--gg-shadow-sm);
+}
+.gg-btn--primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--gg-grad-accent-deep);
+  opacity: 0;
+  transition: opacity var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-btn--primary:hover {
+  color: var(--gg-white);
+  box-shadow: var(--gg-shadow-md), var(--gg-shadow-glow);
+  transform: translateY(-2px);
+}
+.gg-btn--primary:hover::before { opacity: 1; }
+.gg-btn--primary:active { transform: translateY(0); }
+
+/* --- Secondary: navy outline -------------------------------------------- */
+.gg-btn--secondary {
+  color: var(--gg-navy-700);
+  background: transparent;
+  border-color: var(--gg-navy-700);
+}
+.gg-btn--secondary:hover {
+  color: var(--gg-white);
+  background: var(--gg-navy-700);
+  transform: translateY(-2px);
+  box-shadow: var(--gg-shadow-md);
+}
+.gg-dark .gg-btn--secondary {
+  color: var(--gg-on-dark);
+  border-color: var(--gg-glass-border);
+  background: var(--gg-glass-bg);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.gg-dark .gg-btn--secondary:hover {
+  background: var(--gg-glass-hover);
+  border-color: var(--gg-green-400);
+  color: var(--gg-white);
+}
+
+/* --- Ghost: text only, underline grows on hover -------------------------- */
+.gg-btn--ghost {
+  color: var(--gg-navy-700);
+  background: transparent;
+  border-radius: var(--gg-r-sm);
+  padding-inline: var(--sp-1);
+  overflow: visible;
+}
+.gg-btn--ghost::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 6px;
+  inset-inline-start: var(--sp-1);
+  inline-size: calc(100% - var(--sp-2));
+  block-size: 2px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-grad-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-btn--ghost:hover { color: var(--gg-green-700); }
+.gg-btn--ghost:hover::after { transform: scaleX(1); }
+.gg-dark .gg-btn--ghost { color: var(--gg-on-dark); }
+.gg-dark .gg-btn--ghost:hover { color: var(--gg-green-300); }
+
+/* --- Icon-only ----------------------------------------------------------- */
+.gg-btn--icon {
+  inline-size: 48px;
+  block-size: 48px;
+  padding: 0;
+  border-radius: var(--gg-r-pill);
+  color: var(--gg-navy-700);
+  border-color: var(--gg-line);
+  background: var(--gg-white);
+}
+.gg-btn--icon:hover {
+  color: var(--gg-white);
+  background: var(--gg-navy-700);
+  border-color: var(--gg-navy-700);
+  transform: translateY(-2px);
+  box-shadow: var(--gg-shadow-md);
+}
+.gg-btn--icon .gg-btn__icon { inline-size: 20px; block-size: 20px; }
+.gg-btn--icon:hover .gg-btn__icon { transform: none; }
+.gg-dark .gg-btn--icon {
+  color: var(--gg-on-dark);
+  background: var(--gg-glass-bg);
+  border-color: var(--gg-glass-border);
+}
+.gg-dark .gg-btn--icon:hover { background: var(--gg-green-500); border-color: var(--gg-green-500); }
+
+/* --- Disabled ------------------------------------------------------------ */
+.gg-btn:disabled,
+.gg-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: .45;
+  transform: none;
+  box-shadow: none;
+  filter: grayscale(.4);
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   2. BADGES
+   ========================================================================== */
+.gg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  font-family: var(--gg-font-body);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: .02em;
+  border-radius: var(--gg-r-pill);
+  border: 1px solid transparent;
+  white-space: nowrap;
+}
+.gg-badge__dot {
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: var(--gg-r-pill);
+  background: currentColor;
+  flex: none;
+}
+
+/* Active — operational business */
+.gg-badge--active {
+  color: var(--gg-green-700);
+  background: var(--gg-success-soft);
+  border-color: rgba(76,168,63,.24);
+}
+
+/* Planned — regulated, not operational. Wraps on narrow screens rather than
+   truncating, because the full wording is a compliance requirement. */
+.gg-badge--planned {
+  color: var(--gg-planned);
+  background: var(--gg-planned-soft);
+  border-color: rgba(161,98,7,.24);
+  white-space: normal;
+  text-align: start;
+}
+.gg-dark .gg-badge--planned {
+  color: var(--gg-white);
+  background: rgba(161,98,7,.28);
+  border-color: rgba(255,255,255,.22);
+}
+.gg-dark .gg-badge--active {
+  color: var(--gg-green-300);
+  background: rgba(76,168,63,.16);
+  border-color: rgba(143,212,106,.3);
+}
+
+/* Sector-number pill — the 01..15 marker */
+.gg-badge--number {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: .04em;
+  color: var(--gg-navy-700);
+  background: var(--gg-white);
+  border-color: var(--gg-line);
+  padding: 4px 10px;
+  font-variant-numeric: tabular-nums;
+}
+.gg-dark .gg-badge--number {
+  color: var(--gg-on-dark);
+  background: var(--gg-glass-bg);
+  border-color: var(--gg-glass-border);
+}
+
+/* Neutral meta badge — job type, location, experience */
+.gg-badge--meta {
+  color: var(--gg-grey-700);
+  background: var(--gg-off);
+  border-color: var(--gg-line);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   3. PLANNED-ENTITY TREATMENT
+   Applied by the templates from status: 'planned'. De-emphasises the surface
+   and — critically — removes any call to action.
+   ========================================================================== */
+.is-planned { opacity: .72; }
+.is-planned:hover { opacity: .9; }
+.is-planned .gg-btn--primary,
+.is-planned .gg-btn--secondary { display: none; }
+
+/* ==========================================================================
+   4. SURFACES
+   ========================================================================== */
+.gg-card {
+  position: relative;
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+  padding: var(--sp-4);
+  box-shadow: var(--gg-shadow-sm);
+  transition: transform var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-dark .gg-card {
+  background: var(--gg-glass-bg);
+  border-color: var(--gg-glass-border);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: none;
+}
+
+.gg-divider { block-size: 1px; background: var(--gg-line); border: 0; }
+.gg-dark .gg-divider { background: var(--gg-glass-border); }
+
+/* ==========================================================================
+   5. NAVBAR
+   Transparent over a dark hero, solidifying to navy with blur past 80px.
+   Pages without a dark hero add .gg-nav--solid to start solid.
+   ========================================================================== */
+.gg-nav {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: var(--z-nav);
+  block-size: var(--gg-nav-h);
+  display: flex;
+  align-items: center;
+  color: var(--gg-on-dark);
+  background: transparent;
+  border-block-end: 1px solid transparent;
+  transition: background var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease),
+              block-size var(--gg-dur-fast) var(--gg-ease),
+              transform var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-nav.is-solid,
+.gg-nav--solid {
+  block-size: var(--gg-nav-h-sm);
+  background: var(--gg-scrim-nav);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+  border-block-end-color: var(--gg-glass-border);
+  box-shadow: var(--gg-shadow-md);
+}
+
+.gg-nav__inner {
+  inline-size: 100%;
+  max-inline-size: var(--gg-container);
+  margin-inline: auto;
+  padding-inline: var(--gg-gutter);
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.gg-nav__brand { display: flex; align-items: center; gap: 11px; margin-inline-end: auto; }
+.gg-nav__brand img {
+  block-size: 42px;
+  inline-size: 42px;
+  flex: none;
+  transition: block-size var(--gg-dur-fast) var(--gg-ease),
+              inline-size var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-nav.is-solid .gg-nav__brand img,
+.gg-nav--solid .gg-nav__brand img { block-size: 36px; inline-size: 36px; }
+
+/* Wordmark set in the brand face, matching the supplied artwork: the name in
+   two weights of one word, "Growth" carrying the green. */
+.gg-nav__wordmark { display: flex; flex-direction: column; line-height: 1; }
+.gg-nav__wordmark-name {
+  font-family: var(--gg-font-display);
+  font-size: 1.06rem;
+  font-weight: 800;
+  letter-spacing: -.01em;
+  text-transform: uppercase;
+  color: var(--gg-white);
+  white-space: nowrap;
+}
+.gg-nav__wordmark-name em { font-style: normal; color: var(--gg-green-400); margin-inline-start: .28em; }
+.gg-nav__wordmark-sub {
+  font-size: .55rem;
+  font-weight: 600;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  color: var(--gg-on-dark-soft);
+  margin-block-start: 3px;
+  white-space: nowrap;
+}
+/* Below 420px the wordmark would crowd the toggle; the mark carries it. */
+@media (max-width: 419px) { .gg-nav__wordmark { display: none; } }
+
+/* --- Desktop links -------------------------------------------------------- */
+.gg-nav__links { display: none; align-items: center; gap: 2px; }
+
+.gg-nav__item { position: relative; }
+
+.gg-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px var(--sp-2);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--gg-on-dark-mute);
+  border-radius: var(--gg-r-sm);
+  transition: color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-nav__link:hover,
+.gg-nav__item.is-open > .gg-nav__link { color: var(--gg-white); }
+.gg-nav__link::after {
+  content: "";
+  position: absolute;
+  inset-block-end: 4px;
+  inset-inline-start: var(--sp-2);
+  inline-size: calc(100% - var(--sp-4));
+  block-size: 2px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-grad-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-nav__link:hover::after,
+.gg-nav__item.is-open > .gg-nav__link::after,
+.gg-nav__link[aria-current="page"]::after { transform: scaleX(1); }
+.gg-nav__link[aria-current="page"] { color: var(--gg-white); }
+
+.gg-nav__link .gg-icon {
+  inline-size: 14px; block-size: 14px;
+  transition: transform var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-nav__item.is-open > .gg-nav__link .gg-icon { transform: rotate(180deg); }
+
+.gg-nav__actions { display: none; align-items: center; gap: var(--sp-1); }
+
+/* --- Mobile toggle -------------------------------------------------------- */
+.gg-nav__toggle {
+  inline-size: 44px;
+  block-size: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--gg-r-sm);
+  color: var(--gg-white);
+  border: 1px solid var(--gg-glass-border);
+  background: var(--gg-glass-bg);
+}
+.gg-nav__toggle .gg-icon { inline-size: 22px; block-size: 22px; }
+
+@media (min-width: 1100px) {
+  .gg-nav__links, .gg-nav__actions { display: flex; }
+  .gg-nav__toggle { display: none; }
+}
+
+/* ==========================================================================
+   6. MEGA MENU
+   ========================================================================== */
+.gg-mega {
+  position: absolute;
+  inset-block-start: calc(100% + 10px);
+  inset-inline-start: 50%;
+  translate: -50% 0;
+  inline-size: min(1080px, calc(100vw - var(--sp-6)));
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-scrim-mega);
+  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(20px) saturate(150%);
+  border: 1px solid var(--gg-glass-border);
+  box-shadow: var(--gg-shadow-lg);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity var(--gg-dur-fast) var(--gg-ease),
+              transform var(--gg-dur-fast) var(--gg-ease),
+              visibility 0s linear var(--gg-dur-fast);
+}
+.gg-nav__item.is-open > .gg-mega {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition-delay: 0s;
+}
+
+.gg-mega__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2);
+  padding-block-end: var(--sp-2);
+  margin-block-end: var(--sp-3);
+  border-block-end: 1px solid var(--gg-glass-border);
+}
+.gg-mega__head h3 { color: var(--gg-white); font-size: var(--fs-h4); }
+.gg-mega__head p { color: var(--gg-on-dark-soft); font-size: var(--fs-xs); margin-inline-start: auto; }
+
+.gg-mega__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px var(--sp-2);
+}
+
+.gg-mega__link {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px;
+  border-radius: var(--gg-r-sm);
+  color: var(--gg-on-dark-mute);
+  transition: background var(--gg-dur-fast) var(--gg-ease),
+              color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-mega__link:hover { background: var(--gg-glass-hover); color: var(--gg-white); }
+
+.gg-mega__icon {
+  inline-size: 34px;
+  block-size: 34px;
+  flex: none;
+  display: grid;
+  place-items: center;
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  color: var(--gg-green-300);
+}
+.gg-mega__icon .gg-icon { inline-size: 18px; block-size: 18px; }
+
+.gg-mega__text { min-inline-size: 0; }
+.gg-mega__name {
+  display: block;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--gg-white);
+  line-height: 1.3;
+}
+.gg-mega__meta {
+  display: block;
+  font-size: var(--fs-xs);
+  color: var(--gg-on-dark-soft);
+  margin-block-start: 2px;
+}
+.gg-mega__link.is-planned { opacity: .6; }
+
+.gg-mega__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-3);
+  padding-block-start: var(--sp-3);
+  border-block-start: 1px solid var(--gg-glass-border);
+}
+.gg-mega__note {
+  font-size: var(--fs-xs);
+  color: var(--gg-on-dark-soft);
+  margin-inline-end: auto;
+  max-inline-size: 62ch;
+}
+
+/* ==========================================================================
+   7. MOBILE DRAWER
+   ========================================================================== */
+.gg-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-drawer);
+  display: flex;
+  flex-direction: column;
+  background: var(--gg-grad-dark);
+  color: var(--gg-on-dark);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--gg-dur-fast) var(--gg-ease),
+              visibility 0s linear var(--gg-dur-fast);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.gg-drawer.is-open { opacity: 1; visibility: visible; transition-delay: 0s; }
+
+.gg-drawer__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--gg-gutter);
+  block-size: var(--gg-nav-h);
+  flex: none;
+  border-block-end: 1px solid var(--gg-glass-border);
+}
+.gg-drawer__head .gg-nav__brand img { block-size: 40px; inline-size: 40px; }
+
+.gg-drawer__body { padding: var(--sp-4) var(--gg-gutter) var(--sp-8); }
+
+.gg-drawer__link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) 0;
+  font-family: var(--gg-font-display);
+  font-size: clamp(1.5rem, 7vw, 2rem);
+  font-weight: 700;
+  letter-spacing: var(--ls-heading);
+  color: var(--gg-white);
+  border-block-end: 1px solid var(--gg-glass-border);
+}
+.gg-drawer__link .gg-icon { color: var(--gg-green-300); }
+.gg-drawer__link[aria-expanded="true"] .gg-icon { transform: rotate(180deg); }
+
+/* Nested sector list inside the drawer */
+.gg-drawer__sub { padding-block: var(--sp-2); display: grid; gap: 2px; }
+.gg-drawer__sub[hidden] { display: none; }
+.gg-drawer__sublink {
+  display: flex; align-items: center; gap: var(--sp-1);
+  padding: 9px 0;
+  font-size: var(--fs-sm);
+  color: var(--gg-on-dark-mute);
+}
+.gg-drawer__sublink:hover { color: var(--gg-white); }
+.gg-drawer__sublink.is-planned { opacity: .6; }
+
+.gg-drawer__foot {
+  margin-block-start: var(--sp-6);
+  padding-block-start: var(--sp-4);
+  border-block-start: 1px solid var(--gg-glass-border);
+  display: grid;
+  gap: var(--sp-2);
+}
+
+/* Locks background scroll while the drawer is open */
+body.is-drawer-open { overflow: hidden; }
+
+@media (min-width: 1100px) { .gg-drawer { display: none; } }
+
+/* ==========================================================================
+   8. FOOTER
+   ========================================================================== */
+.gg-footer {
+  background: var(--gg-navy-900);
+  color: var(--gg-on-dark-mute);
+  padding-block: var(--sp-10) 0;
+  position: relative;
+}
+/* The brand ascent, restated as a hairline across the top of the footer */
+.gg-footer::before {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: 3px;
+  background: var(--gg-grad-brand);
+}
+
+.gg-footer__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+}
+@media (min-width: 768px)  { .gg-footer__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-footer__grid { grid-template-columns: 1.6fr 1fr 1.2fr 1.4fr; gap: var(--sp-5); } }
+
+.gg-footer__logo { inline-size: 210px; max-inline-size: 70%; margin-block-end: var(--sp-3); }
+.gg-footer__tagline { font-size: var(--fs-sm); max-inline-size: 42ch; }
+
+.gg-footer__title {
+  font-family: var(--gg-font-body);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-green-300);
+  margin-block-end: var(--sp-2);
+}
+
+.gg-footer__list { display: grid; gap: 9px; }
+.gg-footer__list a {
+  font-size: var(--fs-sm);
+  color: var(--gg-on-dark-mute);
+  transition: color var(--gg-dur-fast) var(--gg-ease),
+              padding-inline-start var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-footer__list a:hover { color: var(--gg-white); padding-inline-start: 6px; }
+
+/* Divisions column runs two-up so twelve links do not become a tall stack.
+   Flows down each column rather than across rows, which is how a reader
+   scans a list of names. */
+.gg-footer__list--split {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(6, auto);
+  grid-auto-flow: column;
+  gap: 9px var(--sp-2);
+  align-content: start;
+}
+
+.gg-footer__contact { display: grid; gap: var(--sp-2); }
+.gg-footer__contact-row { display: flex; align-items: flex-start; gap: 10px; font-size: var(--fs-sm); }
+.gg-footer__contact-row .gg-icon { color: var(--gg-green-300); margin-block-start: 3px; }
+.gg-footer__contact-row a:hover { color: var(--gg-white); }
+
+.gg-footer__social { display: flex; gap: var(--sp-1); margin-block-start: var(--sp-3); }
+.gg-footer__social a {
+  inline-size: 40px; block-size: 40px;
+  display: grid; place-items: center;
+  border-radius: var(--gg-r-pill);
+  border: 1px solid var(--gg-glass-border);
+  background: var(--gg-glass-bg);
+  color: var(--gg-on-dark-mute);
+  transition: background var(--gg-dur-fast) var(--gg-ease),
+              color var(--gg-dur-fast) var(--gg-ease),
+              transform var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-footer__social a:hover {
+  background: var(--gg-green-500);
+  border-color: var(--gg-green-500);
+  color: var(--gg-white);
+  transform: translateY(-2px);
+}
+
+/* Regulatory footnote sits above the bottom bar on every page */
+.gg-footer__note {
+  margin-block-start: var(--sp-8);
+  padding: var(--sp-3);
+  border: 1px solid var(--gg-glass-border);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-glass-bg);
+  font-size: var(--fs-xs);
+  line-height: 1.6;
+  color: var(--gg-on-dark-soft);
+}
+
+.gg-footer__bar {
+  margin-block-start: var(--sp-6);
+  padding-block: var(--sp-3);
+  border-block-start: 1px solid var(--gg-glass-border);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-1) var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--gg-on-dark-soft);
+}
+.gg-footer__legal { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin-inline-start: auto; }
+.gg-footer__legal a:hover { color: var(--gg-white); }
+
+/* ==========================================================================
+   9. SECTION HEADER PATTERN
+   eyebrow + H2 + lead. One component, used by every section on the site.
+   ========================================================================== */
+.gg-shead { max-inline-size: 720px; margin-block-end: var(--sp-8); }
+.gg-shead--center { margin-inline: auto; text-align: center; }
+.gg-shead--center .gg-eyebrow { justify-content: center; }
+.gg-shead--wide { max-inline-size: 900px; }
+.gg-shead__title { margin-block-end: var(--sp-2); }
+
+/* Header with a trailing action on the same line */
+.gg-shead-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  margin-block-end: var(--sp-6);
+}
+.gg-shead-row .gg-shead { margin-block-end: 0; }
+
+/* ==========================================================================
+   10. SECTOR CARD
+   The signature component. The brand gradient sweeps in from bottom-left on
+   hover, the sector number scales up, the arrow travels right.
+   ========================================================================== */
+.gg-sector-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-block-size: 280px;
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform var(--gg-dur) var(--gg-ease),
+              box-shadow var(--gg-dur) var(--gg-ease),
+              border-color var(--gg-dur) var(--gg-ease);
+}
+.gg-sector-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--gg-grad-brand);
+  opacity: 0;
+  transform: translate3d(-28%, 28%, 0) scale(1.35);
+  transition: opacity var(--gg-dur) var(--gg-ease),
+              transform var(--gg-dur-slow) var(--gg-ease);
+}
+.gg-sector-card:hover,
+.gg-sector-card:focus-within {
+  transform: translateY(-6px);
+  border-color: transparent;
+  box-shadow: var(--gg-shadow-lg);
+}
+.gg-sector-card:hover::before,
+.gg-sector-card:focus-within::before { opacity: 1; transform: none; }
+
+.gg-sector-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--sp-2); }
+
+.gg-sector-card__icon {
+  inline-size: 52px;
+  block-size: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--gg-r-md);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  color: var(--gg-navy-700);
+  transition: background var(--gg-dur-fast) var(--gg-ease),
+              color var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-sector-card__icon .gg-icon { inline-size: 26px; block-size: 26px; }
+
+.gg-sector-card__num {
+  font-family: var(--gg-font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  color: var(--gg-line);
+  font-variant-numeric: tabular-nums;
+  transition: color var(--gg-dur-fast) var(--gg-ease),
+              transform var(--gg-dur) var(--gg-ease);
+  transform-origin: top right;
+}
+
+.gg-sector-card__title { font-size: var(--fs-h4); margin-block-start: var(--sp-1); }
+.gg-sector-card__text { font-size: var(--fs-sm); color: var(--gg-grey-500); }
+
+.gg-sector-card__divs {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-block-start: auto;
+  padding-block-start: var(--sp-2);
+}
+.gg-sector-card__chip {
+  font-size: var(--fs-xs);
+  padding: 3px 9px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  color: var(--gg-grey-500);
+  transition: background var(--gg-dur-fast) var(--gg-ease),
+              color var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease);
+}
+
+.gg-sector-card__foot {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-2);
+  padding-block-start: var(--sp-2);
+  border-block-start: 1px solid var(--gg-line);
+  transition: border-color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-sector-card__cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: var(--fs-sm); font-weight: 600;
+  color: var(--gg-navy-700);
+  transition: color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-sector-card__cta .gg-icon { transition: transform var(--gg-dur-fast) var(--gg-ease); }
+
+/* Stretched link keeps the whole card clickable with one real anchor */
+.gg-sector-card__link::after { content: ""; position: absolute; inset: 0; }
+
+/* --- Hover colour flip ---------------------------------------------------
+   EVERY selector here is scoped :not(.is-planned).
+
+   A planned card suppresses the gradient sweep (::before is display:none
+   below), so if it also flipped its text to white it would be white-on-white
+   — the card would appear blank the moment a pointer touched it. Do not drop
+   the :not() from any of these. */
+.gg-sector-card:not(.is-planned):hover .gg-sector-card__title,
+.gg-sector-card:not(.is-planned):focus-within .gg-sector-card__title { color: var(--gg-white); }
+.gg-sector-card:not(.is-planned):hover .gg-sector-card__text,
+.gg-sector-card:not(.is-planned):focus-within .gg-sector-card__text { color: var(--gg-on-dark-mute); }
+.gg-sector-card:not(.is-planned):hover .gg-sector-card__num,
+.gg-sector-card:not(.is-planned):focus-within .gg-sector-card__num {
+  color: rgba(255,255,255,.28);
+  transform: scale(1.35);
+}
+.gg-sector-card:not(.is-planned):hover .gg-sector-card__icon,
+.gg-sector-card:not(.is-planned):focus-within .gg-sector-card__icon {
+  background: var(--gg-glass-bg);
+  border-color: var(--gg-glass-border);
+  color: var(--gg-green-300);
+}
+.gg-sector-card:not(.is-planned):hover .gg-sector-card__chip,
+.gg-sector-card:not(.is-planned):focus-within .gg-sector-card__chip {
+  background: var(--gg-glass-bg);
+  border-color: var(--gg-glass-border);
+  color: var(--gg-on-dark-mute);
+}
+.gg-sector-card:not(.is-planned):hover .gg-sector-card__foot,
+.gg-sector-card:not(.is-planned):focus-within .gg-sector-card__foot { border-block-start-color: var(--gg-glass-border); }
+.gg-sector-card:not(.is-planned):hover .gg-sector-card__cta,
+.gg-sector-card:not(.is-planned):focus-within .gg-sector-card__cta { color: var(--gg-white); }
+.gg-sector-card:not(.is-planned):hover .gg-sector-card__cta .gg-icon,
+.gg-sector-card:not(.is-planned):focus-within .gg-sector-card__cta .gg-icon { transform: translateX(5px); }
+
+/* Planned sectors never sweep and never show a CTA */
+.gg-sector-card.is-planned:hover,
+.gg-sector-card.is-planned:focus-within {
+  transform: none;
+  box-shadow: var(--gg-shadow-sm);
+  border-color: var(--gg-line);
+}
+.gg-sector-card.is-planned::before { display: none; }
+.gg-sector-card.is-planned .gg-sector-card__cta { display: none; }
+
+/* ==========================================================================
+   11. DIVISION CARD
+   ========================================================================== */
+.gg-div-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  transition: transform var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-div-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--gg-shadow-md);
+  border-color: var(--gg-green-500);
+}
+.gg-div-card__icon {
+  inline-size: 44px; block-size: 44px; flex: none;
+  display: grid; place-items: center;
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-off);
+  color: var(--gg-navy-700);
+}
+.gg-div-card__body { min-inline-size: 0; }
+.gg-div-card__name { font-size: var(--fs-body); font-weight: 600; color: var(--gg-ink); line-height: 1.3; }
+.gg-div-card__sector { font-size: var(--fs-xs); color: var(--gg-grey-500); margin-block-start: 2px; }
+.gg-div-card__arrow {
+  margin-inline-start: auto;
+  color: var(--gg-grey-500);
+  transition: transform var(--gg-dur-fast) var(--gg-ease), color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-div-card:hover .gg-div-card__arrow { transform: translateX(4px); color: var(--gg-green-700); }
+.gg-div-card__link::after { content: ""; position: absolute; inset: 0; }
+
+.gg-dark .gg-div-card { background: var(--gg-glass-bg); border-color: var(--gg-glass-border); }
+.gg-dark .gg-div-card__name { color: var(--gg-white); }
+.gg-dark .gg-div-card__icon { background: var(--gg-glass-bg); color: var(--gg-green-300); }
+.gg-dark .gg-div-card:hover .gg-div-card__arrow { color: var(--gg-green-300); }
+
+/* ==========================================================================
+   12. STAT CARD
+   ========================================================================== */
+.gg-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  /* This component renders its value at up to 64px. A long string here would
+     otherwise set the grid track width and push the page sideways. */
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+.gg-stat-card__value {
+  font-family: var(--gg-font-display);
+  font-size: clamp(2.75rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: var(--ls-display);
+  font-variant-numeric: tabular-nums;
+}
+.gg-stat-card__label { font-size: var(--fs-sm); font-weight: 600; color: var(--gg-ink); }
+.gg-dark .gg-stat-card__label { color: var(--gg-white); }
+.gg-stat-card__detail { font-size: var(--fs-xs); color: var(--gg-grey-500); max-inline-size: 32ch; }
+.gg-dark .gg-stat-card__detail { color: var(--gg-on-dark-soft); }
+
+/* On dark the counter uses the light ramp — it clears contrast there */
+.gg-dark .gg-stat-card__value.gg-grad-text { background-image: var(--gg-grad-accent); }
+
+/* ==========================================================================
+   13. LEADERSHIP CARD
+   ========================================================================== */
+.gg-leader-card {
+  position: relative;
+  border-radius: var(--gg-r-lg);
+  overflow: hidden;
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+}
+.gg-leader-card__media {
+  aspect-ratio: 4 / 5;
+  /* A grid with only two or three profiles must not produce an 800px portrait */
+  max-block-size: 420px;
+  background: var(--gg-grad-dark);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+.gg-leader-card__media img { inline-size: 100%; block-size: 100%; object-fit: cover; }
+/* Placeholder monogram until real portraits arrive */
+.gg-leader-card__monogram {
+  font-family: var(--gg-font-display);
+  font-size: 3rem;
+  font-weight: 800;
+  color: var(--gg-on-dark-soft);
+  letter-spacing: var(--ls-display);
+}
+.gg-leader-card__body { padding: var(--sp-3); }
+.gg-leader-card__name { font-size: var(--fs-h4); }
+.gg-leader-card__role {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-green-700);
+  margin-block-start: 4px;
+}
+.gg-leader-card__bio { font-size: var(--fs-sm); color: var(--gg-grey-500); margin-block-start: var(--sp-1); }
+
+/* ==========================================================================
+   14. JOB CARD
+   ========================================================================== */
+.gg-job-card {
+  position: relative;
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-inline-start: 3px solid var(--gg-line);
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease),
+              transform var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-job-card:hover {
+  border-inline-start-color: var(--gg-green-500);
+  box-shadow: var(--gg-shadow-md);
+  transform: translateX(3px);
+}
+.gg-job-card__head { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-1) var(--sp-2); }
+.gg-job-card__title { font-size: var(--fs-h4); }
+.gg-job-card__dept {
+  font-size: var(--fs-xs); font-weight: 600;
+  letter-spacing: var(--ls-eyebrow); text-transform: uppercase;
+  color: var(--gg-green-700);
+}
+.gg-job-card__summary { font-size: var(--fs-sm); color: var(--gg-grey-500); max-inline-size: 72ch; }
+.gg-job-card__meta { display: flex; flex-wrap: wrap; gap: 6px; }
+.gg-job-card__foot { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); }
+.gg-job-card__foot .gg-btn { margin-inline-start: auto; }
+
+/* ==========================================================================
+   15. FORM CONTROLS
+   ========================================================================== */
+.gg-field { display: grid; gap: 6px; margin-block-end: var(--sp-3); }
+
+.gg-label { font-size: var(--fs-sm); font-weight: 600; color: var(--gg-ink); }
+.gg-label__req { color: var(--gg-danger); margin-inline-start: 2px; }
+.gg-dark .gg-label { color: var(--gg-white); }
+
+.gg-help { font-size: var(--fs-xs); color: var(--gg-grey-500); }
+.gg-dark .gg-help { color: var(--gg-on-dark-soft); }
+
+.gg-input,
+.gg-textarea,
+.gg-select {
+  inline-size: 100%;
+  padding: 13px var(--sp-2);
+  font-size: var(--fs-sm);
+  font-family: var(--gg-font-body);
+  color: var(--gg-ink);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-sm);
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease),
+              background var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-input::placeholder, .gg-textarea::placeholder { color: var(--gg-grey-500); opacity: .75; }
+.gg-input:hover, .gg-textarea:hover, .gg-select:hover { border-color: var(--gg-grey-500); }
+.gg-input:focus, .gg-textarea:focus, .gg-select:focus {
+  outline: none;
+  border-color: var(--gg-green-500);
+  box-shadow: 0 0 0 3px rgba(76,168,63,.18);
+}
+
+.gg-textarea { min-block-size: 140px; resize: vertical; line-height: 1.6; }
+
+/* Native arrow removed and replaced with a token-coloured chevron */
+.gg-select {
+  -webkit-appearance: none;
+  appearance: none;
+  padding-inline-end: var(--sp-5);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2364748B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--sp-2) center;
+  background-size: 18px;
+}
+
+/* On dark surfaces */
+.gg-dark .gg-input, .gg-dark .gg-textarea, .gg-dark .gg-select {
+  color: var(--gg-white);
+  background: var(--gg-glass-bg);
+  border-color: var(--gg-glass-border);
+}
+.gg-dark .gg-input::placeholder, .gg-dark .gg-textarea::placeholder { color: var(--gg-on-dark-soft); }
+.gg-dark .gg-input:focus, .gg-dark .gg-textarea:focus, .gg-dark .gg-select:focus {
+  border-color: var(--gg-green-400);
+  background: var(--gg-glass-hover);
+}
+
+/* --- Validation states ---------------------------------------------------- */
+.gg-field.is-error .gg-input,
+.gg-field.is-error .gg-textarea,
+.gg-field.is-error .gg-select {
+  border-color: var(--gg-danger);
+  background: var(--gg-danger-soft);
+}
+.gg-field.is-error .gg-input:focus,
+.gg-field.is-error .gg-textarea:focus,
+.gg-field.is-error .gg-select:focus { box-shadow: 0 0 0 3px rgba(192,57,43,.18); }
+
+.gg-field.is-success .gg-input,
+.gg-field.is-success .gg-textarea,
+.gg-field.is-success .gg-select { border-color: var(--gg-green-500); }
+
+.gg-error, .gg-success-msg {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-xs);
+  font-weight: 500;
+}
+.gg-error { color: var(--gg-danger); }
+.gg-success-msg { color: var(--gg-green-700); }
+.gg-field.is-error .gg-error { display: flex; }
+.gg-field.is-success .gg-success-msg { display: flex; }
+
+/* --- File upload ---------------------------------------------------------- */
+.gg-file { position: relative; }
+.gg-file input[type="file"] {
+  position: absolute; inset: 0;
+  inline-size: 100%; block-size: 100%;
+  opacity: 0; cursor: pointer;
+}
+.gg-file__box {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border: 1.5px dashed var(--gg-line);
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-off);
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              background var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-file input[type="file"]:hover + .gg-file__box,
+.gg-file input[type="file"]:focus-visible + .gg-file__box {
+  border-color: var(--gg-green-500);
+  background: var(--gg-success-soft);
+}
+.gg-file__box .gg-icon { color: var(--gg-green-700); }
+.gg-file__text { font-size: var(--fs-sm); }
+.gg-file__name { font-weight: 600; color: var(--gg-ink); }
+.gg-file__hint { display: block; font-size: var(--fs-xs); color: var(--gg-grey-500); }
+.gg-file.has-file .gg-file__box {
+  border-style: solid;
+  border-color: var(--gg-green-500);
+  background: var(--gg-success-soft);
+}
+
+/* --- Checkbox & radio ----------------------------------------------------- */
+.gg-check { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
+.gg-check input { position: absolute; opacity: 0; inline-size: 0; block-size: 0; }
+.gg-check__box {
+  inline-size: 20px; block-size: 20px; flex: none;
+  margin-block-start: 2px;
+  display: grid; place-items: center;
+  border: 1.5px solid var(--gg-line);
+  border-radius: 6px;
+  background: var(--gg-white);
+  color: transparent;
+  transition: background var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease),
+              color var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-check__box .gg-icon { inline-size: 13px; block-size: 13px; stroke-width: 3; }
+.gg-check:hover .gg-check__box { border-color: var(--gg-green-500); }
+.gg-check input:checked + .gg-check__box {
+  background: var(--gg-green-700);
+  border-color: var(--gg-green-700);
+  color: var(--gg-white);
+}
+.gg-check input:focus-visible + .gg-check__box { box-shadow: var(--gg-focus-ring); }
+.gg-check__label { font-size: var(--fs-sm); color: var(--gg-grey-700); }
+.gg-dark .gg-check__label { color: var(--gg-on-dark-mute); }
+.gg-dark .gg-check__box { background: var(--gg-glass-bg); border-color: var(--gg-glass-border); }
+
+/* Radio variant — same box, round */
+.gg-check--radio .gg-check__box { border-radius: var(--gg-r-pill); }
+
+/* --- Form-level messages --------------------------------------------------- */
+.gg-form-note {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--gg-r-sm);
+  font-size: var(--fs-sm);
+  border: 1px solid transparent;
+}
+.gg-form-note--success { color: var(--gg-green-700); background: var(--gg-success-soft); border-color: rgba(76,168,63,.24); }
+.gg-form-note--error   { color: var(--gg-danger);    background: var(--gg-danger-soft);  border-color: rgba(192,57,43,.24); }
+.gg-form-note--info    { color: var(--gg-navy-700);  background: var(--gg-info-soft);    border-color: rgba(30,111,184,.22); }
+
+/* On-dark variants. The light versions use deep text on a pale tint, which is
+   unreadable on navy — these flip to light text on a translucent tint. */
+.gg-dark .gg-form-note--success {
+  color: var(--gg-green-300);
+  background: rgba(76,168,63,.14);
+  border-color: rgba(143,212,106,.28);
+}
+.gg-dark .gg-form-note--error {
+  color: var(--gg-white);
+  background: rgba(192,57,43,.24);
+  border-color: rgba(255,255,255,.22);
+}
+.gg-dark .gg-form-note--info {
+  color: var(--gg-on-dark);
+  background: var(--gg-glass-bg);
+  border-color: var(--gg-glass-border);
+}
+.gg-dark .gg-form-note .gg-icon { color: var(--gg-green-300); }
+
+/* ==========================================================================
+   16. PRELOADER
+   ========================================================================== */
+.gg-preloader {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-preload);
+  display: grid;
+  place-items: center;
+  background: var(--gg-grad-dark);
+  color: var(--gg-on-dark);
+}
+.gg-preloader__inner { display: grid; justify-items: center; gap: var(--sp-3); }
+.gg-preloader__mark { inline-size: 72px; block-size: 72px; }
+/* Each bar scales up from its own baseline as the mark draws in. */
+.gg-preloader__mark [data-draw] {
+  transform-box: fill-box;
+  transform-origin: bottom center;
+}
+/* Mark colours come from tokens, never from fill attributes in the markup. */
+.gg-pl-bar--1 { fill: var(--gg-white); opacity: .45; }
+.gg-pl-bar--2 { fill: var(--gg-white); opacity: .62; }
+.gg-pl-bar--3 { fill: var(--gg-green-400); }
+.gg-pl-bar--4 { fill: var(--gg-green-500); }
+.gg-pl-head   { fill: var(--gg-green-300); }
+.gg-preloader__bar {
+  inline-size: min(240px, 60vw);
+  block-size: 3px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-glass-border);
+  overflow: hidden;
+}
+.gg-preloader__fill {
+  display: block;
+  block-size: 100%;
+  inline-size: 0%;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-grad-accent);
+}
+.gg-preloader__count {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  letter-spacing: .12em;
+  color: var(--gg-on-dark-soft);
+  font-variant-numeric: tabular-nums;
+}
+.gg-preloader.is-done { pointer-events: none; }
+
+/* ==========================================================================
+   17. SCROLL PROGRESS BAR
+   ========================================================================== */
+.gg-progress {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline: 0;
+  block-size: 3px;
+  z-index: var(--z-progress);
+  background: transparent;
+  pointer-events: none;
+}
+.gg-progress__fill {
+  display: block;
+  block-size: 100%;
+  inline-size: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: var(--gg-grad-accent);
+}
+
+/* ==========================================================================
+   18. CUSTOM CURSOR  (desktop, pointer:fine only — cursor.js gates this)
+   ========================================================================== */
+.gg-cursor, .gg-cursor__ring {
+  position: fixed;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+  z-index: var(--z-cursor);
+  pointer-events: none;
+  border-radius: var(--gg-r-pill);
+  will-change: transform;
+}
+.gg-cursor {
+  inline-size: 7px; block-size: 7px;
+  background: var(--gg-green-500);
+  margin: -3.5px 0 0 -3.5px;
+}
+.gg-cursor__ring {
+  inline-size: 34px; block-size: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1.5px solid var(--gg-navy-500);
+  transition: inline-size var(--gg-dur-fast) var(--gg-ease),
+              block-size var(--gg-dur-fast) var(--gg-ease),
+              margin var(--gg-dur-fast) var(--gg-ease),
+              border-color var(--gg-dur-fast) var(--gg-ease),
+              opacity var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-cursor__ring.is-active {
+  inline-size: 56px; block-size: 56px;
+  margin: -28px 0 0 -28px;
+  border-color: var(--gg-green-500);
+}
+/* Over dark sections the ring needs the light ramp to stay visible */
+.gg-cursor__ring.is-on-dark { border-color: var(--gg-green-300); }
+
+/* ==========================================================================
+   19. BACK TO TOP
+   ========================================================================== */
+.gg-to-top {
+  position: fixed;
+  inset-block-end: var(--sp-3);
+  inset-inline-end: var(--sp-3);
+  z-index: var(--z-sticky);
+  inline-size: 48px; block-size: 48px;
+  display: grid; place-items: center;
+  border-radius: var(--gg-r-pill);
+  color: var(--gg-white);
+  background: var(--gg-navy-700);
+  box-shadow: var(--gg-shadow-md);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity var(--gg-dur-fast) var(--gg-ease),
+              transform var(--gg-dur-fast) var(--gg-ease),
+              visibility 0s linear var(--gg-dur-fast),
+              background var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-to-top.is-visible { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
+.gg-to-top:hover { background: var(--gg-green-700); }

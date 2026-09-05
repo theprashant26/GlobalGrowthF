@@ -1,0 +1,116 @@
+/* ==========================================================================
+   GLOBAL GROWTH — BOOTSTRAP OVERRIDES
+   Remaps Bootstrap 5.3 CSS variables onto the brand tokens so stock
+   components (grid, modal, offcanvas, accordion, nav) inherit the brand
+   without us restyling each one.
+
+   LOAD ORDER MATTERS: this file must come AFTER vendor/bootstrap.min.css.
+   ========================================================================== */
+
+:root {
+  /* --- Theme colour slots ------------------------------------------------ */
+  --bs-primary:       var(--gg-navy-700);
+  --bs-primary-rgb:   10, 42, 82;
+  --bs-secondary:     var(--gg-grey-500);
+  --bs-secondary-rgb: 100, 116, 139;
+  --bs-success:       var(--gg-green-500);
+  --bs-success-rgb:   76, 168, 63;
+  --bs-info:          var(--gg-blue-500);
+  --bs-info-rgb:      30, 111, 184;
+  --bs-danger:        var(--gg-danger);
+  --bs-danger-rgb:    192, 57, 43;
+  --bs-light:         var(--gg-off);
+  --bs-dark:          var(--gg-navy-900);
+  --bs-dark-rgb:      4, 24, 47;
+
+  /* --- Type -------------------------------------------------------------- */
+  --bs-font-sans-serif:   var(--gg-font-body);
+  --bs-body-font-family:  var(--gg-font-body);
+  --bs-body-font-size:    var(--fs-body);
+  --bs-body-line-height:  var(--lh-body);
+  --bs-body-color:        var(--gg-grey-700);
+  --bs-body-color-rgb:    51, 65, 85;
+  --bs-body-bg:           var(--gg-white);
+  --bs-emphasis-color:    var(--gg-ink);
+  --bs-heading-color:     var(--gg-ink);
+  --bs-secondary-color:   var(--gg-grey-500);
+
+  /* --- Links ------------------------------------------------------------- */
+  --bs-link-color:        var(--gg-navy-700);
+  --bs-link-color-rgb:    10, 42, 82;
+  --bs-link-hover-color:  var(--gg-green-500);
+  --bs-link-hover-color-rgb: 76, 168, 63;
+  --bs-link-decoration:   none;
+
+  /* --- Borders & radii --------------------------------------------------- */
+  --bs-border-color:      var(--gg-line);
+  --bs-border-radius:     var(--gg-r-sm);
+  --bs-border-radius-sm:  var(--gg-r-sm);
+  --bs-border-radius-lg:  var(--gg-r-md);
+  --bs-border-radius-xl:  var(--gg-r-lg);
+  --bs-border-radius-2xl: var(--gg-r-xl);
+  --bs-border-radius-pill: var(--gg-r-pill);
+
+  /* --- Shadows ----------------------------------------------------------- */
+  --bs-box-shadow-sm: var(--gg-shadow-sm);
+  --bs-box-shadow:    var(--gg-shadow-md);
+  --bs-box-shadow-lg: var(--gg-shadow-lg);
+
+  /* --- Focus ring -------------------------------------------------------- */
+  --bs-focus-ring-color:  rgba(76, 168, 63, .35);
+  --bs-focus-ring-width:  3px;
+
+  /* --- Grid gutter on the brand 8px scale -------------------------------- */
+  --bs-gutter-x: var(--sp-3);
+}
+
+/* Bootstrap's own container caps are narrower than ours; align the widest
+   breakpoint to the brand container so .container matches .gg-container. */
+@media (min-width: 1400px) {
+  .container, .container-sm, .container-md,
+  .container-lg, .container-xl, .container-xxl { max-width: var(--gg-container); }
+}
+
+/* --------------------------------------------------------------------------
+   Neutralise stock component chrome we always restyle ourselves.
+   Keeping this minimal — we override behaviour-bearing bits only.
+   -------------------------------------------------------------------------- */
+.btn {
+  --bs-btn-focus-box-shadow: none;
+  font-family: var(--gg-font-body);
+  font-weight: 600;
+}
+
+.form-control, .form-select {
+  --bs-body-bg: var(--gg-white);
+  border-color: var(--gg-line);
+  border-radius: var(--gg-r-sm);
+}
+.form-control:focus, .form-select:focus {
+  border-color: var(--gg-green-500);
+  box-shadow: 0 0 0 3px rgba(76, 168, 63, .18);
+}
+
+.offcanvas, .modal-content, .dropdown-menu {
+  border-radius: var(--gg-r-md);
+  border-color: var(--gg-line);
+}
+
+.accordion {
+  --bs-accordion-border-color: var(--gg-line);
+  --bs-accordion-btn-focus-box-shadow: none;
+  --bs-accordion-active-bg: var(--gg-success-soft);
+  --bs-accordion-active-color: var(--gg-navy-700);
+  --bs-accordion-border-radius: var(--gg-r-md);
+}
+
+/* Bootstrap sets its own selection/placeholder greys — pull them to brand. */
+.form-control::placeholder, .form-select::placeholder { color: var(--gg-grey-500); opacity: .8; }
+
+/* Tables inherit brand lines rather than Bootstrap's default grey. */
+.table {
+  --bs-table-color: var(--gg-grey-700);
+  --bs-table-border-color: var(--gg-line);
+  --bs-table-striped-bg: var(--gg-off);
+  --bs-table-hover-bg: var(--gg-success-soft);
+}

@@ -9,7 +9,7 @@
  * disabled once the markup exists.
  */
 
-import { qs, qsa, icon, escapeHtml } from './utils.js';
+import { qs, qsa, icon, escapeHtml, url } from './utils.js';
 import { SECTORS, COUNTS } from '../data/sectors.js';
 import { BRAND, VISION, MISSION, VALUES, LEADERSHIP, MILESTONES, GOVERNANCE } from '../data/site.js';
 import { leaderCard } from './cards.js';
@@ -45,7 +45,7 @@ const treeDivision = division => {
   <div class="gg-node__item${planned ? ' is-planned' : ''}">
     ${icon(planned ? 'alert-circle' : 'chevron-right', 'gg-icon gg-icon--sm')}
     ${linked
-      ? `<a href="${division.page}">${escapeHtml(division.name)}</a>`
+      ? `<a href="${url(division.page)}">${escapeHtml(division.name)}</a>`
       : escapeHtml(division.name)}
     ${planned
       ? `<span class="gg-badge gg-badge--planned">${escapeHtml(division.regulator || 'Planned')}</span>`

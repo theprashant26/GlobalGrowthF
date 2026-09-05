@@ -9,7 +9,7 @@
  * filtered-out role leaves the tab order and the accessibility tree.
  */
 
-import { qs, qsa, icon, escapeHtml } from './utils.js';
+import { qs, qsa, icon, escapeHtml, url } from './utils.js';
 import { JOBS, DEPARTMENTS, LOCATIONS, JOB_TYPES, BENEFITS, HIRING_PROCESS } from '../data/jobs.js';
 import { jobCard } from './cards.js';
 
@@ -46,7 +46,7 @@ const roleMarkup = job => `
         <span class="gg-badge gg-badge--meta">${icon('clock', 'gg-icon gg-icon--sm')}${escapeHtml(job.type)}</span>
         <span class="gg-badge gg-badge--meta">${escapeHtml(job.experience)}</span>
         ${job.divisionSlug
-          ? `<a class="gg-badge gg-badge--active" href="/${job.divisionSlug}/">${escapeHtml(job.division)} division</a>`
+          ? `<a class="gg-badge gg-badge--active" href="${url(`/${job.divisionSlug}/`)}">${escapeHtml(job.division)} division</a>`
           : `<span class="gg-badge gg-badge--meta">${escapeHtml(job.division)}</span>`}
       </div>
     </div>

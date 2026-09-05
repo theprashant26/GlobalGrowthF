@@ -10,7 +10,7 @@
  * sectors.js / site.js / jobs.js are rendered here.
  */
 
-import { qs, icon, escapeHtml } from './utils.js';
+import { qs, icon, escapeHtml, url } from './utils.js';
 import { COUNTS } from '../data/sectors.js';
 import { GROUP_STATS, ROADMAP } from '../data/site.js';
 import { JOBS } from '../data/jobs.js';
@@ -73,7 +73,7 @@ const careersMarkup = () => [...JOBS]
   .map(job => `
     <div class="gg-careers-row">
       <span class="gg-careers-row__title">
-        <a class="gg-careers-row__link" href="/careers#${job.id}">${escapeHtml(job.title)}</a>
+        <a class="gg-careers-row__link" href="${url(`/careers#${job.id}`)}">${escapeHtml(job.title)}</a>
       </span>
       <span class="gg-careers-row__meta">
         ${escapeHtml(job.department)} · ${escapeHtml(job.location)} · ${escapeHtml(job.type)}

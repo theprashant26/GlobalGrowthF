@@ -13,7 +13,7 @@
  * these templates — not in the pages — so no page can accidentally omit it.
  */
 
-import { icon, escapeHtml } from './utils.js';
+import { icon, escapeHtml, url } from './utils.js';
 import { REGULATORY } from '../data/site.js';
 
 /** The status badge for any entity carrying a status flag. */
@@ -40,7 +40,7 @@ export const sectorCard = (sector, { chips = 3 } = {}) => {
     <h3 class="gg-sector-card__title">
       ${planned
         ? escapeHtml(sector.name)
-        : `<a class="gg-sector-card__link" href="/sectors#${sector.id}">${escapeHtml(sector.name)}</a>`}
+        : `<a class="gg-sector-card__link" href="${url(`/sectors#${sector.id}`)}">${escapeHtml(sector.name)}</a>`}
     </h3>
     <p class="gg-sector-card__text">${escapeHtml(sector.summary)}</p>
 
@@ -72,7 +72,7 @@ export const divisionCard = (division, { showSector = true } = {}) => {
     <div class="gg-div-card__body">
       <h3 class="gg-div-card__name">
         ${hasPage
-          ? `<a class="gg-div-card__link" href="${division.page}">${escapeHtml(division.name)}</a>`
+          ? `<a class="gg-div-card__link" href="${url(division.page)}">${escapeHtml(division.name)}</a>`
           : escapeHtml(division.name)}
       </h3>
       ${showSector && division.sectorName
@@ -115,7 +115,7 @@ export const leaderCard = person => `
   <article class="gg-leader-card">
     <div class="gg-leader-card__media">
       ${person.photo
-        ? `<img src="${person.photo}" alt="${escapeHtml(person.name)}" width="480" height="600" loading="lazy">`
+        ? `<img src="${url(person.photo)}" alt="${escapeHtml(person.name)}" width="480" height="600" loading="lazy">`
         : `<span class="gg-leader-card__monogram" aria-hidden="true">${escapeHtml(monogram(person.name))}</span>`}
     </div>
     <div class="gg-leader-card__body">
@@ -141,7 +141,7 @@ export const jobCard = job => `
         <span class="gg-badge gg-badge--meta">${icon('clock', 'gg-icon gg-icon--sm')}${escapeHtml(job.type)}</span>
         <span class="gg-badge gg-badge--meta">${escapeHtml(job.experience)}</span>
       </div>
-      <a class="gg-btn gg-btn--secondary gg-btn--sm" href="/careers#${job.id}">
+      <a class="gg-btn gg-btn--secondary gg-btn--sm" href="${url(`/careers#${job.id}`)}">
         View role ${icon('arrow-right', 'gg-btn__icon')}
       </a>
     </div>

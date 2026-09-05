@@ -18,7 +18,7 @@
  * border — never as a fill. No division has a colour scheme of its own.
  */
 
-import { qs, qsa, icon, escapeHtml } from './utils.js';
+import { qs, qsa, icon, escapeHtml, url } from './utils.js';
 import { getDivision, getRelatedDivisions, getSector, SECTORS } from '../data/sectors.js';
 import { getDivisionDetail } from '../data/divisions.js';
 import { DIVISION_EMAILS, BRAND } from '../data/site.js';
@@ -58,14 +58,14 @@ const heroMarkup = (division, sector, detail, email) => `
   <div class="gg-container">
     <div class="gg-page-hero__inner">
       <nav class="gg-crumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a>
+        <a href="${url('/')}">Home</a>
         ${icon('chevron-right')}
-        <a href="/sectors">Our Sectors</a>
+        <a href="${url('/sectors')}">Our Sectors</a>
         ${icon('chevron-right')}
         ${/* Several divisions share their sector's name (Aviation in Aviation).
               Repeating it would read as a mistake, so the crumb is dropped. */
           division.name === sector.name ? '' : `
-        <a href="/sectors#${sector.id}">${escapeHtml(sector.name)}</a>
+        <a href="${url(`/sectors#${sector.id}`)}">${escapeHtml(sector.name)}</a>
         ${icon('chevron-right')}`}
         <span aria-current="page">${escapeHtml(division.name)}</span>
       </nav>
@@ -103,7 +103,7 @@ const overviewMarkup = (division, sector, detail) => `
         </div>
         <span class="gg-visual__grid" aria-hidden="true"></span>
         <div class="gg-visual__content">
-          <img class="gg-visual__mark" src="${BRAND.logo.markWhite}" alt=""
+          <img class="gg-visual__mark" src="${url(BRAND.logo.markWhite)}" alt=""
                width="64" height="64" loading="lazy">
           <div>
             <p class="gg-visual__caption">${escapeHtml(division.name)}</p>
@@ -118,7 +118,7 @@ const overviewMarkup = (division, sector, detail) => `
       <h2 class="gg-shead__title">What this division does</h2>
       ${detail.overview.map((para, i) =>
         `<p class="${i === 0 ? 'gg-lead' : 'gg-mt-3'}">${escapeHtml(para)}</p>`).join('')}
-      <a class="gg-btn gg-btn--secondary gg-mt-4" href="/sectors#${sector.id}">
+      <a class="gg-btn gg-btn--secondary gg-mt-4" href="${url(`/sectors#${sector.id}`)}">
         See all of ${escapeHtml(sector.name)}
         ${icon('arrow-right', 'gg-btn__icon')}
       </a>
@@ -164,7 +164,7 @@ const contactMarkup = (division, email) => `
         ${icon('mail')}
         <span>${email}</span>
       </a>
-      <a class="gg-btn gg-btn--primary gg-btn--block" href="/contact">
+      <a class="gg-btn gg-btn--primary gg-btn--block" href="${url('/contact')}">
         Send a detailed enquiry
         ${icon('arrow-right', 'gg-btn__icon')}
       </a>

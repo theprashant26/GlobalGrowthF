@@ -5,6 +5,53 @@
  */
 
 /* --------------------------------------------------------------------------
+   SITE BASE PATH
+   The site must work from a domain root (www.globalgrowthindustries.com/) AND
+   from a subdirectory (a GitHub Pages project site at /GlobalGrowthF/). A
+   root-relative "/assets/..." breaks in the second case, so every path in the
+   data files is written root-relative and passed through url() here.
+
+   BASE is derived from where this module was actually loaded from, so it is
+   correct wherever the site is deployed and needs no configuration.
+   utils.js lives at <base>assets/js/modules/utils.js — three levels down.
+   -------------------------------------------------------------------------- */
+export const BASE = new URL('../../../', import.meta.url).pathname;
+
+/**
+ * Set to true only when the host serves /about from about.html (nginx
+ * try_files, Netlify, Cloudflare Pages). Static hosts that do not — GitHub
+ * Pages project sites among them — need the extension, which is the default.
+ */
+const CLEAN_URLS = false;
+
+/** Pages that exist as <name>.html at the site root. */
+const ROOT_PAGES = new Set(['about', 'sectors', 'roadmap', 'careers', 'contact',
+                            'csr', 'legal', 'styleguide', '404']);
+
+/**
+ * Resolve a site-absolute path ("/about", "/assets/x.css", "/aviation/") to
+ * one that works from wherever the page currently is.
+ * Anything already absolute, or a mailto/tel/hash, is returned untouched.
+ */
+export const url = path => {
+  if (!path) return path;
+  if (/^([a-z]+:|\/\/|#)/i.test(path)) return path;   // absolute, protocol, or hash
+  if (!path.startsWith('/')) return path;               // already relative
+
+  let rest = path.slice(1);
+  if (rest === '') return BASE;
+
+  // Split any #hash or ?query off before deciding about the extension.
+  const marker = rest.search(/[#?]/);
+  const tail = marker === -1 ? '' : rest.slice(marker);
+  let name = marker === -1 ? rest : rest.slice(0, marker);
+
+  if (!CLEAN_URLS && ROOT_PAGES.has(name)) name += '.html';
+
+  return BASE + name + tail;
+};
+
+/* --------------------------------------------------------------------------
    DOM
    -------------------------------------------------------------------------- */
 export const qs  = (selector, scope = document) => scope.querySelector(selector);
@@ -58,6 +105,7 @@ export const icon = (name, className = 'gg-icon') =>
 let spritePromise = null;
 export const injectSprite = (src = '/assets/icons/sprite.svg') => {
   if (spritePromise) return spritePromise;
+  src = url(src);
   spritePromise = fetch(src)
     .then(response => (response.ok ? response.text() : Promise.reject(response.status)))
     .then(markup => {
@@ -111,7 +159,7 @@ export const loadScript = src => {
  * @param {{sizes?:string, className?:string, eager?:boolean}} options
  */
 export const picture = (image, { sizes = '100vw', className = '', eager = false } = {}) => {
-  const base = `/assets/images/offices/${image.file}`;
+  const base = url(`/assets/images/offices/${image.file}`);
   return `
   <picture>
     <source type="image/webp" sizes="${sizes}"

@@ -14,7 +14,7 @@
  * and carries no link, because a link implies a service to enquire about.
  */
 
-import { qs, qsa, icon, escapeHtml, rafThrottle } from './utils.js';
+import { qs, qsa, icon, escapeHtml, rafThrottle, url } from './utils.js';
 import { SECTORS, COUNTS, ALL_DIVISIONS } from '../data/sectors.js';
 import { REGULATORY } from '../data/site.js';
 
@@ -40,7 +40,7 @@ const divisionMarkup = division => {
     ${icon(planned ? 'alert-circle' : 'check', 'gg-icon gg-icon--sm')}
     <span class="gg-division-item__name">
       ${linked
-        ? `<a class="gg-division-item__link" href="${division.page}">${escapeHtml(division.name)}</a>`
+        ? `<a class="gg-division-item__link" href="${url(division.page)}">${escapeHtml(division.name)}</a>`
         : escapeHtml(division.name)}
     </span>
     <span class="gg-division-item__tail">

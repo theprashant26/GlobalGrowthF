@@ -10,7 +10,7 @@
  * Mount point:  <footer class="gg-footer" data-footer></footer>
  */
 
-import { qs, icon, escapeHtml } from './utils.js';
+import { qs, icon, escapeHtml, url } from './utils.js';
 import { FOOTER_LINKS, LEGAL_LINKS } from '../data/nav.js';
 import { DIVISION_PAGES } from '../data/sectors.js';
 import { BRAND, OFFICE, EMAILS, SOCIAL, REGULATORY } from '../data/site.js';
@@ -43,7 +43,7 @@ const markup = () => `
     <div class="gg-footer__grid">
 
       <div>
-        <img class="gg-footer__logo" src="${BRAND.logo.lockupWhite}"
+        <img class="gg-footer__logo" src="${url(BRAND.logo.lockupWhite)}"
              alt="${escapeHtml(BRAND.legalName)}" width="480" height="358" loading="lazy">
         <p class="gg-footer__tagline">${escapeHtml(BRAND.tagline)}</p>
         <p class="gg-footer__tagline gg-mt-2" style="opacity:.72">
@@ -58,7 +58,7 @@ const markup = () => `
         <h2 class="gg-footer__title">The Group</h2>
         <ul class="gg-footer__list">
           ${FOOTER_LINKS.map(link => `
-            <li><a href="${link.href}">${escapeHtml(link.label)}</a></li>`).join('')}
+            <li><a href="${url(link.href)}">${escapeHtml(link.label)}</a></li>`).join('')}
         </ul>
       </nav>
 
@@ -66,7 +66,7 @@ const markup = () => `
         <h2 class="gg-footer__title">Divisions</h2>
         <ul class="gg-footer__list gg-footer__list--split">
           ${DIVISION_PAGES.map(division => `
-            <li><a href="${division.page}">${escapeHtml(division.name)}</a></li>`).join('')}
+            <li><a href="${url(division.page)}">${escapeHtml(division.name)}</a></li>`).join('')}
         </ul>
       </nav>
 
@@ -98,7 +98,7 @@ const markup = () => `
             </address>
           </div>
         </div>
-        <a class="gg-btn gg-btn--secondary gg-btn--sm gg-mt-3" href="/contact">
+        <a class="gg-btn gg-btn--secondary gg-btn--sm gg-mt-3" href="${url('/contact')}">
           All department emails ${icon('arrow-right', 'gg-btn__icon')}
         </a>
       </div>
@@ -114,7 +114,7 @@ const markup = () => `
       <span>&copy; ${new Date().getFullYear()} ${escapeHtml(BRAND.legalNameUC)}. All rights reserved.</span>
       <span>CIN: ${escapeHtml(BRAND.cin)}</span>
       <nav class="gg-footer__legal" aria-label="Legal">
-        ${LEGAL_LINKS.map(link => `<a href="${link.href}">${escapeHtml(link.label)}</a>`).join('')}
+        ${LEGAL_LINKS.map(link => `<a href="${url(link.href)}">${escapeHtml(link.label)}</a>`).join('')}
       </nav>
     </div>
   </div>`;

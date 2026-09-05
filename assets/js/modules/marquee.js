@@ -13,14 +13,14 @@
  * Mount point:  <div class="gg-marquee" data-marquee><div class="gg-marquee__track"></div></div>
  */
 
-import { qs, qsa, icon, escapeHtml, prefersReducedMotion, debounce } from './utils.js';
+import { qs, qsa, icon, escapeHtml, prefersReducedMotion, debounce, url } from './utils.js';
 import { DIVISION_PAGES } from '../data/sectors.js';
 
 /** Pixels per second. Slow and confident — this is not a ticker tape. */
 const SPEED = 70;
 
 const itemMarkup = division => `
-  <a class="gg-marquee__item" href="${division.page}">
+  <a class="gg-marquee__item" href="${url(division.page)}">
     ${icon('arrow-up-right')}${escapeHtml(division.name)}
   </a>`;
 

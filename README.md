@@ -60,7 +60,28 @@ GlobalGrowthF/
 └── README.md
 ```
 
-### Path discipline
+### Deployment paths — works at root AND in a subdirectory
+
+The site runs both from a domain root (`www.globalgrowthindustries.com/`) and
+from a subdirectory (a GitHub Pages **project** site at
+`username.github.io/GlobalGrowthF/`). Those need different paths, so:
+
+* **HTML** uses page-relative paths — `assets/…` at the root, `../assets/…` on
+  division pages. Never `/assets/…`, which only resolves at a domain root.
+* **CSS** references assets relative to the stylesheet — `url('../fonts/…')`.
+* **JS** resolves everything through `url()` in `utils.js`, which prefixes a
+  `BASE` derived from `import.meta.url`. Data files keep writing site-absolute
+  paths (`/about`, `/aviation/`, `/assets/…`) and `url()` maps them. **Any new
+  href or asset path emitted from JS must go through `url()`.**
+
+`CLEAN_URLS` in `utils.js` is the one switch: `false` (default) links to
+`about.html`, which works on every static host. Set it to `true` once the host
+serves `/about` from `about.html` — nginx `try_files`, Netlify, Cloudflare
+Pages — and links become extensionless again.
+
+`.nojekyll` is present so GitHub Pages serves the files as-is.
+
+### Path discipline (source convention)
 
 * Every asset reference is **root-relative**: `/assets/css/tokens.css`.
 * Never `../assets/`, never bare `assets/`. A relative path breaks on division pages.

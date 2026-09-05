@@ -24,7 +24,7 @@
  * complete, and the cursor, preloader and marquee are removed elsewhere.
  */
 
-import { qs, qsa, rafThrottle, prefersReducedMotion, loadScript } from './utils.js';
+import { qs, qsa, rafThrottle, prefersReducedMotion, loadScript, url } from './utils.js';
 
 const GSAP_FILES = [
   '/assets/vendor/gsap/gsap.min.js',
@@ -45,7 +45,7 @@ const ensureGsap = () => {
   gsapReady = (async () => {
     if (window.gsap?.registerPlugin && window.ScrollTrigger) return window.gsap;
     // Sequential, not parallel: the plugins attach to the core.
-    for (const file of GSAP_FILES) await loadScript(file);
+    for (const file of GSAP_FILES) await loadScript(url(file));
     if (!window.gsap) throw new Error('gsap global missing after load');
     window.gsap.registerPlugin(window.ScrollTrigger, window.ScrollToPlugin);
     return window.gsap;
@@ -66,7 +66,7 @@ const initLenis = async gsap => {
   if (!gsap) return null;
 
   try {
-    await loadScript(LENIS_FILE);
+    await loadScript(url(LENIS_FILE));
   } catch (error) {
     console.warn('[Global Growth] Lenis unavailable, native scrolling retained.');
     return null;

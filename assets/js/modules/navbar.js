@@ -13,7 +13,7 @@
  * Mount point:  <header class="gg-nav" data-navbar></header>
  */
 
-import { qs, qsa, el, icon, escapeHtml, rafThrottle, prefersReducedMotion } from './utils.js';
+import { qs, qsa, el, icon, escapeHtml, rafThrottle, prefersReducedMotion, url } from './utils.js';
 import { PRIMARY_NAV, NAV_CTA } from '../data/nav.js';
 import { SECTORS, DIVISION_PAGES, COUNTS } from '../data/sectors.js';
 import { BRAND, REGULATORY } from '../data/site.js';
@@ -39,7 +39,7 @@ const sectorsPanel = () => `
     <div class="gg-mega__grid">
       ${SECTORS.map(sector => `
         <a class="gg-mega__link${sector.status === 'planned' ? ' is-planned' : ''}"
-           href="/sectors#${sector.id}">
+           href="${url(`/sectors#${sector.id}`)}">
           <span class="gg-mega__icon">${icon(sector.icon)}</span>
           <span class="gg-mega__text">
             <span class="gg-mega__name">${escapeHtml(sector.name)}</span>
@@ -53,7 +53,7 @@ const sectorsPanel = () => `
     </div>
     <div class="gg-mega__foot">
       <p class="gg-mega__note">${escapeHtml(REGULATORY.footnote)}</p>
-      <a class="gg-btn gg-btn--primary gg-btn--sm" href="/sectors">
+      <a class="gg-btn gg-btn--primary gg-btn--sm" href="${url('/sectors')}">
         View all sectors ${icon('arrow-right', 'gg-btn__icon')}
       </a>
     </div>
@@ -67,7 +67,7 @@ const divisionsPanel = () => `
     </div>
     <div class="gg-mega__grid">
       ${DIVISION_PAGES.map(division => `
-        <a class="gg-mega__link" href="${division.page}">
+        <a class="gg-mega__link" href="${url(division.page)}">
           <span class="gg-mega__icon">${icon('arrow-up-right')}</span>
           <span class="gg-mega__text">
             <span class="gg-mega__name">${escapeHtml(division.name)}</span>
@@ -79,7 +79,7 @@ const divisionsPanel = () => `
       <p class="gg-mega__note">
         Every division operates to one group standard for governance, compliance and delivery.
       </p>
-      <a class="gg-btn gg-btn--primary gg-btn--sm" href="/sectors">
+      <a class="gg-btn gg-btn--primary gg-btn--sm" href="${url('/sectors')}">
         Explore the group ${icon('arrow-right', 'gg-btn__icon')}
       </a>
     </div>
@@ -93,8 +93,8 @@ const navMarkup = () => `
          wordmark is illegible, so the header pairs the mark with the name set
          in the brand face — the standard responsive-logo treatment. The full
          lockup is used in the footer and drawer where there is vertical room. -->
-    <a class="gg-nav__brand" href="/" aria-label="${escapeHtml(BRAND.legalName)} — home">
-      <img src="${BRAND.logo.markWhite}" alt="" width="160" height="160">
+    <a class="gg-nav__brand" href="${url('/')}" aria-label="${escapeHtml(BRAND.legalName)} — home">
+      <img src="${url(BRAND.logo.markWhite)}" alt="" width="160" height="160">
       <span class="gg-nav__wordmark" aria-hidden="true">
         <span class="gg-nav__wordmark-name">Global<em>Growth</em></span>
         <span class="gg-nav__wordmark-sub">Industries Pvt. Ltd.</span>
@@ -104,7 +104,7 @@ const navMarkup = () => `
     <ul class="gg-nav__links">
       ${PRIMARY_NAV.map(item => `
         <li class="gg-nav__item"${item.mega ? ' data-mega' : ''}>
-          <a class="gg-nav__link" href="${item.href}"${isCurrent(item.href) ? ' aria-current="page"' : ''}${
+          <a class="gg-nav__link" href="${url(item.href)}"${isCurrent(item.href) ? ' aria-current="page"' : ''}${
             item.mega ? ' aria-expanded="false" aria-haspopup="true"' : ''
           }>
             ${escapeHtml(item.label)}${item.mega ? icon('chevron-down') : ''}
@@ -114,7 +114,7 @@ const navMarkup = () => `
     </ul>
 
     <div class="gg-nav__actions">
-      <a class="gg-btn gg-btn--primary gg-btn--sm" href="${NAV_CTA.href}">
+      <a class="gg-btn gg-btn--primary gg-btn--sm" href="${url(NAV_CTA.href)}">
         ${escapeHtml(NAV_CTA.label)} ${icon('arrow-right', 'gg-btn__icon')}
       </a>
     </div>
@@ -129,7 +129,7 @@ const drawerMarkup = () => {
   let index = 0;
   const link = (label, href, current) => {
     const html = `
-      <a class="gg-drawer__link" href="${href}" style="--i:${index}"${current ? ' aria-current="page"' : ''}>
+      <a class="gg-drawer__link" href="${url(href)}" style="--i:${index}"${current ? ' aria-current="page"' : ''}>
         ${escapeHtml(label)} ${icon('arrow-up-right')}
       </a>`;
     index += 1;
@@ -144,7 +144,7 @@ const drawerMarkup = () => {
       <div class="gg-drawer__sub" id="gg-drawer-sectors" hidden>
         ${SECTORS.map(sector => `
           <a class="gg-drawer__sublink${sector.status === 'planned' ? ' is-planned' : ''}"
-             href="/sectors#${sector.id}">
+             href="${url(`/sectors#${sector.id}`)}">
             ${icon('chevron-right', 'gg-icon gg-icon--sm')} ${escapeHtml(sector.name)}
           </a>`).join('')}
       </div>
@@ -157,7 +157,7 @@ const drawerMarkup = () => {
       </button>
       <div class="gg-drawer__sub" id="gg-drawer-divisions" hidden>
         ${DIVISION_PAGES.map(division => `
-          <a class="gg-drawer__sublink" href="${division.page}">
+          <a class="gg-drawer__sublink" href="${url(division.page)}">
             ${icon('chevron-right', 'gg-icon gg-icon--sm')} ${escapeHtml(division.name)}
           </a>`).join('')}
       </div>
@@ -169,8 +169,8 @@ const drawerMarkup = () => {
 
   return `
     <div class="gg-drawer__head">
-      <a class="gg-nav__brand" href="/" aria-label="${escapeHtml(BRAND.legalName)} — home">
-        <img src="${BRAND.logo.markWhite}" alt="" width="160" height="160">
+      <a class="gg-nav__brand" href="${url('/')}" aria-label="${escapeHtml(BRAND.legalName)} — home">
+        <img src="${url(BRAND.logo.markWhite)}" alt="" width="160" height="160">
         <span class="gg-nav__wordmark" aria-hidden="true">
           <span class="gg-nav__wordmark-name">Global<em>Growth</em></span>
           <span class="gg-nav__wordmark-sub">Industries Pvt. Ltd.</span>
@@ -186,7 +186,7 @@ const drawerMarkup = () => {
       ${divisionsGroup}
       ${after.map(item => link(item.label, item.href, isCurrent(item.href))).join('')}
       <div class="gg-drawer__foot" style="--i:${index}">
-        <a class="gg-btn gg-btn--primary gg-btn--lg gg-btn--block" href="${NAV_CTA.href}">
+        <a class="gg-btn gg-btn--primary gg-btn--lg gg-btn--block" href="${url(NAV_CTA.href)}">
           ${escapeHtml(NAV_CTA.label)} ${icon('arrow-right', 'gg-btn__icon')}
         </a>
         <a class="gg-btn gg-btn--secondary gg-btn--block" href="mailto:${BRAND.primaryEmail}">

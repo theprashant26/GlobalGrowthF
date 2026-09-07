@@ -46,18 +46,87 @@ export const BRAND = {
   }
 };
 
-/** Registered office — awaiting confirmed address from the client. */
+/**
+ * Registered office — confirmed by the client.
+ *
+ * `lines` is what gets printed. The individual components below exist for the
+ * PostalAddress in the JSON-LD and for the map query, so that the structured
+ * data and the visible address can never drift apart.
+ */
 export const OFFICE = {
   label: 'Registered Office',
   lines: [
-    '{{REGISTERED_OFFICE_LINE_1}}',
-    '{{REGISTERED_OFFICE_LINE_2}}',
-    '{{REGISTERED_OFFICE_CITY_STATE_PIN}}',
-    'India'
+    '2nd Floor, BMTC Complex',
+    'Kengal Hanumanthaiah Road (K.H. Road)',
+    'Shanti Nagar, Bengaluru',
+    'Karnataka 560027, India'
   ],
+  street:     '2nd Floor, BMTC Complex, Kengal Hanumanthaiah Road (K.H. Road)',
+  locality:   'Shanti Nagar, Bengaluru',
+  region:     'Karnataka',
+  postalCode: '560027',
+  country:    'IN',
+  countryName: 'India',
   phone: '+91 92048 04718',
-  mapEmbed: null // set once the confirmed address is available
+  helpline: '+91 92048 04718',
+  /** Used to build the "open in maps" link — no third-party embed, no cookie. */
+  mapQuery: 'BMTC Complex, Kengal Hanumanthaiah Road, Shanti Nagar, Bengaluru, Karnataka 560027',
+  mapEmbed: null // an embedded iframe is a client decision: it sets a third-party cookie
 };
+
+/**
+ * Group certifications and registrations, as supplied by the client.
+ *
+ * `ref` is the registration or certificate number. Every one is a placeholder
+ * because a certification claim without a verifiable number is the kind of
+ * statement a regulator reads closely — supply the numbers before launch or
+ * remove the entry. Where the client supplied only an acronym, the expansion
+ * is marked so it can be confirmed rather than guessed.
+ */
+export const CERTIFICATIONS = [
+  {
+    abbr: 'MCA',
+    name: 'Ministry of Corporate Affairs',
+    detail: 'Incorporated and registered as a private limited company under the Companies Act, 2013.',
+    ref: '{{CIN_PLACEHOLDER}}'
+  },
+  {
+    abbr: 'MSME',
+    name: 'Udyam Registration',
+    detail: 'Registered as a Micro, Small and Medium Enterprise with the Ministry of MSME.',
+    ref: '{{UDYAM_REGISTRATION_NUMBER}}'
+  },
+  {
+    abbr: 'Startup India',
+    name: 'DPIIT Recognition',
+    detail: 'Recognised under the Startup India initiative of the Department for Promotion of Industry and Internal Trade.',
+    ref: '{{DPIIT_RECOGNITION_NUMBER}}'
+  },
+  {
+    abbr: 'ISO',
+    name: 'ISO Certification',
+    detail: 'Certified against the applicable ISO management-system standard.',
+    ref: '{{ISO_STANDARD_AND_CERTIFICATE_NUMBER}}'
+  },
+  {
+    abbr: 'IICA',
+    name: 'Indian Institute of Corporate Affairs',
+    detail: 'Registered with the Indian Institute of Corporate Affairs under the Ministry of Corporate Affairs.',
+    ref: '{{IICA_REGISTRATION_NUMBER}}'
+  },
+  {
+    abbr: 'FEF',
+    name: '{{FEF_FULL_FORM_TO_CONFIRM}}',
+    detail: 'Certification supplied by the client as "FEF". The issuing body must be named in full before this is published.',
+    ref: '{{FEF_REGISTRATION_NUMBER}}'
+  },
+  {
+    abbr: 'NCT',
+    name: '{{NCT_FULL_FORM_TO_CONFIRM}}',
+    detail: 'Certification supplied by the client as "NCT". The issuing body must be named in full before this is published.',
+    ref: '{{NCT_REGISTRATION_NUMBER}}'
+  }
+];
 
 /**
  * Corporate email directory — rendered as the table on /contact and used to
@@ -98,11 +167,10 @@ export const DIVISION_EMAILS = {
  * client confirms it.
  *
  * NOTE ON THE DIVISION COUNT
- * The client brief proposed the phrase "60+ business divisions". The sector
- * architecture as supplied actually contains 93, and a visitor can count them
- * on /sectors — so the figure is read from the data rather than hardcoded.
- * To publish the conservative phrasing instead, replace COUNTS.divisions with
- * 60 and set suffix to '+'. That is the only change required.
+ * The client's brand architecture defines 27 divisions, each trading as
+ * "Global Growth <name>". A visitor can count them on /sectors, so the figure
+ * is read from the data rather than hardcoded — the headline can never
+ * disagree with the page beneath it.
  */
 export const GROUP_STATS = [
   { value: COUNTS.sectors,   suffix: '',  label: 'Sectors of operation',   detail: 'Defined sectors spanning mobility, industry and services.' },
@@ -122,10 +190,18 @@ export const REGULATORY = {
     'does not solicit, offer or carry on any such activity until the applicable licence or registration is in force.'
 };
 
+/**
+ * Social profiles, as confirmed by the client.
+ *
+ * Only accounts that actually exist are listed. An inert icon in the footer
+ * looks like a broken link, and a link to an unclaimed handle is worse — so
+ * LinkedIn is absent rather than pending. Add it here when the page exists and
+ * it appears in the footer and in the Organization JSON-LD at the same time.
+ */
 export const SOCIAL = [
-  { name: 'LinkedIn', href: '{{LINKEDIN_URL_PLACEHOLDER}}', icon: 'linkedin' },
-  { name: 'X',        href: '{{X_URL_PLACEHOLDER}}',        icon: 'x' },
-  { name: 'YouTube',  href: '{{YOUTUBE_URL_PLACEHOLDER}}',  icon: 'youtube' }
+  { name: 'X',         href: 'https://x.com/Globalgrowth121',                   icon: 'x' },
+  { name: 'YouTube',   href: 'https://www.youtube.com/@GlobalGrowthIndustries', icon: 'youtube' },
+  { name: 'Instagram', href: 'https://www.instagram.com/globalgrowthindustries/', icon: 'instagram' }
 ];
 
 /** Growth roadmap — drives /roadmap and the homepage teaser. */
@@ -137,7 +213,7 @@ export const ROADMAP = [
     window: 'Phase 1',
     summary:
       'Establish the operating core — service businesses that generate cash, build the workforce and prove our delivery discipline.',
-    focus: ['Skill Development', 'Logistics', 'Travel & Tourism', 'Electrical & Engineering', 'Consultancy & Services']
+    focus: ['Skill Development', 'Logistics', 'Driver Services', 'Electrical', 'Travel & Tourism', 'Consultancy']
   },
   {
     id: 'phase-2',
@@ -146,7 +222,8 @@ export const ROADMAP = [
     window: 'Phase 2',
     summary:
       'Convert operating strength into asset-backed businesses, moving from services into manufacturing, care delivery and built infrastructure.',
-    focus: ['Manufacturing', 'Healthcare', 'Hotels', 'Technology', 'Infrastructure', 'Security', 'Education']
+    focus: ['Manufacturing', 'Healthcare', 'Hotels', 'IT & Technology', 'Construction', 'Security',
+             'Teaching & Education', 'Food & Beverages', 'Retail', 'Agriculture', 'Real Estate']
   },
   {
     id: 'phase-3',
@@ -155,7 +232,8 @@ export const ROADMAP = [
     window: 'Phase 3',
     summary:
       'Enter capital-intensive and licensed sectors at group scale, where credibility, balance sheet and regulatory standing are prerequisites.',
-    focus: ['Aviation', 'Rail & Metro Projects', 'Energy', 'Large Infrastructure', 'Pharma', 'Financial Services', 'Banking'],
+    focus: ['Aviation', 'Metro', 'Railways', 'Infrastructure', 'Energy', 'Renewable Energy',
+             'Pharmacy', 'Banking', 'Finance', 'Insurance'],
     hasRegulated: true
   }
 ];
@@ -221,39 +299,57 @@ export const VALUES = [
 ];
 
 /**
- * Leadership. Every profile is a placeholder pending client copy — names,
- * biographies and portraits are all to be supplied. The cards render a
- * monogram rather than a broken image until then.
+ * Leadership.
+ *
+ * READ THIS BEFORE THE REAL NAMES GO IN.
+ * The six portraits currently wired up are stock model photographs supplied as
+ * placeholders. They are safe only while the names beside them are also
+ * placeholders — nothing on the page yet claims that a specific person holds a
+ * specific office. The moment a real name replaces {{CHAIRMAN_NAME}}, a stock
+ * face beside it stops being a placeholder and becomes a false claim about a
+ * named individual.
+ *
+ * So: when the real names arrive, either the real photographs arrive with them,
+ * or `photo` comes off these entries and the cards fall back to the monogram —
+ * which they still do automatically for any entry without a `photo`.
+ *
+ * Biographies are still to be supplied.
  */
 export const LEADERSHIP = [
   {
     name: '{{CHAIRMAN_NAME}}',
     role: 'Chairman',
+    photo: 'leader-1',
     bio: '{{CHAIRMAN_BIO — background, sector experience and the mandate held at group level.}}'
   },
   {
     name: '{{MD_NAME}}',
     role: 'Managing Director',
+    photo: 'leader-2',
     bio: '{{MD_BIO — operating background and the divisions reporting into this role.}}'
   },
   {
     name: '{{DIRECTOR_OPERATIONS_NAME}}',
     role: 'Director — Operations',
+    photo: 'leader-3',
     bio: '{{DIRECTOR_OPERATIONS_BIO — delivery record across mobility, logistics and facility services.}}'
   },
   {
     name: '{{DIRECTOR_FINANCE_NAME}}',
     role: 'Director — Finance',
+    photo: 'leader-4',
     bio: '{{DIRECTOR_FINANCE_BIO — group finance, treasury and statutory reporting.}}'
   },
   {
     name: '{{DIRECTOR_COMPLIANCE_NAME}}',
     role: 'Director — Legal & Compliance',
+    photo: 'leader-5',
     bio: '{{DIRECTOR_COMPLIANCE_BIO — licensing across regulated sectors and group governance.}}'
   },
   {
     name: '{{DIRECTOR_HR_NAME}}',
     role: 'Director — Human Resources',
+    photo: 'leader-6',
     bio: '{{DIRECTOR_HR_BIO — workforce strategy, skilling pipeline and industrial relations.}}'
   }
 ];

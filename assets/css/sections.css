@@ -330,13 +330,6 @@
   color: var(--gg-white);
   max-inline-size: 18ch;
 }
-.gg-visual__note {
-  font-size: var(--fs-xs);
-  color: var(--gg-on-dark-soft);
-  margin-block-start: var(--sp-1);
-  /* Carries {{PLACEHOLDER}} tokens with no break opportunity of their own. */
-  overflow-wrap: anywhere;
-}
 
 /* Floating stat card overlapping the visual */
 .gg-visual-stat {
@@ -1772,3 +1765,266 @@
   color: var(--gg-white);
   text-shadow: 0 1px 12px rgba(4,24,47,.7);
 }
+
+/* ==========================================================================
+   28. CAREERS — WORKFORCE STRUCTURE
+   The careers page publishes the group's whole position structure, which needs
+   four things the rest of the site did not: a chip list, a department card, a
+   promotion chain and a legal notice block.
+   ========================================================================== */
+
+/* --- Chip list ------------------------------------------------------------
+   Used for document sets, HR paperwork and the role list inside a department
+   card. Deliberately not interactive: a chip here is a label, not a filter,
+   so it carries no hover state and no cursor change. */
+.gg-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.gg-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  color: var(--gg-grey-700);
+  line-height: 1.35;
+}
+
+/* On a dark section the off-white ground disappears, so the chip flips to the
+   glass treatment used by every other dark-context surface. */
+.gg-dark .gg-chip {
+  background: var(--gg-glass-bg);
+  border-color: var(--gg-glass-border);
+  color: var(--gg-on-dark-mute);
+}
+
+/* --- Head-office department card ----------------------------------------- */
+.gg-depts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-2);
+}
+@media (min-width: 640px)  { .gg-depts { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-depts { grid-template-columns: repeat(3, 1fr); } }
+
+.gg-dept {
+  padding: var(--sp-3);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-dept:hover { border-color: var(--gg-green-500); box-shadow: var(--gg-shadow-sm); }
+.gg-dept .gg-feature__icon { margin-block-end: var(--sp-2); }
+.gg-dept__title { font-size: var(--fs-h4); margin-block-end: var(--sp-2); }
+
+/* --- Promotion path -------------------------------------------------------
+   A chain of steps. The connector is a ::after on each step except the last,
+   so the chain reflows with the steps instead of being drawn over them. */
+.gg-path {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: gg-path;
+}
+.gg-path__step {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--gg-ink);
+  counter-increment: gg-path;
+}
+.gg-path__step::before {
+  content: counter(gg-path);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--gg-green-700);
+}
+.gg-path__step:not(:last-child)::after {
+  content: "";
+  inline-size: 14px;
+  block-size: 1px;
+  margin-inline: 8px -8px;
+  background: var(--gg-line);
+  /* The connector sits outside the chip, between it and the next one. */
+  order: 1;
+  position: relative;
+  inset-inline-start: 14px;
+}
+
+/* --- Careers legal notice -------------------------------------------------
+   Neutral, not amber. Amber is reserved site-wide for "planned — subject to
+   regulatory approval"; reusing it for a careers notice would blunt the one
+   signal that has to stay unmistakable. */
+.gg-notice {
+  padding: var(--sp-4) var(--sp-5);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-inline-start: 4px solid var(--gg-navy-700);
+  max-inline-size: 90ch;
+}
+.gg-notice__title {
+  font-size: var(--fs-h3);
+  margin-block-end: var(--sp-3);
+}
+.gg-notice p {
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-700);
+  margin-block-end: var(--sp-2);
+}
+.gg-notice p:last-of-type { margin-block-end: 0; }
+
+.gg-notice__contact {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-2);
+  margin-block-start: var(--sp-4);
+  padding-block-start: var(--sp-3);
+  border-block-start: 1px solid var(--gg-line);
+}
+@media (min-width: 640px) { .gg-notice__contact { grid-template-columns: repeat(2, 1fr); } }
+.gg-notice__contact dt {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-grey-500);
+  margin-block-end: 4px;
+}
+.gg-notice__contact dd { margin: 0; font-size: var(--fs-sm); font-weight: 500; }
+.gg-notice__contact a { color: var(--gg-green-700); }
+.gg-notice__contact a:hover { text-decoration: underline; }
+
+/* --- Two-up filter row ----------------------------------------------------
+   The base .gg-job-filters is a three-column grid. The position catalogue
+   filters on two axes, so it gets its own column count rather than leaving a
+   third of the row empty. */
+@media (min-width: 700px) {
+  .gg-job-filters--pair { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* --- Careers hero note ----------------------------------------------------
+   The "this is a structure, not a vacancy list" line under the page hero.
+   It sits on the dark hero, so it uses the on-dark ramp. */
+.gg-page-hero__note {
+  max-inline-size: 62ch;
+  margin-block-start: var(--sp-3);
+  padding: 12px var(--sp-3);
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  font-size: var(--fs-sm);
+  color: var(--gg-on-dark-mute);
+}
+.gg-page-hero__note a { color: var(--gg-white); text-decoration: underline; text-underline-offset: 3px; }
+
+/* --- Planned position card ------------------------------------------------
+   .is-planned already dims the card and hides its buttons group-wide. The
+   left rule is the remaining tell: it must not turn green on hover, because
+   green means "operating" everywhere else on the site. */
+.gg-job-card.is-planned { border-inline-start-color: var(--gg-planned); }
+.gg-job-card.is-planned:hover { border-inline-start-color: var(--gg-planned); transform: none; }
+
+/* ==========================================================================
+   29. CERTIFICATIONS
+   Registrations the group holds, each shown with the reference it can be
+   checked against. The reference is monospaced and set apart because it is
+   the part a reader is meant to copy and verify.
+   ========================================================================== */
+.gg-certs {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-2);
+}
+@media (min-width: 640px)  { .gg-certs { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1100px) { .gg-certs { grid-template-columns: repeat(3, 1fr); } }
+
+.gg-cert {
+  display: flex;
+  flex-direction: column;
+  padding: var(--sp-3);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-block-start: 3px solid var(--gg-teal-700);
+  transition: box-shadow var(--gg-dur-fast) var(--gg-ease),
+              transform var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-cert:hover { box-shadow: var(--gg-shadow-md); transform: translateY(-3px); }
+
+.gg-cert__abbr {
+  align-self: flex-start;
+  padding: 4px 10px;
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-off);
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-navy-700);
+}
+/* Placeholder names such as {{FEF_FULL_FORM_TO_CONFIRM}} carry no break
+   opportunity and set the card's min-content width; so would a long real
+   certification name. Let one break rather than let it push the grid. */
+.gg-cert__name { font-size: var(--fs-h4); margin-block: var(--sp-2) 6px; overflow-wrap: anywhere; }
+.gg-cert__text { font-size: var(--fs-sm); color: var(--gg-grey-500); flex: 1; }
+.gg-cert__ref {
+  margin-block-start: var(--sp-3);
+  padding-block-start: var(--sp-2);
+  border-block-start: 1px solid var(--gg-line);
+  font-family: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
+  font-size: var(--fs-xs);
+  color: var(--gg-grey-700);
+  /* Registration numbers are long and unbreakable; without this they set the
+     card's min-content width and blow the grid out at 375px. */
+  overflow-wrap: anywhere;
+}
+
+/* The org-tree root now carries two lines under the group name — the legal
+   entity and the counts — so they have to stack rather than run together. */
+.gg-tree__root span { display: block; }
+
+/* --- Position card: the pay line ------------------------------------------
+   The indicative range is the first thing a candidate looks for, so it gets a
+   line of its own rather than a pill. It also has to be a line: a 40-character
+   range plus an incentive note inside a white-space: nowrap badge sets the
+   card's min-content width and overflows the page at 375px. */
+.gg-job-card__pay {
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-500);
+}
+.gg-job-card__pay strong {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  color: var(--gg-ink);
+  font-variant-numeric: tabular-nums;
+  /* Ranges are long and hyphen-joined; let one break rather than push the card. */
+  overflow-wrap: anywhere;
+}
+.gg-job-card__note {
+  display: inline-block;
+  margin-inline-start: 6px;
+  font-size: var(--fs-xs);
+  color: var(--gg-green-700);
+  font-weight: 600;
+}
+.gg-job-card.is-planned .gg-job-card__pay strong { color: var(--gg-grey-700); }

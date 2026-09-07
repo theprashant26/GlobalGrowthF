@@ -13,7 +13,14 @@
 import { qs, icon, escapeHtml, url } from './utils.js';
 import { FOOTER_LINKS, LEGAL_LINKS } from '../data/nav.js';
 import { DIVISION_PAGES } from '../data/sectors.js';
-import { BRAND, OFFICE, EMAILS, SOCIAL, REGULATORY } from '../data/site.js';
+import { BRAND, OFFICE, EMAILS, SOCIAL, REGULATORY, CERTIFICATIONS } from '../data/site.js';
+
+/**
+ * The certification strip prints only the acronyms; every registration number
+ * lives on /about, one click away, and the link goes straight there. If any of
+ * these cannot be evidenced, remove it from CERTIFICATIONS in site.js and it
+ * disappears from both places at once — never edit this list here.
+ */
 
 /** The four addresses worth surfacing in the footer; the rest live on /contact. */
 const FOOTER_EMAIL_KEYS = [
@@ -108,6 +115,12 @@ const markup = () => `
     <p class="gg-footer__note">
       <strong style="color:var(--gg-on-dark)">Regulatory notice.</strong>
       ${escapeHtml(REGULATORY.footnote)}
+    </p>
+
+    <p class="gg-footer__certs">
+      <span>Registered &amp; certified with</span>
+      ${CERTIFICATIONS.map(c => `<span>${escapeHtml(c.abbr)}</span>`).join('')}
+      <a href="${url('/about#certifications')}">See the references</a>
     </p>
 
     <div class="gg-footer__bar">

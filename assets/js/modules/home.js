@@ -8,12 +8,15 @@
  * Prose stays in index.html as static markup so it is crawlable and paints
  * without JavaScript. Only figures and lists that must never contradict
  * sectors.js / site.js / jobs.js are rendered here.
+ *
+ * The careers teaser shows positions from the published structure, not live
+ * vacancies — the wording on both this page and /careers has to keep saying so.
  */
 
 import { qs, icon, escapeHtml, url } from './utils.js';
 import { COUNTS } from '../data/sectors.js';
 import { GROUP_STATS, ROADMAP } from '../data/site.js';
-import { JOBS } from '../data/jobs.js';
+import { ALL_ROLES, GRADE_LABELS } from '../data/jobs.js';
 import { statCard } from './cards.js';
 
 /* ==========================================================================
@@ -65,18 +68,22 @@ const phaseMarkup = phase => `
 
 /* ==========================================================================
    CAREERS TEASER
-   The three most recently posted roles, newest first.
+   Three positions from three different parts of the group, chosen to show the
+   spread rather than the top of the ladder. They are looked up by division so
+   the teaser cannot drift from the catalogue on /careers.
    ========================================================================== */
-const careersMarkup = () => [...JOBS]
-  .sort((a, b) => new Date(b.posted) - new Date(a.posted))
-  .slice(0, 3)
-  .map(job => `
+const TEASER_DIVISIONS = ['logistics', 'skill-development', 'it-technology'];
+
+const careersMarkup = () => TEASER_DIVISIONS
+  .map(id => ALL_ROLES.find(role => role.divisionId === id && role.status === 'active'))
+  .filter(Boolean)
+  .map(role => `
     <div class="gg-careers-row">
       <span class="gg-careers-row__title">
-        <a class="gg-careers-row__link" href="${url(`/careers#${job.id}`)}">${escapeHtml(job.title)}</a>
+        <a class="gg-careers-row__link" href="${url(`/careers#${role.id}`)}">${escapeHtml(role.title)}</a>
       </span>
       <span class="gg-careers-row__meta">
-        ${escapeHtml(job.department)} · ${escapeHtml(job.location)} · ${escapeHtml(job.type)}
+        ${escapeHtml(role.division)} · ${escapeHtml(role.level)} ${escapeHtml(GRADE_LABELS[role.level] || '')} · ${escapeHtml(role.salary)}
       </span>
       <span class="gg-careers-row__arrow">${icon('arrow-right')}</span>
     </div>`).join('');

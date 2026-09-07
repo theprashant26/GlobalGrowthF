@@ -103,12 +103,78 @@ Pages — and links become extensionless again.
 
 ---
 
+## Group architecture
+
+The group is **15 sectors containing 27 divisions**, each trading as
+"Global Growth <name>". `assets/js/data/sectors.js` is the single source of
+truth for that; every count on the site is derived from it, so a heading can
+never disagree with the list beneath it.
+
+12 divisions have a dedicated page. The remaining 15 appear on `/sectors`, in
+the org tree and in the navigation without one — that is a content gap, not a
+bug, and it is tracked in `CLIENT_CHECKLIST.md`.
+
+Four divisions — **Banking, Pharmacy, Finance and Insurance** — are
+`status: 'planned'`. They render de-emphasised, carry the approval badge, and
+have no CTA, no service list and no apply route anywhere on the site,
+including in the careers position catalogue. This is enforced from the data by
+`cards.js`, `sectorsPage.js`, `about.js` and `careers.js`; the CSS rule
+`.is-planned .gg-btn--primary { display: none }` is a second line of defence,
+not the first.
+
+## The careers page
+
+`/careers` publishes the group's **position structure**, not a vacancy list:
+172 positions across the 27 divisions, a 12-grade ladder with indicative
+ranges, the qualification matrix, the 15-step recruitment process and the
+26-document employment file.
+
+The wording matters and is deliberate. `CAREERS_DISCLAIMER` in `jobs.js` is the
+client's approved legal notice, reproduced verbatim — it is the site's
+protection against a candidate reading a private-sector position as government
+employment. **Do not paraphrase it, shorten it, or move that section below the
+application form.**
+
+## Photography
+
+Every photograph on the site is served as WebP with a JPEG fallback, at three
+widths, through one helper — `picture()` in `assets/js/modules/utils.js`. A set
+is identified by its folder and the widths that exist for it:
+
+| Set | Folder | Widths | Ratio | Data |
+|---|---|---|---|---|
+| Division panels | `assets/images/divisions/` | 480, 900, 1400 | 5:4 | `DIVISION_PHOTOS` in `data/divisions.js` |
+| Leadership portraits | `assets/images/team/` | 320, 480, 800 | 4:5 | `photo` on each `LEADERSHIP` entry in `data/site.js` |
+| Workspace photos | `assets/images/offices/` | 480, 800 | mixed | `OFFICES` in `data/site.js` |
+| Share image | `assets/images/og/` | 1200×630 JPEG only | 1.91:1 | hardcoded in the `og:image` meta |
+
+Masters live beside each set in a `_masters/` folder and are never referenced by
+a page. To add or replace one, drop the master in, run `python
+tools/build-images.py`, and add its `alt` and `caption` to the data file — no
+page is edited. See [tools/README.md](tools/README.md).
+
+Two rules that are easy to get wrong here:
+
+- **`alt` is written from the photograph, not the filename.** It describes what
+  is in the frame. `caption` is editorial and sits over the scrim; the two must
+  never be the same sentence, because a screen-reader user would then hear the
+  same line twice.
+- **`width` and `height` are always emitted.** Without them each photograph
+  shifts the layout as it lands, which is the cheapest way to lose a Lighthouse
+  CLS score.
+
+The share image is the one place on this site that uses an absolute URL. A
+social scraper has the HTML and nothing else, so a relative `og:image` does not
+resolve for it.
+
 ## Where things live
 
 | I want to change… | Edit this |
 |---|---|
 | A colour, size, shadow, radius or easing | `assets/css/tokens.css` — **the only file allowed to contain a hex value** |
-| Sectors, divisions, slugs, regulatory status | `assets/js/data/sectors.js` |
+| Sectors, divisions, brand names, slugs, regulatory status | `assets/js/data/sectors.js` |
+| Certifications and registrations | `CERTIFICATIONS` in `assets/js/data/site.js` |
+| Registered office and map link | `OFFICE` in `assets/js/data/site.js` |
 | Brand name, taglines, email directory, roadmap | `assets/js/data/site.js` |
 | Buttons, badges, cards, nav, footer, forms | `assets/css/components.css` |
 | Hero, stats band, sector grid, timeline, CTA band | `assets/css/sections.css` |
@@ -118,7 +184,7 @@ Pages — and links become extensionless again.
 | Header / nav links / mega-menu | `assets/js/data/nav.js` + `assets/js/modules/navbar.js` |
 | Footer columns | `assets/js/modules/footer.js` |
 | Any card's markup | `assets/js/modules/cards.js` — one template per card, shared by every page |
-| Job openings | `assets/js/data/jobs.js` |
+| Positions, grades, salary matrix, recruitment process | `assets/js/data/jobs.js` |
 | Icons | `assets/icons/sprite.svg` |
 | Homepage figures, phases, careers rows | `assets/js/modules/home.js` |
 | About: vision, values, org tree, milestones | `assets/js/modules/about.js` + `site.js` |
@@ -126,7 +192,7 @@ Pages — and links become extensionless again.
 | Roadmap phases | `assets/js/modules/roadmap.js` + `ROADMAP` in `site.js` |
 | Division page copy | `assets/js/data/divisions.js`, keyed by slug |
 | Division page layout | `division-template.html` + `assets/js/modules/divisionPage.js` |
-| Careers copy, benefits, hiring process | `assets/js/data/jobs.js` |
+| Careers copy, benefits, the careers legal notice | `assets/js/data/jobs.js` |
 | CSR focus areas, principles, metrics | `CSR_*` in `assets/js/data/site.js` |
 | Form validation rules | `assets/js/modules/forms.js` → `RULES` |
 | **The form submit stub** | `assets/js/modules/forms.js` → `submitForm()` |
@@ -387,7 +453,7 @@ To drop it, remove this one line from each page and re-check form spacing:
   and Twitter card.
 * **JSON-LD is generated, not hand-written.** `Organization` + `WebSite` on the
   homepage, `Organization` + `BreadcrumbList` on every other page, derived from
-  `sectors.js` so it cannot drift. Regenerate with the SEO script after adding
+  `sectors.js` so it cannot drift. Regenerate with `python tools/build-seo.py` after adding
   a page; the block is marked in each file and is replaced wholesale.
 * `sitemap.xml` lists all 20 public pages. `robots.txt` excludes
   `/styleguide.html`, `/division-template.html` and `/legal` (the last until

@@ -77,10 +77,13 @@ const officeMarkup = () => `
   </div>`;
 
 /**
- * Map placeholder. A real embed is withheld deliberately — an iframe pointing
- * at an unconfirmed address would publish a location we cannot stand behind,
- * and Google's embed also sets third-party cookies we have not disclosed.
- * Swap this block for the iframe once OFFICE.mapEmbed is set.
+ * Location panel.
+ *
+ * The registered office is confirmed, so this now names the building and links
+ * out to a map search rather than embedding one. A Google Maps iframe would set
+ * third-party cookies on every visitor of a page that has no cookie notice, for
+ * the sake of a picture of a building — that trade is not worth making. Set
+ * OFFICE.mapEmbed and swap this block if the client decides otherwise.
  */
 const mapMarkup = () => `
   <div class="gg-map-placeholder">
@@ -91,11 +94,17 @@ const mapMarkup = () => `
     <span class="gg-visual__grid" aria-hidden="true"></span>
     <div class="gg-map-placeholder__body">
       ${icon('map-pin', 'gg-icon gg-icon--xl')}
-      <p class="gg-map-placeholder__title">Map pending confirmed address</p>
+      <p class="gg-map-placeholder__title">${escapeHtml(OFFICE.locality)}</p>
       <p class="gg-map-placeholder__note">
-        {{MAP_EMBED_PLACEHOLDER}} — the embed goes in once the registered office
-        is confirmed. We would rather show nothing than pin the wrong building.
+        ${escapeHtml(OFFICE.street)}, ${escapeHtml(OFFICE.region)} ${escapeHtml(OFFICE.postalCode)}.
+        We link out rather than embedding a map, so no third party is handed your
+        visit to this page.
       </p>
+      <a class="gg-btn gg-btn--secondary gg-btn--sm gg-mt-3"
+         href="https://www.openstreetmap.org/search?query=${encodeURIComponent(OFFICE.mapQuery)}"
+         target="_blank" rel="noopener noreferrer">
+        Open in maps ${icon('arrow-up-right', 'gg-btn__icon')}
+      </a>
     </div>
   </div>`;
 

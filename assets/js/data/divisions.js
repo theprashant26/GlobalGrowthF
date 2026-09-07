@@ -5,7 +5,7 @@
  * keyed by the same slug used in sectors.js.
  *
  * WHY THIS IS A SEPARATE FILE
- * sectors.js is the group's structural spine — 15 sectors, 93 divisions, slugs
+ * sectors.js is the group's structural spine — 15 sectors, 27 divisions, slugs
  * and regulatory status — and is read by the navbar, the grids, the org tree
  * and the sectors page. Page prose has a different lifecycle and a different
  * author, and folding it in would roughly triple that file. divisionPage.js
@@ -23,6 +23,9 @@
  *   services     the concrete service list
  *   why          four differentiators specific to this division
  *   process      four steps describing how an engagement runs
+ *
+ * Photography for these pages lives in DIVISION_PHOTOS at the foot of this
+ * file, keyed by the same slug.
  */
 
 export const DIVISION_DETAIL = {
@@ -522,3 +525,88 @@ export const DIVISION_DETAIL = {
 
 /** Look up page content for a division slug. */
 export const getDivisionDetail = slug => DIVISION_DETAIL[slug] || null;
+
+/* ===========================================================================
+   DIVISION PHOTOGRAPHY
+   ---------------------------------------------------------------------------
+   The overview panel on each division page. Built from the client's masters
+   into assets/images/divisions/<slug>-{480,900,1400}.{webp,jpg} at 5:4, which
+   is the aspect ratio .gg-visual already reserves.
+
+   `alt` describes what is actually in the frame — it is written from the
+   photograph, not from the division name, because a screen-reader user gets
+   the description and nobody gets both. `caption` is the line that sits over
+   the scrim; it is editorial, and the two must not be the same sentence.
+
+   TWO FRAMES TO REVIEW BEFORE LAUNCH — both are flagged in CLIENT_CHECKLIST.md:
+     logistics  the quay signage reads CONTAINER TERMINAL ALTENWERDER, which is
+                Hamburg. It is a stock frame of a port, not one of ours.
+     railways   the locomotive carries Indian Railways livery. The careers
+                notice on this site exists partly to say we are not Indian
+                Railways, so this frame argues against our own disclaimer.
+   =========================================================================== */
+export const DIVISION_PHOTOS = {
+  'aviation': {
+    file: 'aviation', width: 1400, height: 1120,
+    alt: 'A white narrow-body passenger jet standing on a wet apron at dawn, nose and engines facing the camera, terminal buildings behind it.',
+    caption: 'Built to the standard the regulator inspects against'
+  },
+  'metro': {
+    file: 'metro', width: 1400, height: 1120,
+    alt: 'A metro train drawing into an elevated station, twin tracks running away from it along a viaduct above the city.',
+    caption: 'Station and rolling-stock support across urban rail'
+  },
+  'railways': {
+    file: 'railways', width: 1400, height: 1120,
+    alt: 'An electric locomotive standing at a station platform under the canopy, staff and passengers waiting alongside it.',
+    caption: 'Station operations, ticketing and rail cargo coordination'
+  },
+  'driver': {
+    file: 'driver', width: 1400, height: 1120,
+    alt: 'A driver at the wheel of a yellow commercial taxi, seen through the open driver-side window.',
+    caption: 'Trained commercial drivers, and the fleet discipline behind them'
+  },
+  'logistics': {
+    file: 'logistics', width: 1400, height: 1120,
+    alt: 'Container gantry cranes along a quayside at sunset, with a container vessel berthed beside stacks of freight containers.',
+    caption: 'Supply chains fail at the joins. We hold the joins'
+  },
+  'hotels': {
+    file: 'hotels', width: 1400, height: 1120,
+    alt: 'The lit facade and entrance canopy of a hotel at dusk, guest-room windows glowing across three floors.',
+    caption: 'One service standard, whichever property carries the name'
+  },
+  'travel-tourism': {
+    file: 'travel-tourism', width: 1400, height: 1120,
+    alt: 'An aircraft on final approach at sunset, passing above a group of travellers silhouetted on a hilltop with their arms raised.',
+    caption: 'Managed travel, for the business trip and the holiday alike'
+  },
+  'healthcare': {
+    file: 'healthcare', width: 1400, height: 1120,
+    alt: 'A tray of surgical instruments laid out on a sterile green drape, a gloved hand reaching across the field.',
+    caption: 'Care delivery, diagnostics and the equipment behind both'
+  },
+  'skill-development': {
+    file: 'skill-development', width: 1400, height: 1120,
+    alt: 'A trainee working at a multi-monitor workstation in a training room, course material and code open on the screens.',
+    caption: 'Held to placement outcomes, not certification volume'
+  },
+  'electrical': {
+    file: 'electrical', width: 1400, height: 1120,
+    alt: 'Linesmen working among insulators and conductors on a high-voltage substation gantry.',
+    caption: 'LT and HT distribution, from the drawing to commissioning'
+  },
+  'manufacturing': {
+    file: 'manufacturing', width: 1400, height: 1120,
+    alt: 'Two managers in hard hats walking a production floor lined with machinery and packed output.',
+    caption: 'A part either meets the drawing or it does not'
+  },
+  'security': {
+    file: 'security', width: 1400, height: 1120,
+    alt: 'A security control room at night, two operators at banks of monitors beneath a wide screen showing a live warehouse floor.',
+    caption: 'Supervised on site, not from a head office'
+  }
+};
+
+/** Look up the overview photograph for a division slug. */
+export const getDivisionPhoto = slug => DIVISION_PHOTOS[slug] || null;

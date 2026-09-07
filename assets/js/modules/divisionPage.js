@@ -18,9 +18,10 @@
  * border — never as a fill. No division has a colour scheme of its own.
  */
 
-import { qs, qsa, icon, escapeHtml, url } from './utils.js';
-import { getDivision, getRelatedDivisions, getSector, SECTORS } from '../data/sectors.js';
-import { getDivisionDetail } from '../data/divisions.js';
+import { qs, qsa, icon, escapeHtml, url, picture } from './utils.js';
+import { getDivision, getRelatedDivisions, getSector, SECTORS,
+         DIVISION_PAGES } from '../data/sectors.js';
+import { getDivisionDetail, getDivisionPhoto } from '../data/divisions.js';
 import { DIVISION_EMAILS, BRAND } from '../data/site.js';
 import { divisionCard } from './cards.js';
 
@@ -93,9 +94,41 @@ const heroMarkup = (division, sector, detail, email) => `
     </div>
   </div>`;
 
-const overviewMarkup = (division, sector, detail) => `
-  <div class="gg-split gg-split--reverse">
-    <div class="gg-split__media" data-reveal>
+/**
+ * The overview panel.
+ *
+ * With a photograph it becomes the .gg-visual--photo treatment: the picture
+ * fills the 5:4 box, a scrim carries the caption, and the mesh blobs are
+ * dropped because they would only sit behind an opaque image and cost a paint.
+ * Without one it falls back to the branded gradient panel, so a division added
+ * before its photography still renders finished rather than broken.
+ *
+ * The panel sits ~46vw on desktop and full-bleed on mobile, and it is the
+ * largest element above the fold on these pages — so it loads eagerly with a
+ * high fetch priority. Everything else on the page stays lazy.
+ */
+const PANEL_SIZES = '(min-width: 992px) 46vw, 92vw';
+const PANEL_WIDTHS = [480, 900, 1400];
+
+const overviewMarkup = (division, sector, detail) => {
+  const photo = getDivisionPhoto(division.slug);
+
+  const visual = photo
+    ? `
+      <div class="gg-visual gg-visual--photo">
+        ${picture(photo, {
+          sizes: PANEL_SIZES, dir: 'divisions', widths: PANEL_WIDTHS, eager: true
+        })}
+        <span class="gg-visual__grid" aria-hidden="true"></span>
+        <div class="gg-visual__content">
+          <img class="gg-visual__mark" src="${url(BRAND.logo.markWhite)}" alt=""
+               width="64" height="64" loading="lazy">
+          <div>
+            <p class="gg-visual__caption">${escapeHtml(photo.caption)}</p>
+          </div>
+        </div>
+      </div>`
+    : `
       <div class="gg-visual">
         <div class="gg-mesh gg-visual__mesh" aria-hidden="true">
           <span class="gg-mesh__blob gg-mesh__blob--1"></span>
@@ -107,11 +140,13 @@ const overviewMarkup = (division, sector, detail) => `
                width="64" height="64" loading="lazy">
           <div>
             <p class="gg-visual__caption">${escapeHtml(division.name)}</p>
-            <p class="gg-visual__note">{{${division.slug.toUpperCase().replace(/-/g, '_')}_IMAGE_PLACEHOLDER — replace this panel with division photography}}</p>
           </div>
         </div>
-      </div>
-    </div>
+      </div>`;
+
+  return `
+  <div class="gg-split gg-split--reverse">
+    <div class="gg-split__media" data-reveal>${visual}</div>
 
     <div class="gg-split__body" data-reveal>
       <p class="gg-eyebrow">Overview</p>
@@ -124,6 +159,7 @@ const overviewMarkup = (division, sector, detail) => `
       </a>
     </div>
   </div>`;
+};
 
 const capabilitiesMarkup = detail => detail.capabilities.map((cap, index) => `
   <article class="gg-cap" data-reveal>
@@ -229,13 +265,36 @@ export const init = () => {
   // Related divisions — siblings in the same sector. Planned siblings are
   // included so the reader sees the full sector, but the card template
   // renders them unlinked and badged.
-  const related = getRelatedDivisions(slug);
-  // The section heading already names the sector, so the cards do not repeat it.
+  //
+  // Seven of the fifteen sectors hold a single division, so on those pages
+  // there are no siblings at all. Rather than leave a heading standing over an
+  // empty rail, the section widens to other divisions across the group and
+  // says so in the heading — the cards then carry their own sector label,
+  // because it is no longer implied by the heading.
+  const siblings = getRelatedDivisions(slug);
+  const hasSiblings = siblings.length > 0;
+
+  const related = hasSiblings
+    ? siblings
+    : DIVISION_PAGES.filter(division => division.slug !== slug);
+
   mount('related', related.slice(0, 8)
-    .map(sibling => divisionCard(sibling, { showSector: false })).join(''));
+    .map(entry => divisionCard(entry, { showSector: !hasSiblings })).join(''));
 
   const relatedHead = qs('[data-div="related-title"]');
-  if (relatedHead) relatedHead.textContent = `Other divisions in ${sector.name}`;
+  if (relatedHead) {
+    relatedHead.textContent = hasSiblings
+      ? `Other divisions in ${sector.name}`
+      : 'Other divisions across the group';
+  }
+
+  const relatedLead = qs('[data-div="related-lead"]');
+  if (relatedLead && !hasSiblings) {
+    relatedLead.textContent =
+      'This division is the whole of its sector. These are the other divisions with a ' +
+      'page of their own — where a requirement crosses more than one, it still runs under ' +
+      'a single agreement.';
+  }
 
   qsa('[data-div-name]').forEach(node => { node.textContent = division.name; });
 };

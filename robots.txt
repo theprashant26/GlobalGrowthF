@@ -7,6 +7,13 @@ Allow: /
 # Development and reference pages — not part of the public site.
 Disallow: /styleguide.html
 Disallow: /division-template.html
+Disallow: /partials/
+Disallow: /tools/
+
+# Photograph masters. The site serves the resized variants beside them; these
+# are the multi-megabyte originals and should never be crawled or indexed.
+Disallow: /assets/images/offices/_masters/
+Disallow: /assets/images/global/_masters/
 
 # The legal notices are withheld from the index until they have been reviewed
 # by the company's legal adviser. Remove this line once that is done.

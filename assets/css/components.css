@@ -1006,6 +1006,10 @@ body.is-drawer-open { overflow: hidden; }
   place-items: center;
   overflow: hidden;
 }
+/* The portrait is wrapped in a <picture>, which is an inline box by default
+   and would collapse inside this grid — so the wrapper has to be sized too,
+   not just the image. */
+.gg-leader-card__media picture { display: block; inline-size: 100%; block-size: 100%; }
 .gg-leader-card__media img { inline-size: 100%; block-size: 100%; object-fit: cover; }
 /* Placeholder monogram until real portraits arrive */
 .gg-leader-card__monogram {
@@ -1016,7 +1020,10 @@ body.is-drawer-open { overflow: hidden; }
   letter-spacing: var(--ls-display);
 }
 .gg-leader-card__body { padding: var(--sp-3); }
-.gg-leader-card__name { font-size: var(--fs-h4); }
+/* {{DIRECTOR_OPERATIONS_NAME}} has no break opportunity and sets the card's
+   min-content width, overflowing the page below 375px. Real names will not do
+   this, but the placeholders are what is on the page today. */
+.gg-leader-card__name { font-size: var(--fs-h4); overflow-wrap: anywhere; }
 .gg-leader-card__role {
   font-size: var(--fs-xs);
   font-weight: 600;
@@ -1370,3 +1377,39 @@ body.is-drawer-open { overflow: hidden; }
 }
 .gg-to-top.is-visible { opacity: 1; visibility: visible; transform: none; transition-delay: 0s; }
 .gg-to-top:hover { background: var(--gg-green-700); }
+
+/* --- Footer certification strip -------------------------------------------
+   Acronyms only. The registration numbers live on /about, because a claim is
+   only worth printing next to the reference that proves it — and the footer is
+   not the place for seven registration numbers. */
+.gg-footer__certs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  margin-block-start: var(--sp-4);
+  padding-block-start: var(--sp-3);
+  border-block-start: 1px solid var(--gg-glass-border);
+  font-size: var(--fs-xs);
+  color: var(--gg-on-dark-mute);
+}
+.gg-footer__certs > span:first-child {
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.gg-footer__certs > span:not(:first-child) {
+  padding: 3px 9px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-glass-bg);
+  border: 1px solid var(--gg-glass-border);
+  font-weight: 600;
+  color: var(--gg-white);
+}
+.gg-footer__certs a {
+  margin-inline-start: auto;
+  color: var(--gg-on-dark-mute);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.gg-footer__certs a:hover { color: var(--gg-white); }

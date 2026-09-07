@@ -13,7 +13,7 @@
  * these templates — not in the pages — so no page can accidentally omit it.
  */
 
-import { icon, escapeHtml, url } from './utils.js';
+import { icon, escapeHtml, url, picture } from './utils.js';
 import { REGULATORY } from '../data/site.js';
 
 /** The status badge for any entity carrying a status flag. */
@@ -78,6 +78,9 @@ export const divisionCard = (division, { showSector = true } = {}) => {
       ${showSector && division.sectorName
         ? `<p class="gg-div-card__sector">${escapeHtml(division.sectorName)}</p>`
         : ''}
+      ${planned
+        ? `<span class="gg-badge gg-badge--planned">Planned · ${escapeHtml(division.regulator || 'approval required')}</span>`
+        : ''}
     </div>
     ${hasPage ? `<span class="gg-div-card__arrow">${icon('arrow-right')}</span>` : ''}
   </article>`;
@@ -111,11 +114,36 @@ const monogram = name => name
   .join('')
   .toUpperCase() || '—';
 
+/**
+ * The portrait grid sits three-up on desktop inside a 1200px container and the
+ * media box is capped at 420px tall on a 4:5 ratio, so ~336 CSS px is the
+ * widest a card ever gets. 800 covers that past 2x.
+ */
+const PORTRAIT_SIZES = '(min-width: 1100px) 30vw, (min-width: 640px) 46vw, 92vw';
+const PORTRAIT_WIDTHS = [320, 480, 800];
+
+/**
+ * Alt text for a portrait.
+ *
+ * While the name is still a {{PLACEHOLDER}}, using it as the alt would put the
+ * literal braces into a screen reader. It would also assert that the face
+ * belongs to a person we cannot name. Saying it is a placeholder is the only
+ * honest description available until the real name and photograph land
+ * together.
+ */
+const portraitAlt = person => (
+  /^\{\{/.test(person.name)
+    ? `Placeholder portrait for the ${person.role} — photograph to be supplied`
+    : person.name
+);
+
 export const leaderCard = person => `
   <article class="gg-leader-card">
     <div class="gg-leader-card__media">
       ${person.photo
-        ? `<img src="${url(person.photo)}" alt="${escapeHtml(person.name)}" width="480" height="600" loading="lazy">`
+        ? picture(
+            { file: person.photo, width: 800, height: 1000, alt: portraitAlt(person) },
+            { sizes: PORTRAIT_SIZES, dir: 'team', widths: PORTRAIT_WIDTHS })
         : `<span class="gg-leader-card__monogram" aria-hidden="true">${escapeHtml(monogram(person.name))}</span>`}
     </div>
     <div class="gg-leader-card__body">
@@ -128,21 +156,38 @@ export const leaderCard = person => `
 /* ==========================================================================
    JOB CARD
    ========================================================================== */
-export const jobCard = job => `
-  <article class="gg-job-card" data-job="${job.id}" data-department="${escapeHtml(job.department)}">
+/**
+ * Position card. Takes a role from ALL_ROLES in jobs.js.
+ *
+ * A planned division's position carries the amber badge and no link, for the
+ * same reason a planned sector card carries no CTA: a "view position" affordance
+ * reads as an invitation to apply, and there is nothing to apply for until the
+ * licence is in force.
+ */
+export const roleCard = role => {
+  const planned = role.status === 'planned';
+
+  return `
+  <article class="gg-job-card${planned ? ' is-planned' : ''}"
+           data-role="${role.id}" data-division="${escapeHtml(role.divisionId)}">
     <div class="gg-job-card__head">
-      <h3 class="gg-job-card__title">${escapeHtml(job.title)}</h3>
-      <span class="gg-job-card__dept">${escapeHtml(job.department)}</span>
+      <h3 class="gg-job-card__title">${escapeHtml(role.title)}</h3>
+      <span class="gg-job-card__dept">${escapeHtml(role.brandName)}</span>
     </div>
-    <p class="gg-job-card__summary">${escapeHtml(job.summary)}</p>
     <div class="gg-job-card__foot">
       <div class="gg-job-card__meta">
-        <span class="gg-badge gg-badge--meta">${icon('map-pin', 'gg-icon gg-icon--sm')}${escapeHtml(job.location)}</span>
-        <span class="gg-badge gg-badge--meta">${icon('clock', 'gg-icon gg-icon--sm')}${escapeHtml(job.type)}</span>
-        <span class="gg-badge gg-badge--meta">${escapeHtml(job.experience)}</span>
+        <span class="gg-badge gg-badge--number">${escapeHtml(role.level)}</span>
+        <span class="gg-badge gg-badge--meta">${escapeHtml(role.salary)}</span>
+        ${role.experience ? `<span class="gg-badge gg-badge--meta">${escapeHtml(role.experience)}</span>` : ''}
+        ${planned
+          ? `<span class="gg-badge gg-badge--planned">Planned · ${escapeHtml(role.regulator || 'approval required')}</span>`
+          : ''}
       </div>
-      <a class="gg-btn gg-btn--secondary gg-btn--sm" href="${url(`/careers#${job.id}`)}">
-        View role ${icon('arrow-right', 'gg-btn__icon')}
-      </a>
+      ${planned
+        ? ''
+        : `<a class="gg-btn gg-btn--secondary gg-btn--sm" href="${url(`/careers#${role.id}`)}">
+             View position ${icon('arrow-right', 'gg-btn__icon')}
+           </a>`}
     </div>
   </article>`;
+};

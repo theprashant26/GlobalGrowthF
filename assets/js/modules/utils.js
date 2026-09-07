@@ -151,22 +151,35 @@ export const loadScript = src => {
 };
 
 /**
- * A responsive <picture> for one of the site's photographs.
- * WebP first with a JPEG fallback, two widths, explicit dimensions so the
- * layout never shifts as the image lands.
+ * A responsive <picture> for one of the site's photograph sets.
  *
- * @param {{file:string,width:number,height:number,alt:string}} image
- * @param {{sizes?:string, className?:string, eager?:boolean}} options
+ * Every set is built by the image script into the same shape —
+ *   <dir>/<file>-<width>.webp  and  <file>-<width>.jpg
+ * — so this helper only needs to know the folder and which widths exist. That
+ * keeps the widths a property of the image set rather than of every call site:
+ * adding a width later is one edit here plus a rebuild, not a hunt through
+ * the modules.
+ *
+ * `width`/`height` are always emitted so the browser reserves the right box
+ * before the file arrives. Without them every photograph on the page causes a
+ * layout shift, which is the single easiest way to lose a Lighthouse CLS score.
  */
-export const picture = (image, { sizes = '100vw', className = '', eager = false } = {}) => {
-  const base = url(`/assets/images/offices/${image.file}`);
+export const picture = (image, {
+  sizes = '100vw',
+  className = '',
+  eager = false,
+  dir = 'offices',
+  widths = [480, 800]
+} = {}) => {
+  const base = url(`/assets/images/${dir}/${image.file}`);
+  const srcset = ext => widths.map(w => `${base}-${w}.${ext} ${w}w`).join(', ');
+  const fallback = `${base}-${widths[widths.length - 1]}.jpg`;
+
   return `
   <picture>
-    <source type="image/webp" sizes="${sizes}"
-            srcset="${base}-480.webp 480w, ${base}-800.webp 800w">
-    <source type="image/jpeg" sizes="${sizes}"
-            srcset="${base}-480.jpg 480w, ${base}-800.jpg 800w">
-    <img class="${className}" src="${base}-800.jpg"
+    <source type="image/webp" sizes="${sizes}" srcset="${srcset('webp')}">
+    <source type="image/jpeg" sizes="${sizes}" srcset="${srcset('jpg')}">
+    <img class="${className}" src="${fallback}"
          alt="${escapeHtml(image.alt)}"
          width="${image.width}" height="${image.height}"
          loading="${eager ? 'eager' : 'lazy'}"

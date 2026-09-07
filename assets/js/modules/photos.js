@@ -26,9 +26,9 @@ export const init = () => {
     if (!image) return;
 
     panel.classList.add('gg-visual--photo');
-    // The mesh and grid placeholders are no longer wanted behind a photograph.
+    // The mesh is no longer wanted behind an opaque photograph — it would only
+    // cost a blur paint nobody can see.
     qs('.gg-visual__mesh', panel)?.remove();
-    qs('.gg-visual__note', panel)?.remove();
     panel.insertAdjacentHTML('afterbegin', picture(image, { sizes: PANEL_SIZES }));
   });
 

@@ -12,8 +12,8 @@
 import { el, qs, token } from './utils.js';
 import { SECTORS, ALL_DIVISIONS, DIVISION_PAGES, COUNTS } from '../data/sectors.js';
 import { BRAND, EMAILS, DIVISION_EMAILS, ROADMAP, REGULATORY, GROUP_STATS } from '../data/site.js';
-import { JOBS } from '../data/jobs.js';
-import { sectorCard, divisionCard, statCard, leaderCard, jobCard } from './cards.js';
+import { ALL_ROLES } from '../data/jobs.js';
+import { sectorCard, divisionCard, statCard, leaderCard, roleCard } from './cards.js';
 
 /* ==========================================================================
    COLOUR MATHS — WCAG 2.1 relative luminance and contrast ratio
@@ -389,9 +389,11 @@ const renderCards = mount => {
   );
 
   block(
-    'Job card',
-    'Drives the filterable openings list on /careers.',
-    JOBS.slice(0, 3).map(jobCard).join(''),
+    'Position card',
+    'Drives the filterable position catalogue on /careers. The third example is a planned ' +
+    'division: no link, amber badge, and the primary button suppressed by .is-planned.',
+    [ALL_ROLES[0], ALL_ROLES[8], ALL_ROLES.find(r => r.status === 'planned')]
+      .filter(Boolean).map(roleCard).join(''),
     'sg-stack-cards'
   );
 };

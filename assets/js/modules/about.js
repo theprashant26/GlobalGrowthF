@@ -11,7 +11,8 @@
 
 import { qs, qsa, icon, escapeHtml, url } from './utils.js';
 import { SECTORS, COUNTS } from '../data/sectors.js';
-import { BRAND, VISION, MISSION, VALUES, LEADERSHIP, MILESTONES, GOVERNANCE } from '../data/site.js';
+import { BRAND, VISION, MISSION, VALUES, LEADERSHIP, MILESTONES, GOVERNANCE,
+         CERTIFICATIONS } from '../data/site.js';
 import { leaderCard } from './cards.js';
 
 /* ==========================================================================
@@ -45,8 +46,8 @@ const treeDivision = division => {
   <div class="gg-node__item${planned ? ' is-planned' : ''}">
     ${icon(planned ? 'alert-circle' : 'chevron-right', 'gg-icon gg-icon--sm')}
     ${linked
-      ? `<a href="${url(division.page)}">${escapeHtml(division.name)}</a>`
-      : escapeHtml(division.name)}
+      ? `<a href="${url(division.page)}">${escapeHtml(division.brandName)}</a>`
+      : escapeHtml(division.brandName)}
     ${planned
       ? `<span class="gg-badge gg-badge--planned">${escapeHtml(division.regulator || 'Planned')}</span>`
       : ''}
@@ -71,12 +72,26 @@ const treeNode = sector => `
 const treeMarkup = () => `
   <div class="gg-tree__root" data-reveal>
     <strong>${escapeHtml(BRAND.groupName)}</strong>
+    <span>${escapeHtml(BRAND.legalNameUC)}</span>
     <span>${COUNTS.sectors} sectors · ${COUNTS.divisions} divisions</span>
   </div>
   <div class="gg-tree__stem" aria-hidden="true"></div>
   <div class="gg-tree__grid">
     ${SECTORS.map(treeNode).join('')}
   </div>`;
+
+/* ==========================================================================
+   CERTIFICATIONS
+   Each card names the issuing body and its registration number. The number is
+   the point: a certification claim nobody can verify is worth less than none.
+   ========================================================================== */
+const certificationMarkup = certification => `
+  <article class="gg-cert" data-reveal>
+    <span class="gg-cert__abbr">${escapeHtml(certification.abbr)}</span>
+    <h3 class="gg-cert__name">${escapeHtml(certification.name)}</h3>
+    <p class="gg-cert__text">${escapeHtml(certification.detail)}</p>
+    <p class="gg-cert__ref">${escapeHtml(certification.ref)}</p>
+  </article>`;
 
 /* ==========================================================================
    MILESTONES
@@ -97,6 +112,7 @@ export const init = () => {
     values:     qs('[data-about="values"]'),
     tree:       qs('[data-about="tree"]'),
     leadership: qs('[data-about="leadership"]'),
+    certifications: qs('[data-about="certifications"]'),
     milestones: qs('[data-about="milestones"]'),
     governance: qs('[data-about="governance"]')
   };
@@ -108,6 +124,10 @@ export const init = () => {
   if (mounts.leadership) {
     mounts.leadership.innerHTML = LEADERSHIP
       .map(person => `<div data-reveal>${leaderCard(person)}</div>`).join('');
+  }
+
+  if (mounts.certifications) {
+    mounts.certifications.innerHTML = CERTIFICATIONS.map(certificationMarkup).join('');
   }
 
   if (mounts.milestones) mounts.milestones.innerHTML = MILESTONES.map(milestoneMarkup).join('');

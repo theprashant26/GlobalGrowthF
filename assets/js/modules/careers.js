@@ -1,20 +1,59 @@
 /**
  * GLOBAL GROWTH — CAREERS PAGE
  * ---------------------------------------------------------------------------
- * Renders the benefits grid, the hiring process, and the filterable list of
- * openings from jobs.js. Also populates the role dropdown on the application
- * form so a candidate cannot apply for a job that is not open.
+ * Renders the group's published workforce structure: the grade ladder, the
+ * position catalogue for all 27 divisions, the corporate head-office
+ * departments, the qualification and document requirements, the fifteen-step
+ * recruitment process, and the client-approved careers disclaimer.
+ *
+ * WHAT THIS PAGE CLAIMS
+ * It publishes the *structure*, not a list of live vacancies. Every heading,
+ * count and CTA is written to say so, because a candidate who reads "role"
+ * as "opening" and pays somebody for an interview is the exact harm the
+ * client's disclaimer exists to prevent.
+ *
+ * REGULATORY CONTRACT
+ * Banking, Pharmacy, Finance and Insurance are planned divisions. Their role
+ * cards carry the planned badge, state that no recruitment is open, and offer
+ * no apply route. They are also excluded from the application form's role
+ * list, so the form cannot be used to apply for one.
  *
  * Filtering hides cards with the `hidden` attribute rather than a class, so a
  * filtered-out role leaves the tab order and the accessibility tree.
  */
 
-import { qs, qsa, icon, escapeHtml, url } from './utils.js';
-import { JOBS, DEPARTMENTS, LOCATIONS, JOB_TYPES, BENEFITS, HIRING_PROCESS } from '../data/jobs.js';
-import { jobCard } from './cards.js';
+import { qs, qsa, icon, escapeHtml } from './utils.js';
+import {
+  ALL_ROLES, DIVISION_FILTERS, GRADE_FILTERS, GRADE_MATRIX, GRADE_LABELS,
+  CORPORATE_LEVELS, SALARY_BANDS, CORPORATE_DEPARTMENTS, QUALIFICATION_MATRIX,
+  STANDARD_DOCUMENTS, HR_DOCUMENTS, RECRUITMENT_PROCESS, PROBATION,
+  PROMOTION_PATH, EMPLOYEE_CODE, CAREERS_DISCLAIMER, BENEFITS, ROLE_COUNTS
+} from '../data/jobs.js';
 
 /* ==========================================================================
-   MARKUP
+   SMALL SHARED PIECES
+   ========================================================================== */
+const chips = items => `
+  <div class="gg-chips">
+    ${items.map(item => `<span class="gg-chip">${escapeHtml(item)}</span>`).join('')}
+  </div>`;
+
+const tableMarkup = (headings, rows) => `
+  <div class="gg-table-wrap">
+    <table class="gg-table">
+      <thead><tr>${headings.map(h => `<th scope="col">${escapeHtml(h)}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${rows.map(row => `
+          <tr>
+            <th scope="row">${escapeHtml(row[0])}</th>
+            ${row.slice(1).map(cell => `<td>${escapeHtml(cell)}</td>`).join('')}
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>`;
+
+/* ==========================================================================
+   BENEFITS AND GRADES
    ========================================================================== */
 const benefitMarkup = benefit => `
   <article class="gg-value" data-reveal>
@@ -23,118 +62,244 @@ const benefitMarkup = benefit => `
     <p class="gg-value__text">${escapeHtml(benefit.text)}</p>
   </article>`;
 
-const stepMarkup = step => `
-  <article class="gg-step" data-reveal>
-    <h3 class="gg-step__title">${escapeHtml(step.title)}</h3>
-    <p class="gg-step__text">${escapeHtml(step.text)}</p>
+const levelMarkup = tier => `
+  <article class="gg-feature" data-reveal>
+    <span class="gg-badge gg-badge--number">${escapeHtml(tier.level)}</span>
+    <h3 class="gg-feature__title gg-mt-2">${escapeHtml(tier.name)}</h3>
+    <ul class="gg-bullets">
+      ${tier.roles.map(role => `<li>${escapeHtml(role)}</li>`).join('')}
+    </ul>
   </article>`;
 
-/** A full role, expandable in place — no second page for eight openings. */
-const roleMarkup = job => `
-  <article class="gg-job-card" id="${job.id}" data-job="${job.id}"
-           data-department="${escapeHtml(job.department)}"
-           data-location="${escapeHtml(job.location)}"
-           data-type="${escapeHtml(job.type)}">
+/* ==========================================================================
+   ROLE CARD
+   ========================================================================== */
+const roleMarkup = role => {
+  const planned = role.status === 'planned';
+
+  return `
+  <article class="gg-job-card${planned ? ' is-planned' : ''}" id="${role.id}"
+           data-role="${role.id}"
+           data-division="${escapeHtml(role.divisionId)}"
+           data-grade="${escapeHtml(role.level)}">
     <div class="gg-job-card__head">
-      <h3 class="gg-job-card__title">${escapeHtml(job.title)}</h3>
-      <span class="gg-job-card__dept">${escapeHtml(job.department)}</span>
+      <h3 class="gg-job-card__title">${escapeHtml(role.title)}</h3>
+      <span class="gg-job-card__dept">${escapeHtml(role.brandName)}</span>
     </div>
-    <p class="gg-job-card__summary">${escapeHtml(job.summary)}</p>
-    <div class="gg-job-card__foot">
-      <div class="gg-job-card__meta">
-        <span class="gg-badge gg-badge--meta">${icon('map-pin', 'gg-icon gg-icon--sm')}${escapeHtml(job.location)}</span>
-        <span class="gg-badge gg-badge--meta">${icon('clock', 'gg-icon gg-icon--sm')}${escapeHtml(job.type)}</span>
-        <span class="gg-badge gg-badge--meta">${escapeHtml(job.experience)}</span>
-        ${job.divisionSlug
-          ? `<a class="gg-badge gg-badge--active" href="${url(`/${job.divisionSlug}/`)}">${escapeHtml(job.division)} division</a>`
-          : `<span class="gg-badge gg-badge--meta">${escapeHtml(job.division)}</span>`}
-      </div>
+
+    <p class="gg-job-card__pay">
+      <strong>${escapeHtml(role.salary)}</strong> per month
+      ${role.salaryNote ? `<span class="gg-job-card__note">${escapeHtml(role.salaryNote)}</span>` : ''}
+    </p>
+
+    <div class="gg-job-card__meta">
+      <span class="gg-badge gg-badge--number">${escapeHtml(role.level)}</span>
+      <span class="gg-badge gg-badge--meta">${escapeHtml(GRADE_LABELS[role.level] || 'Grade')}</span>
+      ${role.experience ? `<span class="gg-badge gg-badge--meta">${escapeHtml(role.experience)}</span>` : ''}
+      ${role.code ? `<span class="gg-badge gg-badge--meta">${escapeHtml(role.code)}</span>` : ''}
+      ${planned
+        ? `<span class="gg-badge gg-badge--planned">Planned · ${escapeHtml(role.regulator || 'approval required')}</span>`
+        : ''}
     </div>
+
+    ${planned
+      ? `<p class="gg-job-card__summary">
+           No recruitment is open for this division. The structure is published for transparency;
+           positions will exist only once the required authorisation is in force.
+         </p>`
+      : ''}
 
     <details class="gg-job-details">
       <summary class="gg-job-details__toggle">
-        <span>Full role description</span>
+        <span>Position details</span>
         ${icon('chevron-down', 'gg-icon gg-icon--sm')}
       </summary>
       <div class="gg-job-details__body">
-        <h4 class="gg-h4">What you would own</h4>
-        <ul class="gg-bullets">
-          ${job.responsibilities.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
-        </ul>
-        <h4 class="gg-h4 gg-mt-3">What we are looking for</h4>
-        <ul class="gg-bullets">
-          ${job.requirements.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
-        </ul>
-        <a class="gg-btn gg-btn--primary gg-btn--sm gg-mt-3" href="#apply" data-apply-for="${escapeHtml(job.title)}">
-          Apply for this role ${icon('arrow-right', 'gg-btn__icon')}
-        </a>
+        ${role.qualification
+          ? `<h4 class="gg-h4">Qualification</h4><p class="gg-small">${escapeHtml(role.qualification)}</p>`
+          : ''}
+
+        ${role.duties?.length
+          ? `<h4 class="gg-h4 gg-mt-3">Responsibilities</h4>
+             <ul class="gg-bullets">${role.duties.map(d => `<li>${escapeHtml(d)}</li>`).join('')}</ul>`
+          : ''}
+
+        <h4 class="gg-h4 gg-mt-3">Documents required at verification</h4>
+        ${chips(role.documents)}
+
+        ${planned
+          ? `<p class="gg-help gg-mt-3">
+               Applications for this division are not being accepted.
+             </p>`
+          : `<a class="gg-btn gg-btn--primary gg-btn--sm gg-mt-3" href="#apply"
+                data-apply-for="${escapeHtml(role.title)} — ${escapeHtml(role.brandName)}">
+               Register interest in this position ${icon('arrow-right', 'gg-btn__icon')}
+             </a>`}
       </div>
     </details>
   </article>`;
+};
 
 const selectMarkup = (id, label, options) => `
   <label class="gg-label gg-xs" for="${id}">${escapeHtml(label)}</label>
-  <select class="gg-select" id="${id}" data-job-filter="${id.replace('filter-', '')}">
+  <select class="gg-select" id="${id}" data-role-filter="${id.replace('filter-', '')}">
     <option value="all">All</option>
     ${options.map(option =>
-      `<option value="${escapeHtml(option)}">${escapeHtml(option)}</option>`).join('')}
+      `<option value="${escapeHtml(option.value)}">${escapeHtml(option.label)}</option>`).join('')}
   </select>`;
+
+/* ==========================================================================
+   HEAD OFFICE, PROCESS AND POLICY
+   ========================================================================== */
+const departmentMarkup = department => `
+  <article class="gg-dept" data-reveal>
+    <span class="gg-feature__icon">${icon(department.icon)}</span>
+    <h3 class="gg-dept__title">${escapeHtml(department.name)}</h3>
+    ${chips(department.roles)}
+  </article>`;
+
+const stepMarkup = step => `
+  <article class="gg-step" data-reveal>
+    <h3 class="gg-step__title">${escapeHtml(step.step)}</h3>
+    <p class="gg-step__text">${escapeHtml(step.text)}</p>
+  </article>`;
+
+const pathMarkup = () => `
+  <ol class="gg-path">
+    ${PROMOTION_PATH.map(step => `<li class="gg-path__step">${escapeHtml(step)}</li>`).join('')}
+  </ol>`;
+
+const codeMarkup = () => `
+  <p class="gg-small"><strong>Pattern:</strong> <code>${escapeHtml(EMPLOYEE_CODE.pattern)}</code></p>
+  ${tableMarkup(['Example code', 'Division and function'],
+    EMPLOYEE_CODE.examples.map(e => [e.code, e.meaning]))}`;
+
+const disclaimerMarkup = () => `
+  <div class="gg-notice" data-reveal>
+    <h2 class="gg-notice__title" id="disclaimer-title">${escapeHtml(CAREERS_DISCLAIMER.title)}</h2>
+    ${CAREERS_DISCLAIMER.paragraphs.map(p => `<p>${escapeHtml(p)}</p>`).join('')}
+    <dl class="gg-notice__contact">
+      <div>
+        <dt>${escapeHtml(CAREERS_DISCLAIMER.contact.emailLabel)}</dt>
+        <dd><a href="mailto:${escapeHtml(CAREERS_DISCLAIMER.contact.email)}">${escapeHtml(CAREERS_DISCLAIMER.contact.email)}</a></dd>
+      </div>
+      <div>
+        <dt>${escapeHtml(CAREERS_DISCLAIMER.contact.helplineLabel)}</dt>
+        <dd><a href="tel:${escapeHtml(CAREERS_DISCLAIMER.contact.helpline.replace(/\s+/g, ''))}">${escapeHtml(CAREERS_DISCLAIMER.contact.helpline)}</a></dd>
+      </div>
+    </dl>
+  </div>`;
 
 /* ==========================================================================
    BOOT
    ========================================================================== */
 export const init = () => {
-  const benefits = qs('[data-careers="benefits"]');
-  if (benefits) benefits.innerHTML = BENEFITS.map(benefitMarkup).join('');
+  const mount = (key, html) => {
+    const el = qs(`[data-careers="${key}"]`);
+    if (el) el.innerHTML = html;
+    return el;
+  };
 
-  const process = qs('[data-careers="process"]');
-  if (process) process.innerHTML = HIRING_PROCESS.map(stepMarkup).join('');
+  mount('benefits', BENEFITS.map(benefitMarkup).join(''));
+  mount('levels',   CORPORATE_LEVELS.map(levelMarkup).join(''));
 
-  const list = qs('[data-careers="jobs"]');
+  mount('grades', tableMarkup(
+    ['Grade', 'Designation', 'Indicative monthly range'],
+    GRADE_MATRIX.map(row => [row.level, row.designation, row.range])
+  ));
+
+  mount('bands', tableMarkup(
+    ['Band', 'Indicative monthly range'],
+    SALARY_BANDS.map(row => [row.band, row.range])
+  ));
+
+  mount('departments', CORPORATE_DEPARTMENTS.map(departmentMarkup).join(''));
+
+  mount('qualifications', tableMarkup(
+    ['Position level', 'Minimum qualification'],
+    QUALIFICATION_MATRIX.map(row => [row.level, row.qualification])
+  ));
+
+  mount('documents', chips(STANDARD_DOCUMENTS));
+  mount('hrdocs',    chips(HR_DOCUMENTS));
+  mount('process',   RECRUITMENT_PROCESS.map(stepMarkup).join(''));
+
+  mount('probation', tableMarkup(
+    ['Position level', 'Probation period'],
+    PROBATION.periods.map(row => [row.role, row.period])
+  ));
+
+  mount('promotion',  pathMarkup());
+  mount('codes',      codeMarkup());
+  mount('disclaimer', disclaimerMarkup());
+
+  // Counts are read from the data so a heading can never disagree with the
+  // list beneath it.
+  const summary = qs('[data-careers="summary"]');
+  if (summary) {
+    summary.textContent =
+      `${ROLE_COUNTS.roles} positions · ${ROLE_COUNTS.divisions} divisions · ` +
+      `${ROLE_COUNTS.grades} grades · ${ROLE_COUNTS.plannedDivisions} divisions planned pending approval`;
+  }
+
+  /* ---- Role catalogue --------------------------------------------------- */
+  const list = qs('[data-careers="roles"]');
   const filters = qs('[data-careers="filters"]');
   const roleSelect = qs('[data-role-select]');
 
-  // The application form can only offer roles that are actually open.
+  // The form can only offer positions in divisions that are actually
+  // operating. A planned division has no vacancies to apply for.
   if (roleSelect) {
     roleSelect.innerHTML =
-      '<option value="">Select a role…</option>' +
-      JOBS.map(job => `<option value="${escapeHtml(job.title)}">${escapeHtml(job.title)}</option>`).join('') +
+      '<option value="">Select a position…</option>' +
+      ALL_ROLES
+        .filter(role => role.status === 'active')
+        .map(role => {
+          const label = `${role.title} — ${role.division}`;
+          return `<option value="${escapeHtml(label)}">${escapeHtml(label)}</option>`;
+        }).join('') +
       '<option value="Speculative application">Speculative — none of the above</option>';
   }
 
   if (!list) return;
-  list.innerHTML = JOBS.map(roleMarkup).join('');
+  list.innerHTML = ALL_ROLES.map(roleMarkup).join('');
 
   const count = qs('[data-careers="count"]');
   const empty = qs('[data-careers="empty"]');
 
   if (filters) {
     filters.innerHTML = `
-      <div>${selectMarkup('filter-department', 'Department', DEPARTMENTS)}</div>
-      <div>${selectMarkup('filter-location', 'Location', LOCATIONS)}</div>
-      <div>${selectMarkup('filter-type', 'Type', JOB_TYPES)}</div>`;
+      <div>${selectMarkup('filter-division', 'Division',
+        DIVISION_FILTERS.map(d => ({
+          value: d.id,
+          label: d.status === 'planned' ? `${d.label} (planned)` : d.label
+        })))}</div>
+      <div>${selectMarkup('filter-grade', 'Grade',
+        GRADE_FILTERS.map(level => ({
+          value: level,
+          label: `${level} — ${GRADE_LABELS[level] || 'Grade'}`
+        })))}</div>`;
   }
 
   const apply = () => {
     const chosen = {};
-    qsa('[data-job-filter]', filters || document).forEach(select => {
-      chosen[select.dataset.jobFilter] = select.value;
+    qsa('[data-role-filter]', filters || document).forEach(select => {
+      chosen[select.dataset.roleFilter] = select.value;
     });
 
     let shown = 0;
     qsa('.gg-job-card', list).forEach(card => {
       const visible =
-        (chosen.department === 'all' || !chosen.department || card.dataset.department === chosen.department) &&
-        (chosen.location === 'all'   || !chosen.location   || card.dataset.location === chosen.location) &&
-        (chosen.type === 'all'       || !chosen.type       || card.dataset.type === chosen.type);
+        (chosen.division === 'all' || !chosen.division || card.dataset.division === chosen.division) &&
+        (chosen.grade === 'all'    || !chosen.grade    || card.dataset.grade === chosen.grade);
       card.hidden = !visible;
       if (visible) shown += 1;
     });
 
     if (count) {
-      count.textContent = shown === JOBS.length
-        ? `${JOBS.length} open roles`
-        : `${shown} of ${JOBS.length} roles`;
+      count.textContent = shown === ALL_ROLES.length
+        ? `${ALL_ROLES.length} positions across the group`
+        : `${shown} of ${ALL_ROLES.length} positions`;
     }
     if (empty) empty.hidden = shown > 0;
   };
@@ -142,12 +307,14 @@ export const init = () => {
   filters?.addEventListener('change', apply);
   apply();
 
-  // "Apply for this role" pre-fills the form's role field and moves focus
+  // "Register interest" pre-fills the form's position field and moves focus
   // there, so the candidate does not have to find it again in the dropdown.
   list.addEventListener('click', event => {
     const trigger = event.target.closest('[data-apply-for]');
     if (!trigger || !roleSelect) return;
-    roleSelect.value = trigger.dataset.applyFor;
+    const wanted = trigger.dataset.applyFor.split(' — ')[0];
+    const match = [...roleSelect.options].find(option => option.value.startsWith(`${wanted} —`));
+    roleSelect.value = match ? match.value : 'Speculative application';
     // Let the hash navigation land first, then take focus.
     setTimeout(() => roleSelect.focus(), 300);
   });

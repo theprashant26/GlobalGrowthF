@@ -239,7 +239,26 @@ stock that carries no operator branding, or with a station-operations frame.
 | 2 | **Replacements for the logistics and railways frames** | `/logistics/`, `/railways/` | High — see the notes above |
 | 3 | **Certification marks — up to 7** | `/about` credentials cards | Medium — the cards read well as text, but the official marks carry more weight |
 | 4 | **Photography for the other 15 divisions** | Only needed once those divisions get pages of their own | Low — tracked in section 9 |
-| 5 | **Sector imagery — up to 15** | `/sectors` and the homepage grid | Low — the cards use brand icons and look complete without it |
+| 5 | **Sector imagery — up to 15** | `/sectors` and the homepage grid | Low — see the note below |
+
+### Sector imagery — sizes, if you decide to commission it
+
+**1920 × 1080 px, 16:9 landscape, one per sector, 15 in total.** Minimum
+1600 × 900. We generate the 480 / 900 / 1400 / 1920 variants from that.
+
+That figure is measured, not guessed. The largest a sector image can render is
+864 CSS px wide on `/sectors`, and 381 CSS px on the homepage grid — 1920
+covers the larger of those on a 2× retina screen with headroom if the layout
+changes. Expect roughly 40–70 KB per image once converted to WebP.
+
+16:9 because it crops cleanly to 3:2 or 5:4 if the card design moves; a squarer
+master does not crop back the other way.
+
+**Our honest advice: skip this one.** The sector cards use the brand icon set
+and a gradient sweep, and they look deliberate. Fifteen pieces of generic stock
+photography would make that grid look cheaper, not richer — and it is fifteen
+more chances to repeat the Hamburg problem. If you do commission it, shoot it,
+do not licence it.
 
 ### Specifications, if you are commissioning more
 

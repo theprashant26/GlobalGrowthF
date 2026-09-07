@@ -304,7 +304,8 @@ const renderSectorList = mount => {
     mount.append(el('div', { class: `sg-sector${sector.status === 'planned' ? ' is-planned' : ''}` }, [
       el('div', { class: 'sg-sector__head' }, [
         el('span', { class: 'gg-badge gg-badge--number' }, sector.number),
-        el('h4', {}, sector.name),
+        // h3, not h4: each sector is a direct child of the section's h2.
+        el('h3', {}, sector.name),
         el('span', {
           class: `gg-badge gg-badge--${sector.status === 'planned' ? 'planned' : 'active'}`
         }, [

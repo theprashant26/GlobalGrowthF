@@ -52,8 +52,16 @@
   --gg-white:     #FFFFFF;
   --gg-off:       #F6F8FB;   /* light section background */
   --gg-line:      #E2E8F0;   /* borders on light */
-  --gg-grey-500:  #64748B;   /* body text on light */
-  --gg-grey-700:  #334155;
+  /* Secondary body text. Was #64748B, which measured 4.76:1 on --gg-white but
+     only 4.47:1 on --gg-off — a fail, and --gg-off is the background of every
+     other section on the site. Darkened three steps along its own value axis,
+     which is imperceptible next to the old value and clears AA on both light
+     surfaces:
+       --gg-grey-500 on --gg-white ........... 4.97:1  (AA)
+       --gg-grey-500 on --gg-off ............. 4.67:1  (AA)
+     Check any new light surface against this stop before introducing it. */
+  --gg-grey-500:  #617188;   /* secondary body text on light */
+  --gg-grey-700:  #334155;   /* 7.12:1 on --gg-off */
   --gg-ink:       #0B1220;   /* headings on light */
 
   /* ---------------------------------------------------------------------
@@ -170,7 +178,7 @@
   --gg-container:  1320px;
   --gg-container-narrow: 880px;
   --gg-gutter:     clamp(20px, 5vw, 64px);
-  --gg-section-y:  clamp(72px, 9vw, 140px);
+  --gg-section-y:  clamp(56px, 6.5vw, 104px);
   --gg-nav-h:      76px;
   --gg-nav-h-sm:   64px;
 
@@ -196,7 +204,18 @@
   --gg-info-soft:    rgba(30,111,184,.10);
   --gg-danger:       #C0392B;                 /* error text — contrast-safe on white */
   --gg-danger-soft:  rgba(192,57,43,.09);
-  --gg-planned:      #A16207;                 /* "planned" amber, AA on white */
+  /* The "planned" amber. It was picked against white, where #A16207 measures
+     4.92:1 — but it is almost never shown on white. It is shown on its own
+     10% tint, and inside .gg-reg-note that tint stacks twice, which dropped it
+     to 4.32:1 and then 3.82:1. This is the one colour on the site that must be
+     legible: it is what tells a visitor a regulated business is not operating.
+     Darkened along its own hue until it clears AA on every surface it lands on:
+       --gg-planned on white ................. 6.27:1  (AA)
+       --gg-planned on one tint .............. 5.49:1  (AA)
+       --gg-planned on two stacked tints ..... 4.86:1  (AA)
+     The tint and border rgba() values keep the original hue on purpose — they
+     are surfaces, not text, and the softer amber reads better behind copy. */
+  --gg-planned:      #8A5406;
   --gg-planned-soft: rgba(161,98,7,.10);
 
   --gg-focus-ring:   0 0 0 3px var(--gg-white), 0 0 0 6px var(--gg-green-500);

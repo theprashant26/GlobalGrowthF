@@ -907,6 +907,24 @@
 /* ==========================================================================
    16. MILESTONES
    ========================================================================== */
+/* The section head sits beside the timeline from 1000px up, rather than above
+   it. The timeline's own measure is capped at 62ch, so on its own it left most
+   of a 1320px container empty down the right-hand side. This is the same
+   sticky-column pattern /sectors already uses for its index. */
+.gg-timeline-layout { display: grid; gap: var(--sp-4); }
+@media (min-width: 1000px) {
+  .gg-timeline-layout {
+    grid-template-columns: minmax(280px, 380px) 1fr;
+    gap: var(--sp-8);
+    align-items: start;
+  }
+  .gg-timeline-layout > .gg-shead {
+    margin-block-end: 0;
+    position: sticky;
+    inset-block-start: calc(var(--gg-nav-h-sm) + var(--sp-4));
+  }
+}
+
 .gg-milestones { position: relative; display: grid; gap: var(--sp-4); }
 .gg-milestones::before {
   content: "";
@@ -1167,7 +1185,11 @@
    accent tint taken from the existing brand ramp — set as --gg-accent on the
    page root by divisionPage.js. No division gets a colour scheme of its own.
    ========================================================================== */
-.page-division { --gg-accent: var(--gg-teal-500); }
+/* Two accents, not one. --gg-accent is the graphic stop, used for icons,
+   rules and borders where 3:1 is the bar. --gg-accent-text is its text-safe
+   partner for anything under 24px on a light surface, where the bar is 4.5:1.
+   divisionPage.js sets both; these are the fallbacks if it has not run. */
+.page-division { --gg-accent: var(--gg-teal-500); --gg-accent-text: var(--gg-teal-700); }
 
 /* --- Hero ----------------------------------------------------------------- */
 .gg-div-hero { position: relative; }
@@ -1238,7 +1260,8 @@
   font-size: var(--fs-xs);
   font-weight: 700;
   letter-spacing: .12em;
-  color: var(--gg-accent);
+  /* Small text on white: the text-safe stop, not the graphic one. */
+  color: var(--gg-accent-text);
   font-variant-numeric: tabular-nums;
 }
 .gg-cap__title { font-size: var(--fs-h4); margin-block: 6px var(--sp-1); }
@@ -1949,13 +1972,24 @@
    checked against. The reference is monospaced and set apart because it is
    the part a reader is meant to copy and verify.
    ========================================================================== */
+/* Flex, not grid, and deliberately so. There are seven certifications: in a
+   rigid three-column grid the last row holds one card and two empty cells,
+   which reads as a mistake rather than as a layout. Wrapping flex items with a
+   centred last row puts the remainder in the middle, which reads as intended.
+   `align-items: stretch` keeps every card in a row the same height. */
 .gg-certs {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
   gap: var(--sp-2);
 }
-@media (min-width: 640px)  { .gg-certs { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1100px) { .gg-certs { grid-template-columns: repeat(3, 1fr); } }
+.gg-certs > .gg-cert { flex: 1 1 260px; max-inline-size: 100%; }
+@media (min-width: 640px)  { .gg-certs > .gg-cert { max-inline-size: calc(50% - var(--sp-2) / 2); } }
+@media (min-width: 1000px) { .gg-certs > .gg-cert { max-inline-size: calc(33.333% - var(--sp-2) * 2 / 3); } }
+/* Four-up only once a card can still hold "Ministry of Corporate Affairs" on
+   two lines. Below this the fourth column squeezes every title into four. */
+@media (min-width: 1280px) { .gg-certs > .gg-cert { max-inline-size: calc(25% - var(--sp-2) * 3 / 4); } }
 
 .gg-cert {
   display: flex;

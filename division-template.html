@@ -30,7 +30,9 @@
      values below are the no-JS fallback and apply to every division page. -->
 <title>Division — Global Growth Industries</title>
 <meta name="description" content="A division of Global Growth Industries Private Limited, a multi-sector Indian group operating across fifteen sectors.">
-<link rel="canonical" href="https://www.globalgrowthindustries.com/">
+<!-- No canonical on purpose. This skeleton is not a page, so there is no URL
+     it can honestly claim to be the canonical version of. It is noindex,
+     nofollow and disallowed in robots.txt. -->
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Global Growth Industries">
@@ -78,7 +80,22 @@
   <!-- ====================================================================
        1. HERO — division name, parent-sector breadcrumb, mailbox
        ==================================================================== -->
-  <section class="gg-page-hero gg-div-hero gg-dark" data-div="hero" aria-label="Division introduction"></section>
+  <section class="gg-page-hero gg-div-hero gg-dark" data-div="hero" aria-label="Division introduction">
+    <!-- Replaced wholesale by divisionPage.js on any page that carries a
+         data-division slug. It renders only here, on the bare template. -->
+    <div class="gg-container">
+      <div class="gg-page-hero__inner">
+        <p class="gg-eyebrow">Reference</p>
+        <h1 class="gg-h1 gg-page-hero__title">Division page template</h1>
+        <p class="gg-lead gg-page-hero__lead">
+          The skeleton all twelve division pages are built from. It is empty by design:
+          every section below is hydrated by divisionPage.js from the slug in
+          <code>data-division</code>, joining sectors.js for structure with divisions.js
+          for copy. Open a real division to see it filled in.
+        </p>
+      </div>
+    </div>
+  </section>
 
   <!-- ====================================================================
        2. OVERVIEW

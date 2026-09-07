@@ -135,7 +135,13 @@
   block-size: 22px;
   border-radius: 4px;
   background: var(--gg-grad-accent);
-  flex: none;
+  /* flex: none would hold the swatch at its true token width, which is the
+     point of the demo — but --sp-16 is 128px and pushes past a 320px viewport.
+     Allowed to shrink, never to grow, so the scale still reads correctly at
+     every width the site is tested at. */
+  flex: 0 1 auto;
+  min-inline-size: 0;
+  max-inline-size: 100%;
 }
 .sg-radius-demo {
   inline-size: 96px; block-size: 56px;

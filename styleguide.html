@@ -43,7 +43,10 @@
 <!-- ======================================================================
      HEADER
      ====================================================================== -->
-<header class="sg-header">
+<!-- .gg-dark because the header is painted with --gg-grad-dark. Any dark
+     surface must carry the class or the components inside it render their
+     light styles — navy on navy. See README, "the .gg-dark contract". -->
+<header class="sg-header gg-dark">
   <div class="gg-container">
     <img class="sg-header__logo"
          src="assets/images/logo/global-growth-logo-white.png"

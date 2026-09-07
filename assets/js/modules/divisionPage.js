@@ -40,7 +40,22 @@ import { divisionCard } from './cards.js';
  * navy-500 (1.90 on navy) and green-400 (2.22 on white) each disappear in one
  * of the two contexts, so neither can be an accent.
  */
-const ACCENTS = ['--gg-blue-500', '--gg-teal-500', '--gg-green-500'];
+/**
+ * Accent pairs, one per division page: [graphic stop, text-safe stop].
+ *
+ * navy-500 is 1.90:1 on navy and green-400 is 2.22:1 on white, so neither can
+ * be a graphic accent — both disappear in one of the two contexts. The three
+ * kept here clear 3:1 in both.
+ *
+ * The second value exists because 3:1 is the bar for an icon and 4.5:1 is the
+ * bar for text under 24px. blue-500 already clears 4.5:1 on light and is its
+ * own text stop; teal and green need their -700 partners.
+ */
+const ACCENTS = [
+  ['--gg-blue-500',  '--gg-blue-500'],
+  ['--gg-teal-500',  '--gg-teal-700'],
+  ['--gg-green-500', '--gg-green-700']
+];
 
 const accentFor = sectorId => {
   const index = SECTORS.findIndex(sector => sector.id === sectorId);
@@ -238,7 +253,9 @@ export const init = () => {
     return;
   }
 
-  root.style.setProperty('--gg-accent', `var(${accentFor(sector.id)})`);
+  const [accent, accentText] = accentFor(sector.id);
+  root.style.setProperty('--gg-accent', `var(${accent})`);
+  root.style.setProperty('--gg-accent-text', `var(${accentText})`);
 
   // Title and description are set here rather than duplicated across twelve
   // near-identical HTML files.

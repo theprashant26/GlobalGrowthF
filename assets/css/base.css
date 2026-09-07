@@ -251,7 +251,12 @@ p { text-wrap: pretty; }
 .gg-text-center { text-align: center; }
 .gg-muted   { color: var(--gg-grey-500); }
 .gg-dark .gg-muted { color: var(--gg-on-dark-mute); }
+/* The -700 stops are the text-safe greens for LIGHT backgrounds. On navy the
+   same colour drops to 3.66:1, so a dark context takes the -400 stop instead,
+   which measures 8.02:1 there. Same rule as every other colour on this site:
+   -700 on light, -300/-400/-500 on dark. */
 .gg-accent  { color: var(--gg-green-700); }
+.gg-dark .gg-accent { color: var(--gg-green-400); }
 .gg-relative{ position: relative; }
 .gg-full    { inline-size: 100%; }
 
@@ -299,3 +304,18 @@ p { text-wrap: pretty; }
 @supports (scrollbar-color: auto) {
   html { scrollbar-color: var(--gg-navy-500) var(--gg-off); scrollbar-width: thin; }
 }
+
+
+/* --------------------------------------------------------------------------
+   INLINE CODE
+   Bootstrap's Reboot colours <code> #d63384, which is not in this palette and
+   measures 3.95:1 on the amber review panels where our {{TOKEN}} markers
+   actually appear. Brought back into the design system.
+   -------------------------------------------------------------------------- */
+code {
+  font-family: ui-monospace, "SFMono-Regular", "Cascadia Mono", Menlo, Consolas, monospace;
+  font-size: .92em;
+  color: var(--gg-grey-700);
+  overflow-wrap: anywhere;
+}
+.gg-dark code { color: var(--gg-on-dark-mute); }

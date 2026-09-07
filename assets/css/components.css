@@ -745,7 +745,16 @@ body.is-drawer-open { overflow: hidden; }
    9. SECTION HEADER PATTERN
    eyebrow + H2 + lead. One component, used by every section on the site.
    ========================================================================== */
-.gg-shead { max-inline-size: 720px; margin-block-end: var(--sp-8); }
+.gg-shead { max-inline-size: 720px; margin-block-end: var(--sp-6); }
+
+/* --- Reveal wrappers inside a card grid ----------------------------------
+   Several modules wrap a card in <div data-reveal> so the reveal animation has
+   a cell of its own to move. The wrapper stretches to the grid row; without
+   this the card inside it does not, and a row of cards with different amounts
+   of text ends at different heights. */
+.gg-values > [data-reveal],
+.gg-stats-band__grid > [data-reveal] { display: grid; }
+
 .gg-shead--center { margin-inline: auto; text-align: center; }
 .gg-shead--center .gg-eyebrow { justify-content: center; }
 .gg-shead--wide { max-inline-size: 900px; }

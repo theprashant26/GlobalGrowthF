@@ -44,7 +44,13 @@
        white on --gg-green-700 ............... 4.87:1  (AA)
      --------------------------------------------------------------------- */
   --gg-teal-700:  #12776C;   /* text-safe teal  */
-  --gg-green-700: #3A8030;   /* text-safe green */
+  --gg-green-700: #3A8030;   /* text-safe green on white and --gg-off */
+  /* One stop darker again, for green text on a GREEN tint. --gg-green-700 is
+     4.87:1 on white but only 4.17:1 once --gg-success-soft is under it — the
+     tint and the text share a hue, so they close on each other.
+       --gg-green-800 on --gg-success-soft ... 5.15:1  (AA)
+       --gg-green-800 on white ............... 6.02:1  (AA) */
+  --gg-green-800: #337029;
 
   /* ---------------------------------------------------------------------
      3. NEUTRALS
@@ -90,7 +96,8 @@
 
   /* Navy scrims — translucent layers of --gg-navy-900. Declared here so no
      other stylesheet has to restate the navy as an rgba() literal. */
-  --gg-scrim:      rgba(4,24,47,.72);   /* gradient overlay on the hero */
+  --gg-scrim:      rgba(4,24,47,.72);
+  --gg-scrim-soft: rgba(4,24,47,.34);   /* portrait base, keeps faces readable */   /* gradient overlay on the hero */
   --gg-scrim-nav:  rgba(4,24,47,.92);   /* solid navbar behind its blur */
   --gg-scrim-mega: rgba(4,24,47,.94);   /* mega-menu panel */
 

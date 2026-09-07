@@ -13,7 +13,7 @@
  * these templates — not in the pages — so no page can accidentally omit it.
  */
 
-import { icon, escapeHtml, url, picture } from './utils.js';
+import { icon, escapeHtml, url, picture, resolve } from './utils.js';
 import { REGULATORY } from '../data/site.js';
 
 /** The status badge for any entity carrying a status flag. */
@@ -137,21 +137,40 @@ const portraitAlt = person => (
     : person.name
 );
 
-export const leaderCard = person => `
-  <article class="gg-leader-card">
-    <div class="gg-leader-card__media">
+/**
+ * Leadership card.
+ *
+ * While a name is still pending the card leads with the ROLE, because the role
+ * is the real information — the group does have a Chairman, we just cannot
+ * name them yet. Leading with a greyed "to be announced" and demoting the role
+ * to a subtitle would bury the only true fact on the card.
+ *
+ * The moment a real name lands in site.js the card flips back to name-first
+ * with no other change.
+ */
+export const leaderCard = person => {
+  const name = resolve(person.name);
+  const bio = resolve(person.bio);
+  const pending = name.pending;
+
+  return `
+  <article class="gg-leader-card${pending ? ' is-pending' : ''}">
+    <div class="gg-leader-card__media${person.photo ? '' : ' is-monogram'}">
       ${person.photo
         ? picture(
             { file: person.photo, width: 800, height: 1000, alt: portraitAlt(person) },
             { sizes: PORTRAIT_SIZES, dir: 'team', widths: PORTRAIT_WIDTHS })
         : `<span class="gg-leader-card__monogram" aria-hidden="true">${escapeHtml(monogram(person.name))}</span>`}
     </div>
-    <div class="gg-leader-card__body">
-      <h3 class="gg-leader-card__name">${escapeHtml(person.name)}</h3>
-      <p class="gg-leader-card__role">${escapeHtml(person.role)}</p>
-      ${person.bio ? `<p class="gg-leader-card__bio">${escapeHtml(person.bio)}</p>` : ''}
+    <div class="gg-leader-card__body"${name.attr}>
+      <h3 class="gg-leader-card__name">${escapeHtml(pending ? person.role : name.text)}</h3>
+      <p class="gg-leader-card__role">${pending ? 'Appointment to be announced' : escapeHtml(person.role)}</p>
+      ${!bio.pending && bio.text
+        ? `<p class="gg-leader-card__bio">${escapeHtml(bio.text)}</p>`
+        : ''}
     </div>
   </article>`;
+};
 
 /* ==========================================================================
    JOB CARD

@@ -28,17 +28,60 @@ Bengaluru 560027), phone `+91 92048 04718`, all 9 department mailboxes, the logo
 
 ## 2. Certification references — BLOCKS the credentials section
 
-`/about` now carries a **Certifications & Registrations** section. Each card
-names the issuing body and shows the number it can be checked against.
+`/about` carries a **Certifications & Registrations** section with all 13
+bodies, and the acronyms also run as a strip above the footer on every page.
+Each card names the issuing body and shows the number it can be checked
+against.
 
 **To be clear: this is not about fees or any payment.** We have the list of
-bodies you sent and it is already on the site. What is missing is the
-*registration or certificate number* printed on each certificate — the
-identifier a visitor or a client's compliance team would use to verify it.
-Those numbers are placeholders in `assets/js/data/site.js` → `CERTIFICATIONS`.
+bodies you sent and it is all on the site. What is missing is the *registration
+or certificate number* printed on each certificate — the identifier a visitor
+or a client's compliance team would use to verify it. Those numbers are
+placeholders in `assets/js/data/site.js` → `CERTIFICATIONS`.
 
 | Certification | Reference needed |
 |---|---|
+| MCA | The CIN (same value as section 1) |
+| MSME | `{{UDYAM_REGISTRATION_NUMBER}}` |
+| Startup India | `{{DPIIT_RECOGNITION_NUMBER}}` |
+| ISO | `{{ISO_STANDARD_AND_CERTIFICATE_NUMBER}}` — **and which standard**: 9001, 14001, 45001? |
+| IICA | `{{IICA_REGISTRATION_NUMBER}}` |
+| NCVET | `{{NCVET_RECOGNITION_NUMBER}}` |
+| NSDC | `{{NSDC_TRAINING_PARTNER_ID}}` |
+| NSQF | `{{NSQF_ALIGNMENT_REFERENCE}}` |
+| FEF | full form + `{{FEF_REGISTRATION_NUMBER}}` |
+| NCT | full form + `{{NCT_REGISTRATION_NUMBER}}` |
+| AA | full form + `{{AA_REGISTRATION_NUMBER}}` |
+| SSC | **see below** |
+| UGC | **see below** |
+
+*(You listed ISO twice — it is one entry.)*
+
+### Two of these need more than a number
+
+They are on the site now, in the "to be confirmed" state, because dropping your
+content is not our call. But neither should reach a launched site without
+evidence behind it, and both cut against the careers notice you approved.
+
+**SSC.** To most Indian job-seekers "SSC" means the **Staff Selection
+Commission** — the Government of India recruitment body. Your own careers
+notice exists to say GGIPL vacancies *"should not be interpreted as Government
+of India … employment"*. An unexplained SSC badge in the footer of every page
+argues the exact opposite of that notice. If you mean a **Sector Skill
+Council**, the card must name which one — "Logistics Sector Skill Council", say
+— not the bare acronym.
+
+**UGC.** The University Grants Commission recognises universities and
+degree-awarding institutions. It does not certify private limited companies.
+The same careers notice specifically disclaims *"university"* employment. If
+there is a real basis for this — an affiliation held by a partner institution,
+for instance — tell us what it is and we will word it accurately. If not, our
+recommendation is to remove it.
+
+**AA and FEF and NCT** are simply unexplained acronyms. Tell us the issuing
+body in full for each, or we remove the card.
+
+---|---|
 | MCA | The CIN (same value as above) |
 | MSME | `{{UDYAM_REGISTRATION_NUMBER}}` |
 | Startup India | `{{DPIIT_RECOGNITION_NUMBER}}` |
@@ -95,15 +138,44 @@ be reviewed alongside the rest.
 
 ---
 
-## 5. Leadership — 6 people
+## 5. Leadership — names DONE, portraits and bios outstanding
 
-Names, roles and a short biography each. Currently `{{CHAIRMAN_NAME}}`,
-`{{MD_NAME}}`, `{{DIRECTOR_OPERATIONS_NAME}}`, `{{DIRECTOR_FINANCE_NAME}}`,
-`{{DIRECTOR_COMPLIANCE_NAME}}`, `{{DIRECTOR_HR_NAME}}` in
-`assets/js/data/site.js` → `LEADERSHIP`.
+**Received 7 September 2026 and live on `/about`:**
 
-Shown on `/about`. Until portraits arrive the cards show initials rather than a
-broken image, so this section is safe to publish with names only.
+| Role | Name |
+|---|---|
+| Chairman | Sahil Yadav |
+| Managing Director | Paresh Nath Sutradhar |
+| Director — Operations | Lavkush Kumar |
+| Director — Finance | Sagar Singh |
+| Director — Legal & Compliance | Ashwini Kumar |
+| Director — Human Resources | Riya Modak |
+
+**One thing to confirm:** "PareshNath" was supplied as a single word. We have
+published it as **Paresh Nath Sutradhar**, on the assumption a space was
+intended. Say the word and it goes back exactly as you wrote it.
+
+### The stock portraits have been removed
+
+This was flagged when they went in, and the names triggered it. A stock model
+beside `{{CHAIRMAN_NAME}}` is a placeholder. The same stock model beside
+**Sahil Yadav, Chairman** is a false statement about a named individual — the
+sort of thing that gets screenshotted rather than corrected.
+
+The cards now show a branded monogram panel instead. It is a deliberate
+treatment, not a gap, and the section reads as finished.
+
+**To put real photographs back:** send six files, 4:5 portrait, minimum
+800 x 1000, consistent framing. We drop them into
+`assets/images/global/_masters/`, run one script, and the photographs return
+with the same framing and grade already built for the placeholders. One line
+per person in `site.js`; nothing else changes.
+
+### Biographies
+
+Still `{{..._BIO}}` placeholders and **not rendering** — a card with a name and
+a role is complete without one. Two or three sentences each when you have them:
+background, what they run here, and what they were doing before.
 
 ---
 

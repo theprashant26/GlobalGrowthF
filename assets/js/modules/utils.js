@@ -196,6 +196,37 @@ export const escapeHtml = str => String(str)
   .replace(/'/g, '&#39;');
 
 /* --------------------------------------------------------------------------
+   PENDING VALUES
+   The data files carry {{LABELLED_PLACEHOLDER}} tokens for anything the client
+   has not supplied yet. That is deliberate: a labelled gap is honest, and it is
+   greppable, so CLIENT_CHECKLIST.md and the QA probe can both find it.
+
+   What is NOT acceptable is printing the token at a visitor. "{{CHAIRMAN_NAME}}"
+   on a live page reads as a broken site, not as a pending value.
+
+   So every renderer that touches client data runs it through resolve() and
+   decides what the gap should look like in its own context. The token is kept
+   on the element in a data-pending attribute — invisible to a reader, still
+   there for us.
+   -------------------------------------------------------------------------- */
+
+/** True when a value is still an unfilled {{PLACEHOLDER}} token. */
+export const isPending = value =>
+  typeof value === 'string' && /^\s*\{\{[\s\S]*\}\}\s*$/.test(value);
+
+/**
+ * Resolve a possibly-pending value.
+ * @returns {{pending: boolean, text: string, attr: string}}
+ *   `text` is the value, or the supplied fallback when it is still a token.
+ *   `attr` is a ready-to-interpolate data-pending attribute, or ''.
+ */
+export const resolve = (value, fallback = '') => isPending(value)
+  ? { pending: true, text: fallback, attr: ` data-pending="${escapeHtml(value.trim())}"` }
+  : { pending: false, text: value ?? '', attr: '' };
+
+
+
+/* --------------------------------------------------------------------------
    MOTION PREFERENCES
    The single authority on whether motion is allowed. Every module must ask
    this rather than reading the media query itself, so a future override

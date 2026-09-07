@@ -135,6 +135,27 @@ protection against a candidate reading a private-sector position as government
 employment. **Do not paraphrase it, shorten it, or move that section below the
 application form.**
 
+## A note on the module cache
+
+There is no build step and no bundler, so the browser fetches each ES module
+individually and caches it hard. That is normally a feature. It has one sharp
+edge worth knowing about.
+
+If you change a module's **exports** — add a helper to `utils.js`, say — a
+browser still holding the previous copy of that file will fail to link any
+module that imports the new name. `main.js` catches each module's failure
+independently and carries on, so the result is a page that is *partly*
+rendered: the navbar fine, the footer empty, the sector grid missing. It looks
+like a layout bug, and it is not.
+
+**The fix is always a hard reload** (Ctrl+Shift+R, or Cmd+Shift+R). The console
+says so too — a failed boot logs an error naming the module and the likely
+cause.
+
+Worth remembering after a deploy: returning visitors can hit exactly this on
+the first load after an update. If a change alters module exports and the site
+is already live, either wait out the cache or rename the file.
+
 ## Photography
 
 Every photograph on the site is served as WebP with a JPEG fallback, at three

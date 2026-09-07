@@ -10,7 +10,7 @@
  * Mount point:  <footer class="gg-footer" data-footer></footer>
  */
 
-import { qs, icon, escapeHtml, url } from './utils.js';
+import { qs, icon, escapeHtml, url, resolve } from './utils.js';
 import { FOOTER_LINKS, LEGAL_LINKS } from '../data/nav.js';
 import { DIVISION_PAGES } from '../data/sectors.js';
 import { BRAND, OFFICE, EMAILS, SOCIAL, REGULATORY, CERTIFICATIONS } from '../data/site.js';
@@ -125,7 +125,14 @@ const markup = () => `
 
     <div class="gg-footer__bar">
       <span>&copy; ${new Date().getFullYear()} ${escapeHtml(BRAND.legalNameUC)}. All rights reserved.</span>
-      <span>CIN: ${escapeHtml(BRAND.cin)}</span>
+      ${(() => {
+        const cin = resolve(BRAND.cin);
+        // Omitted rather than shown empty or tokenised. data-pending keeps it
+        // findable in the DOM without putting it in front of a reader.
+        return cin.pending
+          ? `<span hidden${cin.attr}></span>`
+          : `<span>CIN: ${escapeHtml(cin.text)}</span>`;
+      })()}
       <nav class="gg-footer__legal" aria-label="Legal">
         ${LEGAL_LINKS.map(link => `<a href="${url(link.href)}">${escapeHtml(link.label)}</a>`).join('')}
       </nav>
@@ -135,10 +142,18 @@ const markup = () => `
 export const init = () => {
   const mount = qs('[data-footer]');
   if (!mount) return;
-  // The footer is a dark surface, so it opts into the on-dark component
-  // context. Without this a .gg-btn--secondary inside it renders its light
-  // styles — navy on navy — and effectively disappears. Set here rather than
-  // in every page's markup so it can never be forgotten.
-  mount.classList.add('gg-dark');
+
+  // Content FIRST, then the dark context class.
+  //
+  // The order matters more than it looks. main.js catches a failing module and
+  // carries on, so if markup() throws the footer stays empty — and if the dark
+  // class were already applied, the result is a deliberate-looking navy band
+  // with nothing in it. That reads as a design decision rather than a fault,
+  // which is how a broken footer once survived review.
+  //
+  // The class is still set here rather than in twenty-three HTML files, so it
+  // cannot be forgotten on a new page: a dark surface must carry .gg-dark or
+  // the components inside it render their light styles — navy on navy.
   mount.innerHTML = markup();
+  mount.classList.add('gg-dark');
 };

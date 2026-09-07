@@ -49,6 +49,58 @@ DIVISIONS = {
     'Security.jpg':          'security',
 }
 PORTRAITS = {'Leader-%d.jpg' % n: 'leader-%d' % n for n in range(1, 7)}
+
+# Framing normalisation, measured off the masters against decile guides.
+#   zoom  >1 crops in, to match head size across the set
+#   cx/cy the point that stays centred, as a fraction of the frame
+#
+# Five of the six are shot centred and head-and-shoulders. Leader-1 is the
+# outlier: waist-up, subject a third of the way in from the left, and a head
+# noticeably smaller than the rest. Left alone it is the one card that does not
+# belong. Nothing else needs more than a nudge.
+PORTRAIT_CROPS = {
+    'leader-1': {'zoom': 1.30, 'cx': 0.38, 'cy': 0.34},
+    'leader-2': {'zoom': 1.00, 'cx': 0.50, 'cy': 0.50},
+    'leader-3': {'zoom': 1.00, 'cx': 0.52, 'cy': 0.50},
+    'leader-4': {'zoom': 1.06, 'cx': 0.48, 'cy': 0.46},
+    'leader-5': {'zoom': 1.00, 'cx': 0.50, 'cy': 0.50},
+    'leader-6': {'zoom': 1.08, 'cx': 0.50, 'cy': 0.44},
+}
+
+# A shared grade, applied only to the portraits.
+#
+# The six masters were shot in six different rooms: white brick, teal seamless,
+# autumn park, grey wall, blue-grey seamless, city street. Side by side in one
+# grid they read as six stock photographs rather than one leadership team, and
+# no amount of cropping fixes that — it is a colour problem, not a framing one.
+#
+# So: pull the saturation back, lift contrast slightly, and lay a few per cent
+# of the brand navy over everything. That is enough for six backgrounds to
+# share a cast without touching skin tones in any way a reader would notice.
+#
+# It is applied at build time, not in CSS, so the served file is the graded one
+# and there is no filter cost on every paint. Masters are untouched; delete
+# this block and re-run to get the originals back.
+PORTRAIT_GRADE = {'saturation': 0.86, 'contrast': 1.05, 'tint': (4, 24, 47), 'tint_amount': 0.07}
+
+
+def grade_portrait(im):
+    from PIL import ImageEnhance, Image as _Image
+    im = ImageEnhance.Color(im).enhance(PORTRAIT_GRADE['saturation'])
+    im = ImageEnhance.Contrast(im).enhance(PORTRAIT_GRADE['contrast'])
+    wash = _Image.new('RGB', im.size, PORTRAIT_GRADE['tint'])
+    return _Image.blend(im, wash, PORTRAIT_GRADE['tint_amount'])
+
+
+def frame(im, crop):
+    """Crop to a focal point at a given zoom, staying inside the frame."""
+    if crop['zoom'] <= 1.0 and crop['cx'] == 0.5 and crop['cy'] == 0.5:
+        return im
+    w, h = im.size
+    nw, nh = w / crop['zoom'], h / crop['zoom']
+    left = min(max(w * crop['cx'] - nw / 2, 0), w - nw)
+    top = min(max(h * crop['cy'] - nh / 2, 0), h - nh)
+    return im.crop((round(left), round(top), round(left + nw), round(top + nh)))
 OG = 'Open-Graph.jpg'
 
 
@@ -75,8 +127,11 @@ def crop_to(im, ratio):
     return im.crop((0, top, w, top + new_h))
 
 
-def variants(master, out_dir, stem, widths, ratio):
-    im = crop_to(Image.open(master).convert('RGB'), ratio)
+def variants(master, out_dir, stem, widths, ratio, prepare=None):
+    im = Image.open(master).convert('RGB')
+    if prepare:
+        im = prepare(im)
+    im = crop_to(im, ratio)
     os.makedirs(out_dir, exist_ok=True)
     written = []
     for w in widths:
@@ -101,8 +156,9 @@ for name, slug in DIVISIONS.items():
 
 print('PORTRAITS  4:5')
 for name, stem in PORTRAITS.items():
+    prepare = lambda im, s=stem: grade_portrait(frame(im, PORTRAIT_CROPS[s]))
     files, size = variants(find(name), os.path.join(ROOT, 'assets/images/team'),
-                           stem, PORTRAIT_WIDTHS, 4 / 5)
+                           stem, PORTRAIT_WIDTHS, 4 / 5, prepare=prepare)
     kb = sum(os.path.getsize(f) for f in files) / 1024
     total += kb
     print('  %-18s from %-24s %dx%d  %d files  %.0f KB' % (stem, name, size[0], size[1], len(files), kb))

@@ -1007,6 +1007,16 @@ body.is-drawer-open { overflow: hidden; }
   border: 1px solid var(--gg-line);
 }
 .gg-leader-card__media {
+  position: relative;
+  /* inline-size MUST be stated, and it must come before the ratio is read.
+     With only aspect-ratio and max-block-size set, the box has no definite
+     dimension: it derives its height from its width, hits the 420px cap, and
+     then derives the width back DOWN from the capped height to preserve the
+     ratio — 4:5 of 420 is 336. On a 365px card that leaves a 29px white
+     gutter down the right-hand side of every portrait.
+     Giving the width explicitly makes it the definite dimension, so the ratio
+     only ever computes the height and the cap only ever crops it. */
+  inline-size: 100%;
   aspect-ratio: 4 / 5;
   /* A grid with only two or three profiles must not produce an 800px portrait */
   max-block-size: 420px;
@@ -1015,16 +1025,58 @@ body.is-drawer-open { overflow: hidden; }
   place-items: center;
   overflow: hidden;
 }
-/* The portrait is wrapped in a <picture>, which is an inline box by default
-   and would collapse inside this grid — so the wrapper has to be sized too,
-   not just the image. */
-.gg-leader-card__media picture { display: block; inline-size: 100%; block-size: 100%; }
+/* Six portraits shot in six different rooms will never share a background.
+   They can share a base: the same navy fade under every one of them, landing
+   where the photo meets the card body. The eye reads the repeated shape and
+   stops cataloguing the differences behind it. Kept off the faces — it is
+   fully transparent above the lower third. */
+.gg-leader-card__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(to top, var(--gg-scrim-soft) 0%, transparent 38%);
+}
+/* The portrait is taken out of flow and pinned to the media box.
+   A percentage block-size here does NOT resolve against the box's used height:
+   it resolves against the ratio-derived height, which is taller than the 420px
+   cap, so the portrait overflowed and was silently clipped from the bottom —
+   cutting the chin off a tall card. Pinning to inset:0 makes the box itself the
+   reference, and object-fit does the cropping evenly.
+   The media is position:relative, and place-items:center still centres the
+   monogram fallback, which stays in flow. */
+.gg-leader-card__media picture { position: absolute; inset: 0; display: block; }
 .gg-leader-card__media img { inline-size: 100%; block-size: 100%; object-fit: cover; }
-/* Placeholder monogram until real portraits arrive */
+/* --- Monogram fallback ----------------------------------------------------
+   Shown when a profile has no photograph. A 4:5 box holding two small letters
+   reads as a picture that failed to load, so the box shortens to a banner and
+   the initials are scaled to fill it — the same move a printed annual report
+   makes when a director's portrait is not available.
+
+   The faint grid is lifted from .gg-visual, so the panel belongs to the same
+   family as every other branded surface on the site rather than looking like
+   an error state. */
+.gg-leader-card__media.is-monogram {
+  aspect-ratio: 16 / 9;
+  max-block-size: 200px;
+  position: relative;
+}
+.gg-leader-card__media.is-monogram::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, var(--gg-glass-border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--gg-glass-border) 1px, transparent 1px);
+  background-size: 44px 44px;
+  opacity: .5;
+}
 .gg-leader-card__monogram {
+  position: relative;              /* above the grid */
   font-family: var(--gg-font-display);
-  font-size: 3rem;
+  font-size: clamp(2.75rem, 7vw, 4rem);
   font-weight: 800;
+  line-height: 1;
   color: var(--gg-on-dark-soft);
   letter-spacing: var(--ls-display);
 }
@@ -1042,6 +1094,29 @@ body.is-drawer-open { overflow: hidden; }
   margin-block-start: 4px;
 }
 .gg-leader-card__bio { font-size: var(--fs-sm); color: var(--gg-grey-500); margin-block-start: var(--sp-1); }
+
+/* --- Pending profile ------------------------------------------------------
+   While a name is unknown the card leads with the role, so the subtitle
+   carries the absence instead. It must NOT keep the green of a confirmed
+   role line — green means settled everywhere else on this site. */
+.gg-leader-card.is-pending .gg-leader-card__role {
+  color: var(--gg-grey-500);
+  text-transform: none;
+  letter-spacing: 0;
+  font-weight: 500;
+  font-size: var(--fs-sm);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.gg-leader-card.is-pending .gg-leader-card__role::before {
+  content: "";
+  inline-size: 6px;
+  block-size: 6px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-planned);
+  flex: none;
+}
 
 /* ==========================================================================
    14. JOB CARD

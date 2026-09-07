@@ -8,9 +8,8 @@ rather than hand-edited.
 Input is a headless-Chrome dump of the homepage, served from the domain root
 so the paths in the snapshot read the way a server include would emit them.
 """
-import io, re, html.parser
+import io, os, re, sys
 
-import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # The DOM dump to read. Produce it first, with the site served over HTTP

@@ -43,7 +43,12 @@ const boot = async (name, loader, when = true) => {
     const module = await loader();
     if (typeof module.init === 'function') await module.init();
   } catch (error) {
-    console.warn(`[Global Growth] "${name}" did not start:`, error);
+    // error, not warn: the default console filter hides warnings, and a module
+    // that did not start leaves a visibly incomplete page. The most common
+    // cause by far is a browser holding a cached copy of a module whose
+    // exports have since changed — a hard reload clears it.
+    console.error(`[Global Growth] "${name}" did not start. ` +
+      'If this followed a code change, hard-reload to clear the module cache.', error);
   }
 };
 

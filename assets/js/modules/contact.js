@@ -8,7 +8,7 @@
  * array, so a department can never appear in one and not the other.
  */
 
-import { qs, icon, escapeHtml } from './utils.js';
+import { qs, icon, escapeHtml, resolve } from './utils.js';
 import { EMAILS, DIVISION_EMAILS, OFFICE, BRAND } from '../data/site.js';
 import { DIVISION_PAGES } from '../data/sectors.js';
 
@@ -69,10 +69,14 @@ const officeMarkup = () => `
         <dt>Primary email</dt>
         <dd><a href="mailto:${BRAND.primaryEmail}">${BRAND.primaryEmail}</a></dd>
       </div>
+      ${(() => {
+        const cin = resolve(BRAND.cin);
+        return cin.pending ? '' : `
       <div>
         <dt>CIN</dt>
-        <dd>${escapeHtml(BRAND.cin)}</dd>
-      </div>
+        <dd>${escapeHtml(cin.text)}</dd>
+      </div>`;
+      })()}
     </dl>
   </div>`;
 

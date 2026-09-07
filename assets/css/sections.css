@@ -1630,17 +1630,15 @@
   line-height: 1.3;
   color: var(--gg-ink);
 }
+/* No longer a monospaced token box — it now carries a sentence explaining the
+   absence, so it is set as the quiet note it is. */
 .gg-metric__token {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   font-size: var(--fs-xs);
+  line-height: 1.45;
   color: var(--gg-grey-500);
-  background: var(--gg-off);
-  border: 1px solid var(--gg-line);
-  border-radius: 6px;
-  padding: 3px 7px;
   margin-block-start: auto;
+  padding-block-start: var(--sp-2);
   max-inline-size: 100%;
-  overflow-wrap: anywhere;
 }
 
 /* ==========================================================================
@@ -2062,3 +2060,18 @@
   font-weight: 600;
 }
 .gg-job-card.is-planned .gg-job-card__pay strong { color: var(--gg-grey-700); }
+
+/* A certification whose reference number has not been supplied yet. The line
+   is a sentence rather than a number, so it drops the monospace and says so
+   quietly — the card is still making a claim, and the missing evidence should
+   look missing. */
+.gg-cert.is-pending { border-block-start-color: var(--gg-planned); }
+.gg-cert.is-pending .gg-cert__ref {
+  font-family: var(--gg-font-body);
+  color: var(--gg-grey-500);
+  font-style: italic;
+}
+
+/* Same idea on the milestone rail: an unconfirmed year is stated, not faked. */
+.gg-milestone.is-pending .gg-milestone__year { color: var(--gg-grey-500); font-weight: 600; }
+.gg-milestone.is-pending::before { border-color: var(--gg-planned); }

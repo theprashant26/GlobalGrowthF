@@ -8,7 +8,7 @@
  * report against rather than inventing a value for it.
  */
 
-import { qs, icon, escapeHtml } from './utils.js';
+import { qs, icon, escapeHtml, resolve } from './utils.js';
 import { CSR_AREAS, CSR_PRINCIPLES, CSR_STATS, CSR_INTRO } from '../data/site.js';
 
 const areaMarkup = area => `
@@ -31,16 +31,24 @@ const principleMarkup = principle => `
 /**
  * A metric with no verified value yet. Deliberately NOT the stat card: that
  * component sets its figure at 64px display size, which is meaningless when
- * the "figure" is a placeholder token — and wide enough to break the layout.
- * What matters here is the metric we have committed to reporting, so the
- * label leads and the token is shown small, as the thing to be filled in.
+ * there is no figure — and wide enough to break the layout.
+ *
+ * What matters here is the metric we have committed to reporting, so the label
+ * leads and the absence is stated plainly. The token itself stays on the
+ * element rather than in the copy: a visitor should read "we have not verified
+ * this yet", not "{{CSR_TRAINED_PLACEHOLDER}}".
  */
-const statMarkup = stat => `
-  <div class="gg-metric" data-reveal>
+const statMarkup = stat => {
+  const value = resolve(stat.value);
+  return `
+  <div class="gg-metric" data-reveal${value.attr}>
     <span class="gg-badge gg-badge--planned">Awaiting verification</span>
     <span class="gg-metric__label">${escapeHtml(stat.label)}</span>
-    <code class="gg-metric__token">${escapeHtml(stat.value)}</code>
+    <span class="gg-metric__token">${value.pending
+      ? 'Figure to be published once independently verified'
+      : escapeHtml(value.text)}</span>
   </div>`;
+};
 
 export const init = () => {
   const intro = qs('[data-csr="intro"]');

@@ -79,7 +79,7 @@
   padding: 2px 8px; border-radius: var(--gg-r-pill);
   border: 1px solid transparent;
 }
-.sg-ratio--pass { color: var(--gg-green-700); background: var(--gg-success-soft); border-color: rgba(76,168,63,.24); }
+.sg-ratio--pass { color: var(--gg-green-800); background: var(--gg-success-soft); border-color: rgba(76,168,63,.24); }
 .sg-ratio--warn { color: var(--gg-planned); background: var(--gg-planned-soft); border-color: rgba(161,98,7,.24); }
 .sg-ratio--fail { color: var(--gg-danger); background: var(--gg-danger-soft); border-color: rgba(192,57,43,.24); }
 .sg-ratio--na   { color: var(--gg-grey-500); background: var(--gg-off); border-color: var(--gg-line); }
@@ -223,7 +223,7 @@
   font-weight: 500;
   margin: 0;
 }
-.sg-audit--pass { color: var(--gg-green-700); background: var(--gg-success-soft); border: 1px solid rgba(76,168,63,.24); }
+.sg-audit--pass { color: var(--gg-green-800); background: var(--gg-success-soft); border: 1px solid rgba(76,168,63,.24); }
 .sg-audit--fail { color: var(--gg-danger); background: var(--gg-danger-soft); border: 1px solid rgba(192,57,43,.24); padding-inline-start: var(--sp-5); }
 
 /* --- Sector inventory ----------------------------------------------------- */
@@ -248,7 +248,9 @@
 }
 .sg-chip--page {
   border-color: var(--gg-green-700);
-  color: var(--gg-green-700);
+  /* Text on a green tint takes the -800 stop; the border is a graphic and can
+     stay at -700. */
+  color: var(--gg-green-800);
   background: var(--gg-success-soft);
   font-weight: 600;
 }

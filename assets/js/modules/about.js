@@ -9,7 +9,7 @@
  * disabled once the markup exists.
  */
 
-import { qs, qsa, icon, escapeHtml, url } from './utils.js';
+import { qs, qsa, icon, escapeHtml, url, resolve } from './utils.js';
 import { SECTORS, COUNTS } from '../data/sectors.js';
 import { BRAND, VISION, MISSION, VALUES, LEADERSHIP, MILESTONES, GOVERNANCE,
          CERTIFICATIONS } from '../data/site.js';
@@ -85,23 +85,41 @@ const treeMarkup = () => `
    Each card names the issuing body and its registration number. The number is
    the point: a certification claim nobody can verify is worth less than none.
    ========================================================================== */
-const certificationMarkup = certification => `
-  <article class="gg-cert" data-reveal>
-    <span class="gg-cert__abbr">${escapeHtml(certification.abbr)}</span>
-    <h3 class="gg-cert__name">${escapeHtml(certification.name)}</h3>
+const certificationMarkup = certification => {
+  const name = resolve(certification.name, certification.abbr);
+  const ref = resolve(certification.ref);
+
+  return `
+  <article class="gg-cert${ref.pending ? ' is-pending' : ''}" data-reveal>
+    ${name.pending
+      // The title has fallen back to the acronym, so the chip above it would
+      // just say the same word twice.
+      ? ''
+      : `<span class="gg-cert__abbr">${escapeHtml(certification.abbr)}</span>`}
+    <h3 class="gg-cert__name">${escapeHtml(name.text)}</h3>
     <p class="gg-cert__text">${escapeHtml(certification.detail)}</p>
-    <p class="gg-cert__ref">${escapeHtml(certification.ref)}</p>
+    <p class="gg-cert__ref"${ref.attr}>
+      ${ref.pending ? 'Registration number to be published' : escapeHtml(ref.text)}
+    </p>
   </article>`;
+};
 
 /* ==========================================================================
    MILESTONES
    ========================================================================== */
-const milestoneMarkup = milestone => `
-  <article class="gg-milestone" data-reveal>
-    <p class="gg-milestone__year">${escapeHtml(milestone.year)}</p>
+const milestoneMarkup = milestone => {
+  // The section's own lead says the sequence matters more than the dates, so a
+  // milestone with no confirmed year still belongs on the timeline — it just
+  // says so instead of printing a token.
+  const year = resolve(milestone.year, 'Year to be confirmed');
+
+  return `
+  <article class="gg-milestone${year.pending ? ' is-pending' : ''}" data-reveal>
+    <p class="gg-milestone__year"${year.attr}>${escapeHtml(year.text)}</p>
     <h3 class="gg-milestone__title">${escapeHtml(milestone.title)}</h3>
     <p class="gg-milestone__text">${escapeHtml(milestone.text)}</p>
   </article>`;
+};
 
 /* ==========================================================================
    BOOT

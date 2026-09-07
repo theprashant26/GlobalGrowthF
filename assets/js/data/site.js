@@ -82,6 +82,22 @@ export const OFFICE = {
  * statement a regulator reads closely — supply the numbers before launch or
  * remove the entry. Where the client supplied only an acronym, the expansion
  * is marked so it can be confirmed rather than guessed.
+ *
+ * FOUR ENTRIES CARRY AN UNCONFIRMED NAME, and they render in the pending state
+ * because of it: FEF, NCT, AA and SSC were supplied as bare acronyms, and UGC
+ * was supplied without a basis. Two of those are not merely vague:
+ *
+ *   SSC  reads as the Staff Selection Commission to most Indian job-seekers.
+ *        That is a Government of India recruitment body. On a site whose own
+ *        careers notice exists to say our vacancies are NOT government
+ *        employment, an unexplained "SSC" badge argues the opposite.
+ *   UGC  regulates universities and degree-awarding institutions. It does not
+ *        certify private limited companies, and the same careers notice
+ *        specifically disclaims "university" employment.
+ *
+ * Neither has been dropped — that is the client's call, not ours — but neither
+ * should reach a launched site without evidence behind it. Both are listed in
+ * CLIENT_CHECKLIST.md.
  */
 export const CERTIFICATIONS = [
   {
@@ -113,6 +129,42 @@ export const CERTIFICATIONS = [
     name: 'Indian Institute of Corporate Affairs',
     detail: 'Registered with the Indian Institute of Corporate Affairs under the Ministry of Corporate Affairs.',
     ref: '{{IICA_REGISTRATION_NUMBER}}'
+  },
+  {
+    abbr: 'NCVET',
+    name: 'National Council for Vocational Education and Training',
+    detail: 'Recognised under the National Council for Vocational Education and Training, the regulator for vocational training in India.',
+    ref: '{{NCVET_RECOGNITION_NUMBER}}'
+  },
+  {
+    abbr: 'NSDC',
+    name: 'National Skill Development Corporation',
+    detail: 'Registered as a training partner of the National Skill Development Corporation.',
+    ref: '{{NSDC_TRAINING_PARTNER_ID}}'
+  },
+  {
+    abbr: 'NSQF',
+    name: 'National Skills Qualifications Framework',
+    detail: 'Training programmes aligned to the National Skills Qualifications Framework under the Ministry of Skill Development and Entrepreneurship.',
+    ref: '{{NSQF_ALIGNMENT_REFERENCE}}'
+  },
+  {
+    abbr: 'SSC',
+    name: '{{SSC_FULL_FORM_TO_CONFIRM}}',
+    detail: 'Supplied by the client as "SSC". This has to be resolved before publication: as a Sector Skill Council it must name WHICH council, and it must not be read as the Staff Selection Commission, which is a Government of India recruitment body this company has no relationship with.',
+    ref: '{{SSC_REGISTRATION_NUMBER}}'
+  },
+  {
+    abbr: 'UGC',
+    name: '{{UGC_BASIS_TO_CONFIRM}}',
+    detail: 'Supplied by the client as "UGC". The University Grants Commission recognises universities and degree-awarding institutions, not private limited companies, so the basis for this entry must be established before it is published.',
+    ref: '{{UGC_REFERENCE_NUMBER}}'
+  },
+  {
+    abbr: 'AA',
+    name: '{{AA_FULL_FORM_TO_CONFIRM}}',
+    detail: 'Supplied by the client as "AA". Most likely an NCVET-recognised Assessment Agency, but the issuing body must be named in full before this is published.',
+    ref: '{{AA_REGISTRATION_NUMBER}}'
   },
   {
     abbr: 'FEF',
@@ -299,57 +351,61 @@ export const VALUES = [
 ];
 
 /**
- * Leadership.
+ * Leadership. Names confirmed by the client 7 September 2026.
  *
- * READ THIS BEFORE THE REAL NAMES GO IN.
- * The six portraits currently wired up are stock model photographs supplied as
- * placeholders. They are safe only while the names beside them are also
- * placeholders — nothing on the page yet claims that a specific person holds a
- * specific office. The moment a real name replaces {{CHAIRMAN_NAME}}, a stock
- * face beside it stops being a placeholder and becomes a false claim about a
- * named individual.
+ * NO `photo` KEY ON ANY OF THESE, DELIBERATELY.
  *
- * So: when the real names arrive, either the real photographs arrive with them,
- * or `photo` comes off these entries and the cards fall back to the monogram —
- * which they still do automatically for any entry without a `photo`.
+ * Six stock model portraits were wired up while the names were still
+ * {{PLACEHOLDER}} tokens. That was defensible: nothing on the page claimed a
+ * specific person held a specific office. It stopped being defensible the
+ * moment these names went in — a stock face under "Sahil Yadav, Chairman" is
+ * not a placeholder, it is a false statement about a named individual, and it
+ * is the sort of thing that is screenshotted rather than corrected.
+ *
+ * So the portraits came off with the names going on. The cards fall back to a
+ * monogram, which is exactly what that fallback exists for.
+ *
+ * To restore photography: put the real photographs in
+ * assets/images/global/_masters/ as Leader-1.jpg … Leader-6.jpg, run
+ * `python tools/build-images.py`, and add `photo: 'leader-N'` back to each
+ * entry in the order below. Nothing else changes.
+ *
+ * The stock files are still in _masters/ and the derivatives in
+ * assets/images/team/ — unreferenced, so nothing serves them, and they are
+ * there only so the pipeline can be tested. Delete them once real portraits
+ * land.
  *
  * Biographies are still to be supplied.
  */
 export const LEADERSHIP = [
   {
-    name: '{{CHAIRMAN_NAME}}',
+    name: 'Sahil Yadav',
     role: 'Chairman',
-    photo: 'leader-1',
     bio: '{{CHAIRMAN_BIO — background, sector experience and the mandate held at group level.}}'
   },
   {
-    name: '{{MD_NAME}}',
+    name: 'Paresh Nath Sutradhar',
     role: 'Managing Director',
-    photo: 'leader-2',
     bio: '{{MD_BIO — operating background and the divisions reporting into this role.}}'
   },
   {
-    name: '{{DIRECTOR_OPERATIONS_NAME}}',
+    name: 'Lavkush Kumar',
     role: 'Director — Operations',
-    photo: 'leader-3',
     bio: '{{DIRECTOR_OPERATIONS_BIO — delivery record across mobility, logistics and facility services.}}'
   },
   {
-    name: '{{DIRECTOR_FINANCE_NAME}}',
+    name: 'Sagar Singh',
     role: 'Director — Finance',
-    photo: 'leader-4',
     bio: '{{DIRECTOR_FINANCE_BIO — group finance, treasury and statutory reporting.}}'
   },
   {
-    name: '{{DIRECTOR_COMPLIANCE_NAME}}',
+    name: 'Ashwini Kumar',
     role: 'Director — Legal & Compliance',
-    photo: 'leader-5',
     bio: '{{DIRECTOR_COMPLIANCE_BIO — licensing across regulated sectors and group governance.}}'
   },
   {
-    name: '{{DIRECTOR_HR_NAME}}',
+    name: 'Riya Modak',
     role: 'Director — Human Resources',
-    photo: 'leader-6',
     bio: '{{DIRECTOR_HR_BIO — workforce strategy, skilling pipeline and industrial relations.}}'
   }
 ];

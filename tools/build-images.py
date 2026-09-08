@@ -30,6 +30,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "assets/images/global")
 MASTERS = os.path.join(SRC, "_masters")
 
+# Sector images were supplied straight into their served folder, so they get
+# their own source/masters pair rather than sharing the one above.
+SECTOR_SRC = os.path.join(ROOT, "assets/images/sectors")
+SECTOR_MASTERS = os.path.join(SECTOR_SRC, "_masters")
+
 DIVISION_WIDTHS = [480, 900, 1400]
 PORTRAIT_WIDTHS = [320, 480, 800]
 
@@ -49,6 +54,28 @@ DIVISIONS = {
     'Security.jpg':          'security',
 }
 PORTRAITS = {'Leader-%d.jpg' % n: 'leader-%d' % n for n in range(1, 7)}
+
+# Sector imagery, keyed by the sector id in assets/js/data/sectors.js. Supplied
+# at 1920x1080, which is the spec we asked for and covers every place these
+# render: 381 CSS px in the homepage grid, 864 CSS px on /sectors.
+SECTORS = {
+    'Agriculture-&-Agri-Services.jpg.jpeg':          'agriculture',
+    'Aviation.jpg.jpeg':                             'aviation',
+    'Consultancy-&-Professional-Services.jpg.jpeg':  'consultancy',
+    'Education-&-Skill-Development.jpg.jpeg':        'education-skill-development',
+    'Energy-&-Renewables.jpg.jpeg':                  'energy',
+    'Financial-Services.jpg.jpeg':                   'financial-services',
+    'Healthcare-&-Pharma.jpg.jpeg':                  'healthcare-pharma',
+    'Hospitality-&-Tourism.jpg.jpeg':                'hospitality-tourism',
+    'Infrastructure-&-Construction.jpg.jpeg':        'infrastructure-construction',
+    'Logistics-&-Supply-Chain.jpg.jpeg':             'logistics-supply-chain',
+    'Manufacturing-&-Engineering.jpg.jpeg':          'manufacturing-engineering',
+    'Retail.jpg.jpeg':                               'retail',
+    'Security-&-Facility-Services.jpg.jpeg':         'security-facility-services',
+    'Technology-&-Digital.jpg.jpeg':                 'technology-digital',
+    'transport-&-mobility.jpg.jpeg':                 'transport-mobility',
+}
+SECTOR_WIDTHS = [480, 900, 1400]
 
 # Framing normalisation, measured off the masters against decile guides.
 #   zoom  >1 crops in, to match head size across the set
@@ -113,6 +140,14 @@ def find(name):
     raise SystemExit("missing master: " + name)
 
 
+def find_sector(name):
+    for folder in (SECTOR_SRC, SECTOR_MASTERS):
+        path = os.path.join(folder, name)
+        if os.path.exists(path):
+            return path
+    raise SystemExit("missing sector master: " + name)
+
+
 def crop_to(im, ratio):
     """Centre-crop to an exact ratio so every panel of a kind matches."""
     w, h = im.size
@@ -163,6 +198,13 @@ for name, stem in PORTRAITS.items():
     total += kb
     print('  %-18s from %-24s %dx%d  %d files  %.0f KB' % (stem, name, size[0], size[1], len(files), kb))
 
+print('SECTOR IMAGERY  16:9')
+for name, sector_id in SECTORS.items():
+    files, size = variants(find_sector(name), SECTOR_SRC, sector_id, SECTOR_WIDTHS, 16 / 9)
+    kb = sum(os.path.getsize(f) for f in files) / 1024
+    total += kb
+    print('  %-30s %dx%d  %d files  %.0f KB' % (sector_id, size[0], size[1], len(files), kb))
+
 print('SHARE IMAGE  1200x630')
 og_dir = os.path.join(ROOT, 'assets/images/og')
 os.makedirs(og_dir, exist_ok=True)
@@ -183,4 +225,15 @@ for name in os.listdir(SRC):
         shutil.move(path, os.path.join(MASTERS, name))
         moved += 1
 print('\nmasters parked in global/_masters:', moved)
+
+# The sector folder holds both masters and derivatives, so only the supplied
+# originals move — anything this script just wrote stays where it is.
+os.makedirs(SECTOR_MASTERS, exist_ok=True)
+sector_moved = 0
+for name in list(SECTORS):
+    path = os.path.join(SECTOR_SRC, name)
+    if os.path.isfile(path):
+        shutil.move(path, os.path.join(SECTOR_MASTERS, name))
+        sector_moved += 1
+print('masters parked in sectors/_masters:', sector_moved)
 print('served derivatives total: %.0f KB' % total)

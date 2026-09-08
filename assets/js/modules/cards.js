@@ -14,6 +14,7 @@
  */
 
 import { icon, escapeHtml, url, picture, resolve } from './utils.js';
+import { getSectorPhoto } from '../data/sectors.js';
 import { REGULATORY } from '../data/site.js';
 
 /** The status badge for any entity carrying a status flag. */
@@ -25,17 +26,40 @@ export const statusBadge = entity =>
 /* ==========================================================================
    SECTOR CARD
    ========================================================================== */
+/** The card is ~381 CSS px at its widest; 900 covers that past 2x. */
+const SECTOR_SIZES = '(min-width: 1100px) 30vw, (min-width: 640px) 46vw, 92vw';
+const SECTOR_WIDTHS = [480, 900, 1400];
+
 export const sectorCard = (sector, { chips = 3 } = {}) => {
   const planned = sector.status === 'planned';
   const shown = sector.divisions.slice(0, chips);
   const remaining = sector.divisions.length - shown.length;
 
-  return `
-  <article class="gg-sector-card${planned ? ' is-planned' : ''}" data-sector="${sector.id}" data-status="${sector.status}">
+  const photo = getSectorPhoto(sector.id);
+
+  // With a photograph the card leads with a 16:9 banner: the sector number sits
+  // on the image over a scrim, and the icon chip drops across its bottom edge.
+  // Without one it keeps the original icon-and-number row, so a sector added
+  // before its photography still renders finished.
+  const head = photo
+    ? `
+    <div class="gg-sector-card__media">
+      ${picture(photo, {
+        sizes: SECTOR_SIZES, dir: 'sectors', widths: SECTOR_WIDTHS
+      })}
+      <span class="gg-sector-card__num" aria-hidden="true">${escapeHtml(sector.number)}</span>
+      <span class="gg-sector-card__icon">${icon(sector.icon)}</span>
+    </div>`
+    : `
     <div class="gg-sector-card__top">
       <span class="gg-sector-card__icon">${icon(sector.icon)}</span>
       <span class="gg-sector-card__num" aria-hidden="true">${escapeHtml(sector.number)}</span>
-    </div>
+    </div>`;
+
+  return `
+  <article class="gg-sector-card${planned ? ' is-planned' : ''}${photo ? ' has-photo' : ''}"
+           data-sector="${sector.id}" data-status="${sector.status}">
+    ${head}
 
     <h3 class="gg-sector-card__title">
       ${planned

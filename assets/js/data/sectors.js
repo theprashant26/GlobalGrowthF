@@ -29,6 +29,9 @@
  * `name`      short form, used in lists and chips        → "Aviation"
  * `brandName` the trading name, used as a page title     → "Global Growth Aviation"
  * `page`      set only where a dedicated page exists
+ *
+ * Sector photography lives in SECTOR_PHOTOS at the foot of this file, keyed by
+ * the same sector id.
  */
 
 const GG = name => `Global Growth ${name}`;
@@ -346,3 +349,85 @@ export const getRelatedDivisions = slug => {
 
 /** True when an entity must render the regulatory badge and suppress CTAs. */
 export const isPlanned = entity => entity?.status === 'planned';
+
+/* ===========================================================================
+   SECTOR PHOTOGRAPHY
+   ---------------------------------------------------------------------------
+   One frame per sector, built into assets/images/sectors/<id>-{480,900,1400}
+   .{webp,jpg} at 16:9 — the ratio the cards and the /sectors banners reserve.
+
+   `alt` describes what is in the frame, written from the photograph rather
+   than from the sector name. A screen-reader user gets the description and the
+   sector name is already the heading beside it, so the two must not repeat
+   each other.
+
+   TWO FRAMES CARRY THIRD-PARTY BRANDING — both flagged in CLIENT_CHECKLIST.md:
+     aviation    a United Airlines aircraft is identifiable on the apron.
+     security    the guards' uniforms carry another company's insignia.
+   Neither is ours to show. Replace before launch.
+   =========================================================================== */
+export const SECTOR_PHOTOS = {
+  'transport-mobility': {
+    file: 'transport-mobility', width: 1400, height: 788,
+    alt: 'A passenger reading in the front of a car moving through a city street, the dashboard display lit beside them.'
+  },
+  'aviation': {
+    file: 'aviation', width: 1400, height: 788,
+    alt: 'Airliners parked at terminal gates across an airport apron at sunset, ground vehicles working between them.'
+  },
+  'infrastructure-construction': {
+    file: 'infrastructure-construction', width: 1400, height: 788,
+    alt: 'An active construction site seen from above — steel reinforcement, red formwork panels and crews working across several levels.'
+  },
+  'healthcare-pharma': {
+    file: 'healthcare-pharma', width: 1400, height: 788,
+    alt: 'A hospital laboratory, technicians in gowns and hair covers working between analysers and benches.'
+  },
+  'education-skill-development': {
+    file: 'education-skill-development', width: 1400, height: 788,
+    alt: 'Trainees gathered around a workbench, working on stripped-down electrical equipment under an instructor’s eye.'
+  },
+  'hospitality-tourism': {
+    file: 'hospitality-tourism', width: 1400, height: 788,
+    alt: 'A hotel staff member showing something on a tablet to an arriving guest holding a suitcase.'
+  },
+  'logistics-supply-chain': {
+    file: 'logistics-supply-chain', width: 1400, height: 788,
+    alt: 'A warehouse operative picking stock from rows of blue bins along a tall shelving aisle.'
+  },
+  'manufacturing-engineering': {
+    file: 'manufacturing-engineering', width: 1400, height: 788,
+    alt: 'An operator working at an industrial production machine on a factory floor.'
+  },
+  'energy': {
+    file: 'energy', width: 1400, height: 788,
+    alt: 'Wind turbines standing across open farmland at sunset.'
+  },
+  'technology-digital': {
+    file: 'technology-digital', width: 1400, height: 788,
+    alt: 'A darkened control desk, several monitors showing dense operational dashboards, an operator’s hands at the keyboard.'
+  },
+  'financial-services': {
+    file: 'financial-services', width: 1400, height: 788,
+    alt: 'Two people going over paperwork together at a table with a calculator and a laptop.'
+  },
+  'security-facility-services': {
+    file: 'security-facility-services', width: 1400, height: 788,
+    alt: 'Uniformed security personnel standing in formation, caps and shoulder insignia visible.'
+  },
+  'agriculture': {
+    file: 'agriculture', width: 1400, height: 788,
+    alt: 'A tractor moving along planted rows, spraying a field under an overcast sky.'
+  },
+  'retail': {
+    file: 'retail', width: 1400, height: 788,
+    alt: 'A customer paying by card at a produce counter, fresh vegetables in the basket beside them.'
+  },
+  'consultancy': {
+    file: 'consultancy', width: 1400, height: 788,
+    alt: 'A team in matching blazers gathered around a laptop in a meeting room.'
+  }
+};
+
+/** The photograph for a sector, or null where none has been supplied. */
+export const getSectorPhoto = id => SECTOR_PHOTOS[id] || null;

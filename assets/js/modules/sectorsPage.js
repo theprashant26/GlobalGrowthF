@@ -14,8 +14,8 @@
  * and carries no link, because a link implies a service to enquire about.
  */
 
-import { qs, qsa, icon, escapeHtml, rafThrottle, url } from './utils.js';
-import { SECTORS, COUNTS, ALL_DIVISIONS } from '../data/sectors.js';
+import { qs, qsa, icon, escapeHtml, rafThrottle, url, picture } from './utils.js';
+import { SECTORS, COUNTS, ALL_DIVISIONS, getSectorPhoto } from '../data/sectors.js';
 import { REGULATORY } from '../data/site.js';
 
 /* ==========================================================================
@@ -57,9 +57,19 @@ const detailMarkup = sector => {
   const planned = sector.status === 'planned';
   const plannedCount = sector.divisions.filter(d => d.status === 'planned').length;
 
+  const photo = getSectorPhoto(sector.id);
+
   return `
   <section class="gg-sector-detail${planned ? ' is-planned' : ''}" id="${sector.id}"
            aria-labelledby="${sector.id}-title" data-sector-section="${sector.id}">
+    ${photo
+      ? `<div class="gg-sector-detail__media">
+           ${picture(photo, {
+             sizes: '(min-width: 1100px) 62vw, 92vw', dir: 'sectors', widths: [480, 900, 1400]
+           })}
+         </div>`
+      : ''}
+
     <div class="gg-sector-detail__head">
       <span class="gg-sector-detail__icon">${icon(sector.icon)}</span>
       <div>

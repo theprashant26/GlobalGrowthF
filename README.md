@@ -166,6 +166,7 @@ is identified by its folder and the widths that exist for it:
 |---|---|---|---|---|
 | Division panels | `assets/images/divisions/` | 480, 900, 1400 | 5:4 | `DIVISION_PHOTOS` in `data/divisions.js` |
 | Leadership portraits | `assets/images/team/` | 320, 480, 800 | 4:5 | `photo` on each `LEADERSHIP` entry in `data/site.js` |
+| Sector banners | `assets/images/sectors/` | 480, 900, 1400 | 16:9 | `SECTOR_PHOTOS` in `data/sectors.js` |
 | Workspace photos | `assets/images/offices/` | 480, 800 | mixed | `OFFICES` in `data/site.js` |
 | Share image | `assets/images/og/` | 1200×630 JPEG only | 1.91:1 | hardcoded in the `og:image` meta |
 

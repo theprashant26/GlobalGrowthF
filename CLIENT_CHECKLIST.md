@@ -311,26 +311,42 @@ stock that carries no operator branding, or with a station-operations frame.
 | 2 | **Replacements for the logistics and railways frames** | `/logistics/`, `/railways/` | High — see the notes above |
 | 3 | **Certification marks — up to 7** | `/about` credentials cards | Medium — the cards read well as text, but the official marks carry more weight |
 | 4 | **Photography for the other 15 divisions** | Only needed once those divisions get pages of their own | Low — tracked in section 9 |
-| 5 | **Sector imagery — up to 15** | `/sectors` and the homepage grid | Low — see the note below |
+| 5 | **Replacements for the aviation and security sector frames** | Homepage grid and `/sectors` | High — see the note below |
 
-### Sector imagery — sizes, if you decide to commission it
+### Sector imagery — supplied and live
 
-**1920 × 1080 px, 16:9 landscape, one per sector, 15 in total.** Minimum
-1600 × 900. We generate the 480 / 900 / 1400 / 1920 variants from that.
+**All 15 received at 1920x1080, exactly to spec.** They now run in two places:
 
-That figure is measured, not guessed. The largest a sector image can render is
-864 CSS px wide on `/sectors`, and 381 CSS px on the homepage grid — 1920
-covers the larger of those on a 2× retina screen with headroom if the layout
-changes. Expect roughly 40–70 KB per image once converted to WebP.
+- a 16:9 banner at the head of each card in the homepage sector grid, with the
+  sector number over the image and the brand icon breaking its bottom edge
+- a wide 21:9 banner at the head of each block on `/sectors`
 
-16:9 because it crops cleanly to 3:2 or 5:4 if the card design moves; a squarer
-master does not crop back the other way.
+Each was rebuilt into WebP and JPEG at 480 / 900 / 1400. The homepage carries
+462 KB of photography fully scrolled, `/sectors` 844 KB — both comfortably
+inside the 2.5 MB page budget.
 
-**Our honest advice: skip this one.** The sector cards use the brand icon set
-and a gradient sweep, and they look deliberate. Fifteen pieces of generic stock
-photography would make that grid look cheaper, not richer — and it is fifteen
-more chances to repeat the Hamburg problem. If you do commission it, shoot it,
-do not licence it.
+**The Financial Services frame renders in greyscale.** That sector is planned,
+not licensed. A full-colour photograph of someone being advised implies an
+operating service however carefully the words around it are chosen, so the
+image is desaturated alongside the approval badge.
+
+### TWO SECTOR FRAMES SHOW ANOTHER COMPANY'S BRANDING
+
+Same problem as the Hamburg port and the Indian Railways locomotive, and it
+lands harder here because of the conversation we have just had about naming
+airlines.
+
+**Aviation.** The aircraft on the apron carry **United Airlines** livery, clearly
+legible at the size we serve. That is a named third-party airline on the page
+describing our aviation division — the exact implication of a commercial
+relationship we agreed the site must not make.
+
+**Security & Facility Services.** The guards' uniforms carry **another security
+company's insignia** on the cap badges and shoulder patches. Those are a
+competitor's staff, presented as ours.
+
+Both need replacing with unbranded frames before launch. Everything else in the
+set is clean.
 
 ### Specifications, if you are commissioning more
 

@@ -1402,6 +1402,8 @@
   margin-block-end: var(--sp-3);
 }
 @media (min-width: 700px) { .gg-job-filters { grid-template-columns: repeat(3, 1fr); } }
+/* The catalogue now filters on three axes — division, grade and entry level. */
+@media (min-width: 700px) { .gg-job-filters--pair { grid-template-columns: repeat(3, 1fr); } }
 .gg-job-filters .gg-label { margin-block-end: 4px; display: block; }
 
 .gg-jobs { display: grid; gap: var(--sp-2); }

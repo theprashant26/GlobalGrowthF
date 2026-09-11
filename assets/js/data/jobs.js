@@ -1452,6 +1452,7 @@ export const ALL_ROLES = DIVISION_ROLES.flatMap(division =>
     status:        division.status,
     regulator:     division.regulator || null,
     certificate:   division.certificate,
+    freshers:      acceptsFreshers(role),
     // The four standard documents, the division's training certificate, and
     // anything a particular post adds on top (an ITI certificate, say).
     documents: [
@@ -1475,6 +1476,24 @@ export const COMPENSATION_NOTE =
 
 /** Posts advertised against a role, or null where none has been notified. */
 export const isVacancy = role => Number.isFinite(role.vacancies) && role.vacancies > 0;
+
+/**
+ * Whether a post is open to candidates with no experience.
+ *
+ * Derived from the client's own experience wording rather than set as a
+ * separate flag, so the two can never disagree. If a notice says "Freshers may
+ * apply" then the post accepts freshers, by definition — and when the client
+ * sends the next batch it works without anyone remembering to tick a box.
+ *
+ * A post starting at "0–" years is also treated as open: a range beginning at
+ * zero is an invitation whether or not the word appears.
+ */
+// A function declaration, not a const: ALL_ROLES is initialised above this
+// point and calls it, which a const would put in the temporal dead zone.
+export function acceptsFreshers(role) {
+  const text = role.experience || '';
+  return /fresher/i.test(text) || /^\s*0\s*[–-]/.test(text);
+}
 
 /** Every role with a live vacancy notice — a post count and an application fee. */
 export const OPEN_VACANCIES = ALL_ROLES.filter(role => isVacancy(role) && role.status === 'active');

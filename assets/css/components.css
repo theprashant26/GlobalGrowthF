@@ -1497,3 +1497,18 @@ body.is-drawer-open { overflow: hidden; }
   text-underline-offset: 3px;
 }
 .gg-footer__certs a:hover { color: var(--gg-white); }
+
+/* A post open to candidates with no experience. Its own colour rather than
+   the operational green: "we are hiring" and "you can apply with nothing
+   behind you" are different facts, and a first-time applicant is scanning for
+   the second one. Blue is the remaining brand stop that clears AA as text. */
+.gg-badge--fresher {
+  background: rgba(30,111,184,.10);
+  color: var(--gg-blue-500);
+  border-color: rgba(30,111,184,.24);
+}
+.gg-dark .gg-badge--fresher {
+  background: var(--gg-glass-bg);
+  color: var(--gg-white);
+  border-color: var(--gg-glass-border);
+}

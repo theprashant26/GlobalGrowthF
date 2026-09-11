@@ -85,6 +85,7 @@ const roleMarkup = role => {
            data-role="${role.id}"
            data-division="${escapeHtml(role.divisionId)}"
            data-grade="${escapeHtml(role.level)}"
+           data-entry="${role.freshers ? 'fresher' : 'experienced'}"
            data-open="${open ? 'yes' : 'no'}">
     <div class="gg-job-card__head">
       <h3 class="gg-job-card__title">${escapeHtml(role.title)}</h3>
@@ -101,6 +102,11 @@ const roleMarkup = role => {
       ${open
         ? `<span class="gg-badge gg-badge--active"><span class="gg-badge__dot"></span>${role.vacancies} posts open</span>
            <span class="gg-badge gg-badge--meta">${escapeHtml(role.employmentType || EMPLOYMENT_TYPE)}</span>`
+        : ''}
+      ${role.freshers
+        // The single most useful thing on the card for a first-time applicant,
+        // so it is a badge rather than a sentence three clicks down.
+        ? `<span class="gg-badge gg-badge--fresher">Freshers may apply</span>`
         : ''}
       <span class="gg-badge gg-badge--number">${escapeHtml(role.level)}</span>
       <span class="gg-badge gg-badge--meta">${escapeHtml(GRADE_LABELS[role.level] || 'Grade')}</span>
@@ -490,7 +496,11 @@ export const init = () => {
         GRADE_FILTERS.map(level => ({
           value: level,
           label: `${level} — ${GRADE_LABELS[level] || 'Grade'}`
-        })))}</div>`;
+        })))}</div>
+      <div>${selectMarkup('filter-entry', 'Experience', [
+        { value: 'fresher',     label: 'Open to freshers' },
+        { value: 'experienced', label: 'Experience required' }
+      ])}</div>`;
   }
 
   /** The current filter state, read from the selects. */
@@ -504,14 +514,19 @@ export const init = () => {
 
   const matchesFilter = (role, chosen) =>
     (chosen.division === 'all' || !chosen.division || role.divisionId === chosen.division) &&
-    (chosen.grade === 'all'    || !chosen.grade    || role.level === chosen.grade);
+    (chosen.grade === 'all'    || !chosen.grade    || role.level === chosen.grade) &&
+    (chosen.entry === 'all'    || !chosen.entry    ||
+      (chosen.entry === 'fresher' ? role.freshers : !role.freshers));
 
   /** Hide or show cards that are already in the DOM. */
   function applyFilterTo(cards) {
     const chosen = chosenNow();
     cards.forEach(card => {
-      card.hidden = !matchesFilter(
-        { divisionId: card.dataset.division, level: card.dataset.grade }, chosen);
+      card.hidden = !matchesFilter({
+        divisionId: card.dataset.division,
+        level: card.dataset.grade,
+        freshers: card.dataset.entry === 'fresher'
+      }, chosen);
     });
   }
 

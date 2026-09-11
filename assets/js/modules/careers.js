@@ -22,12 +22,14 @@
  * filtered-out role leaves the tab order and the accessibility tree.
  */
 
-import { qs, qsa, icon, escapeHtml } from './utils.js';
+import { qs, qsa, icon, escapeHtml, resolve } from './utils.js';
 import {
   ALL_ROLES, DIVISION_FILTERS, GRADE_FILTERS, GRADE_MATRIX, GRADE_LABELS,
   CORPORATE_LEVELS, SALARY_BANDS, CORPORATE_DEPARTMENTS, QUALIFICATION_MATRIX,
   STANDARD_DOCUMENTS, HR_DOCUMENTS, RECRUITMENT_PROCESS, PROBATION,
-  PROMOTION_PATH, EMPLOYEE_CODE, CAREERS_DISCLAIMER, BENEFITS, ROLE_COUNTS
+  PROMOTION_PATH, EMPLOYEE_CODE, CAREERS_DISCLAIMER, BENEFITS, ROLE_COUNTS,
+  APPLICATION_FEE, VACANCY_TOTALS, isVacancy, rupees,
+  EMPLOYMENT_TYPE, COMPENSATION_NOTE
 } from '../data/jobs.js';
 
 /* ==========================================================================
@@ -76,12 +78,14 @@ const levelMarkup = tier => `
    ========================================================================== */
 const roleMarkup = role => {
   const planned = role.status === 'planned';
+  const open = !planned && isVacancy(role);
 
   return `
-  <article class="gg-job-card${planned ? ' is-planned' : ''}" id="${role.id}"
+  <article class="gg-job-card${planned ? ' is-planned' : ''}${open ? ' is-open' : ''}" id="${role.id}"
            data-role="${role.id}"
            data-division="${escapeHtml(role.divisionId)}"
-           data-grade="${escapeHtml(role.level)}">
+           data-grade="${escapeHtml(role.level)}"
+           data-open="${open ? 'yes' : 'no'}">
     <div class="gg-job-card__head">
       <h3 class="gg-job-card__title">${escapeHtml(role.title)}</h3>
       <span class="gg-job-card__dept">${escapeHtml(role.brandName)}</span>
@@ -91,16 +95,35 @@ const roleMarkup = role => {
       <strong>${escapeHtml(role.salary)}</strong> per month
       ${role.salaryNote ? `<span class="gg-job-card__note">${escapeHtml(role.salaryNote)}</span>` : ''}
     </p>
+    ${open ? `<p class="gg-job-card__caveat">${escapeHtml(COMPENSATION_NOTE)}</p>` : ''}
 
     <div class="gg-job-card__meta">
+      ${open
+        ? `<span class="gg-badge gg-badge--active"><span class="gg-badge__dot"></span>${role.vacancies} posts open</span>
+           <span class="gg-badge gg-badge--meta">${escapeHtml(role.employmentType || EMPLOYMENT_TYPE)}</span>`
+        : ''}
       <span class="gg-badge gg-badge--number">${escapeHtml(role.level)}</span>
       <span class="gg-badge gg-badge--meta">${escapeHtml(GRADE_LABELS[role.level] || 'Grade')}</span>
-      ${role.experience ? `<span class="gg-badge gg-badge--meta">${escapeHtml(role.experience)}</span>` : ''}
       ${role.code ? `<span class="gg-badge gg-badge--meta">${escapeHtml(role.code)}</span>` : ''}
       ${planned
         ? `<span class="gg-badge gg-badge--planned">Planned · ${escapeHtml(role.regulator || 'approval required')}</span>`
         : ''}
     </div>
+
+    ${role.summary
+      ? `<p class="gg-job-card__summary">${escapeHtml(role.summary)}</p>`
+      : ''}
+
+    ${open && Number.isFinite(role.fee)
+      // Shown on the card, not buried in the expander. A candidate must see the
+      // cost before deciding to open anything, not after entering their details.
+      ? `<p class="gg-job-card__fee">
+           <span class="gg-job-card__fee-amount">${rupees(role.fee)}</span>
+           <span>application fee — a processing charge, not a payment for a position.
+             <a href="#fee">What this covers</a>
+           </span>
+         </p>`
+      : ''}
 
     ${planned
       ? `<p class="gg-job-card__summary">
@@ -117,6 +140,13 @@ const roleMarkup = role => {
       <div class="gg-job-details__body">
         ${role.qualification
           ? `<h4 class="gg-h4">Qualification</h4><p class="gg-small">${escapeHtml(role.qualification)}</p>`
+          : ''}
+
+        ${role.experience
+          // A full sentence, so it belongs here rather than in a badge — the
+          // badge component is white-space: nowrap and a sentence inside one
+          // sets the card's min-content width and blows out the page.
+          ? `<h4 class="gg-h4 gg-mt-3">Experience</h4><p class="gg-small">${escapeHtml(role.experience)}</p>`
           : ''}
 
         ${role.duties?.length
@@ -173,6 +203,48 @@ const codeMarkup = () => `
   <p class="gg-small"><strong>Pattern:</strong> <code>${escapeHtml(EMPLOYEE_CODE.pattern)}</code></p>
   ${tableMarkup(['Example code', 'Division and function'],
     EMPLOYEE_CODE.examples.map(e => [e.code, e.meaning]))}`;
+
+/**
+ * The application-fee disclosure.
+ *
+ * Deliberately rendered as a notice rather than a marketing block, and placed
+ * on the page before the application form rather than after it. A candidate
+ * should be able to read the whole fee position without having started an
+ * application. The refund line runs through resolve(), so while the policy is
+ * unwritten the page says a policy is pending rather than implying there is
+ * none.
+ */
+const feeMarkup = () => `
+  <div class="gg-notice gg-notice--fee" data-reveal>
+    <h2 class="gg-notice__title" id="fee-title">${escapeHtml(APPLICATION_FEE.heading)}</h2>
+    <p>${escapeHtml(APPLICATION_FEE.intro)}</p>
+    <p class="gg-notice__range">
+      Current fees range from <strong>${rupees(VACANCY_TOTALS.feeLow)}</strong>
+      to <strong>${rupees(VACANCY_TOTALS.feeHigh)}</strong>, depending on the post.
+    </p>
+
+    <dl class="gg-fee-points">
+      ${APPLICATION_FEE.points.map(point => {
+        const text = resolve(point.text, 'A refund policy is being finalised and will be published here before applications open.');
+        return `
+        <div${text.attr}>
+          <dt>${escapeHtml(point.title)}</dt>
+          <dd>${escapeHtml(text.text)}</dd>
+        </div>`;
+      }).join('')}
+    </dl>
+
+    <dl class="gg-notice__contact">
+      <div>
+        <dt>${escapeHtml(APPLICATION_FEE.grievance.label)}</dt>
+        <dd><a href="mailto:${escapeHtml(APPLICATION_FEE.grievance.email)}">${escapeHtml(APPLICATION_FEE.grievance.email)}</a></dd>
+      </div>
+      <div>
+        <dt>Helpline</dt>
+        <dd><a href="tel:${escapeHtml(APPLICATION_FEE.grievance.phone.replace(/\s+/g, ''))}">${escapeHtml(APPLICATION_FEE.grievance.phone)}</a></dd>
+      </div>
+    </dl>
+  </div>`;
 
 const disclaimerMarkup = () => `
   <div class="gg-notice" data-reveal>
@@ -231,15 +303,19 @@ export const init = () => {
 
   mount('promotion',  pathMarkup());
   mount('codes',      codeMarkup());
+  mount('fee',        feeMarkup());
   mount('disclaimer', disclaimerMarkup());
 
   // Counts are read from the data so a heading can never disagree with the
   // list beneath it.
   const summary = qs('[data-careers="summary"]');
   if (summary) {
-    summary.textContent =
-      `${ROLE_COUNTS.roles} positions · ${ROLE_COUNTS.divisions} divisions · ` +
-      `${ROLE_COUNTS.grades} grades · ${ROLE_COUNTS.plannedDivisions} divisions planned pending approval`;
+    summary.textContent = VACANCY_TOTALS.notices
+      ? `${VACANCY_TOTALS.posts.toLocaleString('en-IN')} posts open across ` +
+        `${VACANCY_TOTALS.notices} notices · ${ROLE_COUNTS.roles} positions in the structure · ` +
+        `${ROLE_COUNTS.plannedDivisions} divisions planned pending approval`
+      : `${ROLE_COUNTS.roles} positions · ${ROLE_COUNTS.divisions} divisions · ` +
+        `${ROLE_COUNTS.grades} grades · ${ROLE_COUNTS.plannedDivisions} divisions planned pending approval`;
   }
 
   /* ---- Role catalogue --------------------------------------------------- */

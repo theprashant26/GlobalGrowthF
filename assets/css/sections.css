@@ -2204,3 +2204,89 @@
     transform: none;
   }
 }
+
+/* ==========================================================================
+   31. APPLICATION FEE
+   A charge to a job applicant is the highest-risk element on this site, so the
+   styling works against the usual instinct: it is made prominent and plain
+   rather than small and tidy. A fee a candidate can miss is the one that ends
+   up in a complaint.
+   ========================================================================== */
+
+/* --- On the position card -------------------------------------------------
+   Sits on the card itself, above the details expander, so the cost is visible
+   before anything is opened or entered. */
+.gg-job-card__fee {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px var(--sp-2);
+  margin-block-start: var(--sp-1);
+  padding: 10px var(--sp-2);
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-planned-soft);
+  border-inline-start: 3px solid var(--gg-planned);
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-700);
+}
+.gg-job-card__fee-amount {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  color: var(--gg-planned);
+  font-variant-numeric: tabular-nums;
+}
+.gg-job-card__fee a { color: var(--gg-planned); text-decoration: underline; text-underline-offset: 3px; }
+.gg-job-card__fee a:hover { color: var(--gg-ink); }
+
+/* An open vacancy gets the operational green rule, the same signal the rest of
+   the site uses for "this is actually running". */
+.gg-job-card.is-open { border-inline-start-color: var(--gg-green-500); }
+
+/* --- The disclosure notice ------------------------------------------------ */
+.gg-notice--fee { border-inline-start-color: var(--gg-planned); }
+.gg-notice__range { font-size: var(--fs-sm); }
+.gg-notice__range strong { color: var(--gg-planned); font-variant-numeric: tabular-nums; }
+
+.gg-fee-points {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-2);
+  margin-block: var(--sp-3) 0;
+}
+@media (min-width: 760px) { .gg-fee-points { grid-template-columns: repeat(2, 1fr); } }
+
+.gg-fee-points > div {
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+}
+.gg-fee-points dt {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-ink);
+  margin-block-end: 6px;
+}
+.gg-fee-points dd {
+  margin: 0;
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-700);
+}
+/* A point still waiting on the client's lawyer reads as pending rather than as
+   settled policy. */
+.gg-fee-points > [data-pending] { border-color: var(--gg-planned); background: var(--gg-planned-soft); }
+.gg-fee-points > [data-pending] dd { font-style: italic; }
+
+/* The client's compensation caveat. Carried on every vacancy notice they
+   issue, so it sits under the pay line rather than being buried in the
+   expander — a range is a claim, and the qualifier belongs beside it. */
+.gg-job-card__caveat {
+  margin-block-start: -4px;
+  font-size: var(--fs-xs);
+  line-height: 1.45;
+  color: var(--gg-grey-500);
+  max-inline-size: 70ch;
+}

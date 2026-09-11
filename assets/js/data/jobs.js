@@ -143,50 +143,164 @@ export const DIVISION_ROLES = [
         code: 'GGIPL-AVI-BH-001',
         level: 'L3',
         salary: '₹60,000–₹1,50,000+',
-        qualification: 'Graduate; aviation or travel management preferred',
-        experience: '7–12 years',
+        vacancies: 150,
+        fee: 251,
+        qualification: 'Intermediate (10+2) or equivalent. Aviation, travel and tourism, airport management, business management or a related qualification preferred.',
+        experience: '7–12 years in aviation, airport operations, airline services, travel management or business development.',
+        summary: 'Leads the overall business activities of the Aviation Division — business planning, operational coordination, revenue growth, team leadership, partner management and service-quality standards.',
         duties: [
-          'Overall planning for the aviation division.',
-          'Coordination with airport, airline and travel partners.',
-          'Ownership of revenue and operational targets.',
-          'Team management across airport-side functions.',
-          'Compliance and service quality.'
+          'Lead the overall planning and strategic development of the Aviation Division.',
+          'Coordinate with airports, airlines, travel partners and service providers.',
+          'Develop and monitor revenue, business-development and operational targets.',
+          'Manage, guide and evaluate departmental teams and senior operational staff.',
+          'Monitor business performance and prepare management reports and reviews.',
+          'Develop strategies for business growth, customer acquisition and service expansion.',
+          'Ensure coordination between aviation, travel, operations, finance and HR.',
+          'Monitor service quality, customer satisfaction and operational efficiency.',
+          'Ensure adherence to applicable aviation, airport, safety and security requirements.',
+          'Identify operational and business risks and coordinate corrective actions.',
+          'Represent the division in meetings with business partners and management.',
+          'Support senior management in developing new aviation and travel-service opportunities.'
         ]
       },
       {
         title: 'Airport Operations Manager',
         code: 'GGIPL-AVI-OPS-002',
         level: 'L6',
-        salary: '₹40,000–₹90,000',
-        qualification: 'Graduate or Diploma',
-        experience: '3–7 years',
+        salary: '₹60,000–₹90,000',
+        vacancies: 200,
+        fee: 210,
+        qualification: 'Intermediate (10+2) or equivalent from a recognised board or institution.',
+        experience: '3–7 years in airport operations, aviation, passenger services or ground handling.',
+        summary: 'Coordinates and supervises day-to-day ground and airport operations, passenger services, staff scheduling and operational reporting.',
         duties: [
-          'Ground operations coordination.',
-          'Passenger-service management.',
-          'Staff scheduling.',
-          'Operational reporting.',
-          'Incident escalation.'
+          'Coordinate and supervise day-to-day ground and airport operations.',
+          'Manage passenger-service activities to ensure efficient service delivery.',
+          'Prepare staff duty rosters, shift schedules and workforce allocation.',
+          'Monitor operations and prepare daily, weekly and monthly reports.',
+          'Coordinate with relevant departments and operational teams.',
+          'Identify operational issues and ensure timely escalation and resolution.',
+          'Monitor compliance with airport safety, security and service procedures.',
+          'Maintain proper operational records and documentation.',
+          'Support management in improving operational efficiency and passenger experience.',
+          'Handle operational coordination during delays, disruptions, emergencies and other service-related situations.'
         ]
       },
-      { title: 'Airline Ticketing Manager', level: 'L6', salary: '₹30,000–₹70,000' },
       {
         title: 'Ticketing Executive',
         code: 'GGIPL-AVI-TKT-003',
         level: 'L8',
-        salary: '₹18,000–₹30,000',
-        qualification: '12th or Graduate',
-        experience: '0–3 years',
+        salary: '₹40,000–₹70,000',
+        vacancies: 240,
+        fee: 296,
+        qualification: '12th pass / Intermediate or Graduate from a recognised board or institution.',
+        experience: '0–3 years in airline ticketing, travel services, customer service or reservations. Freshers may apply.',
+        summary: 'Assists customers with ticket reservations, modifications, cancellations and travel documentation, maintaining professional service standards.',
         duties: [
-          'Booking assistance.',
-          'Ticket modification and cancellation support.',
-          'Customer communication.',
-          'Travel documentation support.'
+          'Assist customers with flight ticket booking and reservation services.',
+          'Support ticket modification, rescheduling and cancellation requests.',
+          'Handle customer queries through appropriate communication channels.',
+          'Provide accurate information on fares, schedules and booking procedures.',
+          'Assist customers with travel documentation requirements.',
+          'Verify passenger and booking information before completing transactions.',
+          'Maintain accurate booking records and customer information.',
+          'Coordinate with relevant teams or service providers to resolve booking-related issues.',
+          'Handle customer concerns professionally and escalate complex cases when required.',
+          'Follow applicable company policies, ticketing procedures, data-protection requirements and service standards.'
         ]
       },
-      { title: 'Ground Support Executive',   level: 'L8',  salary: '₹18,000–₹30,000' },
-      { title: 'Customer Service Executive', level: 'L8',  salary: '₹18,000–₹30,000' },
-      { title: 'Aviation Coordinator',       level: 'L9',  salary: '₹20,000–₹35,000' },
-      { title: 'Baggage & Ramp Coordinator', level: 'L9',  salary: '₹18,000–₹35,000' }
+      {
+        title: 'Ground Support Executive',
+        code: 'GGIPL-AVI-GSE-004',
+        level: 'L8',
+        salary: '₹39,000–₹60,000',
+        vacancies: 250,
+        fee: 298,
+        qualification: '12th pass / Intermediate or Graduate from a recognised board or institution.',
+        experience: '0–3 years in airport ground operations, passenger services or customer support. Freshers may apply.',
+        summary: 'Supports day-to-day airport ground operations, assists passengers and coordinates with operational teams.',
+        duties: [
+          'Assist with passenger handling and ground-service activities.',
+          'Support passengers with check-in, boarding, baggage-related and general airport-service queries, as applicable to the assigned role.',
+          'Coordinate with relevant airport, airline, ground-handling and service teams.',
+          'Provide professional customer communication and passenger assistance.',
+          'Assist in managing operational requirements during flight arrivals, departures, delays and service disruptions.',
+          'Maintain accurate operational records and documentation.',
+          'Support the verification and processing of passenger and travel-related documents, where applicable.',
+          'Escalate operational incidents, passenger concerns and service issues to the appropriate supervisor.',
+          'Follow applicable airport safety, security, operational and service procedures.',
+          'Maintain professional conduct and contribute to a positive passenger experience.'
+        ]
+      },
+      {
+        title: 'Customer Service Executive',
+        code: 'GGIPL-AVI-CSE-005',
+        level: 'L8',
+        salary: '₹35,000–₹50,000',
+        vacancies: 260,
+        fee: 239,
+        qualification: '12th pass / Intermediate or Graduate from a recognised board or institution.',
+        experience: '0–3 years in customer service, aviation, travel and tourism or hospitality. Freshers may apply.',
+        summary: 'Provides professional assistance to customers and passengers, resolves service queries and coordinates with relevant departments.',
+        duties: [
+          'Handle customer and passenger queries through appropriate channels.',
+          'Provide accurate information on services, bookings, schedules and procedures.',
+          'Assist with booking modifications, cancellations and service requests.',
+          'Resolve customer complaints and service issues professionally and escalate complex matters to the appropriate supervisor.',
+          'Maintain accurate customer records, service requests and communication logs.',
+          'Coordinate with aviation, ticketing, ground operations and other relevant departments.',
+          'Support passengers during service disruptions, delays or other operational situations, as assigned.',
+          'Assist customers with travel-related documentation and service information.',
+          'Maintain professional communication and contribute to a positive customer experience.',
+          'Follow applicable company policies, operational procedures, customer-service standards and data-protection requirements.'
+        ]
+      },
+      {
+        title: 'Passenger Service Associate',
+        code: 'GGIPL-AVI-PSA-006',
+        level: 'L10',
+        salary: '₹40,000–₹50,000',
+        vacancies: 270,
+        fee: 249,
+        qualification: '12th pass / Intermediate or Graduate from a recognised board or institution.',
+        experience: '0–3 years in passenger services, airport operations, travel and tourism or hospitality. Freshers may apply.',
+        summary: 'Assists passengers throughout their airport journey, supports passenger-processing activities and coordinates with airport and operational teams.',
+        duties: [
+          'Assist passengers with check-in, boarding, arrival and departure requirements.',
+          'Respond professionally to passenger service queries.',
+          'Support verification and processing of passenger and travel documents.',
+          'Assist with baggage-related queries and coordination.',
+          'Coordinate with airport, airline, ground-handling and security teams.',
+          'Provide assistance during delays, cancellations and special service situations.',
+          'Maintain accurate passenger-service records and operational documentation.',
+          'Escalate passenger complaints, operational incidents and service issues to the appropriate supervisor.',
+          'Maintain professional standards of communication, appearance, conduct and customer service.',
+          'Follow applicable airport safety, security, operational and service procedures.'
+        ]
+      },
+      {
+        title: 'Aviation Coordinator',
+        code: 'GGIPL-AVI-COO-007',
+        level: 'L9',
+        salary: '₹28,000–₹35,000',
+        vacancies: 210,
+        fee: 199,
+        qualification: '12th pass / Intermediate or Graduate from a recognised board or institution.',
+        experience: '0–3 years in aviation, airport operations, travel and tourism, customer service or administration. Freshers may apply.',
+        summary: 'Coordinates day-to-day aviation activities, maintains communication between operational teams and supports administrative processes.',
+        duties: [
+          'Coordinate daily aviation and airport-related activities as assigned.',
+          'Maintain communication between operations, ticketing, passenger services and management.',
+          'Assist in coordinating schedules, staff assignments and operational updates.',
+          'Support customers with general aviation and travel-service information.',
+          'Maintain and update operational records, reports, schedules and documentation.',
+          'Coordinate with relevant internal teams and authorised external service providers.',
+          'Monitor assigned operational activities and report delays, issues or incidents to the appropriate supervisor.',
+          'Assist in handling flight-related operational updates and service coordination, where applicable.',
+          'Support management in preparing routine operational reports and performance updates.',
+          'Ensure assigned activities are carried out according to applicable company procedures, safety requirements and service standards.'
+        ]
+      }
     ]
   },
 
@@ -200,17 +314,153 @@ export const DIVISION_ROLES = [
     roles: [
       {
         title: 'Metro Business Head',
+        code: 'GGIPL-MET-BH-001',
         level: 'L3',
-        salary: '₹60,000–₹1,50,000+',
-        qualification: 'Graduate, Engineering or Management',
-        experience: '7+ years'
+        salary: '₹80,000–₹1,50,000+',
+        vacancies: 150,
+        fee: 129,
+        qualification: 'Graduate, engineering or management qualification from a recognised university or institution.',
+        experience: '7+ years in metro rail, railway, urban transport, infrastructure, operations or project management.',
+        summary: 'Leads the business and operational activities of the Metro Division — strategic planning, stakeholder management, performance targets and compliant service delivery.',
+        duties: [
+          'Lead strategic planning and business development for the Metro Division.',
+          'Develop and monitor business, operational and performance targets.',
+          'Coordinate with metro rail organisations, contractors, vendors and partners.',
+          'Provide leadership to departmental and operational teams.',
+          'Monitor operational performance, productivity and service quality.',
+          'Identify new business opportunities, projects and partnerships.',
+          'Prepare and review management reports and performance dashboards.',
+          'Ensure coordination between metro operations, HR, finance and training.',
+          'Monitor compliance with applicable safety, security, operational and contractual requirements.',
+          'Identify operational risks and coordinate appropriate corrective and preventive actions.',
+          'Lead meetings with internal teams and authorised external stakeholders.',
+          'Support senior management in achieving the organisation’s long-term Metro business objectives.'
+        ]
       },
-      { title: 'Station Operations Manager',            level: 'L6',  salary: '₹35,000–₹70,000', qualification: 'Graduate or Diploma' },
-      { title: 'Station Controller / Operations Executive', level: 'L9', salary: '₹20,000–₹40,000', qualification: '12th or Graduate as per role' },
-      { title: 'Customer Service Executive',            level: 'L8',  salary: '₹18,000–₹30,000' },
-      { title: 'Station Assistant',                     level: 'L10', salary: '₹24,000–₹38,000' },
-      { title: 'Security Supervisor',                   level: 'L9',  salary: '₹20,000–₹35,000' },
-      { title: 'Maintenance Technician',                level: 'L11', salary: '₹18,000–₹35,000', qualification: 'ITI or Diploma' }
+      {
+        title: 'Station Operations Manager',
+        code: 'GGIPL-MET-SOM-002',
+        level: 'L6',
+        salary: '₹45,000–₹70,000',
+        vacancies: 290,
+        fee: 299,
+        qualification: 'Intermediate (10+2) or equivalent from a recognised board or institution.',
+        experience: 'Experience in metro rail, railway, station operations, passenger services or transport operations preferred.',
+        summary: 'Coordinates and supervises day-to-day station activities, passenger services, staff deployment and safety procedures.',
+        duties: [
+          'Supervise daily station operations and passenger-service activities.',
+          'Monitor station staff deployment, duty rosters and shifts.',
+          'Ensure smooth management of passenger movement and station facilities.',
+          'Coordinate with security, ticketing, customer service and maintenance teams.',
+          'Report operational issues, incidents and service disruptions promptly.',
+          'Manage station operations during peak hours, delays and emergencies.',
+          'Maintain and review station operational records and documentation.',
+          'Support safety, security and emergency-response procedures.',
+          'Handle passenger-service issues and escalate serious complaints or incidents to the appropriate authority.',
+          'Conduct regular coordination with supervisors and management regarding station performance.',
+          'Support staff training, operational briefings and performance monitoring.',
+          'Ensure professional service standards and proper conduct across station operations.'
+        ]
+      },
+      {
+        title: 'Station Controller / Operations Executive',
+        code: 'GGIPL-MET-SCO-003',
+        level: 'L9',
+        salary: '₹41,000–₹60,000',
+        vacancies: 280,
+        fee: 295,
+        qualification: '12th pass / Intermediate or Graduate, depending on the assigned role.',
+        experience: 'Experience in metro rail, railway, station operations or transport operations preferred. Freshers may be considered for entry-level roles.',
+        summary: 'Supports and monitors day-to-day station operations, coordinates with operational teams and assists with passenger movement and service management.',
+        duties: [
+          'Monitor and support day-to-day station operations.',
+          'Coordinate with station staff, security, ticketing and maintenance teams.',
+          'Assist in maintaining smooth passenger movement and station services.',
+          'Communicate operational updates to the concerned supervisor.',
+          'Support management of disruptions, delays and crowd-management situations.',
+          'Maintain accurate station logs, operational records and reports.',
+          'Assist with implementation of applicable safety, security, emergency-response and operational procedures.',
+          'Respond professionally to passenger queries and coordinate escalation of service-related issues.',
+          'Support staff coordination, shift activities, operational briefings and routine station requirements.',
+          'Report unusual incidents, equipment or service issues, or safety concerns promptly to the appropriate authority.',
+          'Coordinate with relevant teams during emergency or abnormal operational situations.',
+          'Maintain professional conduct and contribute to efficient and passenger-friendly station operations.'
+        ]
+      },
+      {
+        title: 'Customer Service Executive',
+        code: 'GGIPL-MET-CSE-004',
+        level: 'L8',
+        salary: '₹38,000–₹50,000',
+        vacancies: 180,
+        fee: 293,
+        qualification: '12th pass / Intermediate or Graduate from a recognised board or institution.',
+        experience: 'Experience in customer service, metro or rail passenger services, transport operations or hospitality preferred. Freshers may be considered.',
+        summary: 'Assists passengers and customers, handles service queries, provides accurate information and coordinates with station teams.',
+        duties: [
+          'Handle passenger and customer queries professionally.',
+          'Provide information on station services, ticketing, routes and facilities.',
+          'Assist passengers with ticketing and service-related requirements.',
+          'Handle complaints and escalate complex issues to the supervisor.',
+          'Coordinate with station operations, security, ticketing and maintenance.',
+          'Assist passengers during service disruptions, delays, crowd-management situations and other operational conditions.',
+          'Maintain accurate customer-service records, reports and documentation.',
+          'Support smooth passenger movement and contribute to a positive station experience.',
+          'Communicate operational updates and passenger-related issues to the concerned team.',
+          'Follow applicable metro safety, security, operational and customer-service procedures.',
+          'Maintain professional conduct, communication and service standards at all times.'
+        ]
+      },
+      {
+        title: 'Station Assistant',
+        code: 'GGIPL-MET-SA-005',
+        level: 'L10',
+        salary: '₹36,000–₹45,000',
+        vacancies: 170,
+        fee: 290,
+        qualification: '12th pass / Intermediate or equivalent from a recognised board or institution.',
+        experience: 'Experience in metro or railway station operations, passenger services or customer service preferred. Freshers may be considered.',
+        summary: 'Supports day-to-day station activities, assists passengers and helps maintain smooth, safe and efficient station operations.',
+        duties: [
+          'Assist passengers with station-related information and general queries.',
+          'Support passenger movement and station-service activities.',
+          'Direct passengers to the appropriate service counter or facility.',
+          'Coordinate with station operations, security and maintenance teams.',
+          'Assist passengers during peak hours, delays and service disruptions.',
+          'Support orderly movement and basic crowd-management activities.',
+          'Report operational issues, passenger concerns and safety-related observations to the concerned supervisor.',
+          'Maintain basic station records, logs and assigned documentation.',
+          'Assist in maintaining cleanliness, service standards and proper use of station facilities by coordinating with the relevant teams.',
+          'Follow applicable metro safety, security, emergency-response and operational procedures.',
+          'Maintain professional communication and courteous behaviour with passengers and colleagues.'
+        ]
+      },
+      {
+        title: 'Maintenance Technician',
+        code: 'GGIPL-MET-MT-006',
+        level: 'L11',
+        salary: '₹32,000–₹40,000',
+        vacancies: 160,
+        fee: 250,
+        qualification: 'ITI or Diploma in electrical, electronics, mechanical, fitter, HVAC, instrumentation or another relevant technical trade.',
+        experience: 'Experience in metro rail, railway, industrial maintenance or electrical and mechanical systems preferred.',
+        extraDocuments: ['ITI / Diploma Certificate'],
+        summary: 'Supports inspection, preventive maintenance, troubleshooting and repair of assigned metro station, equipment and technical systems.',
+        duties: [
+          'Carry out preventive and corrective maintenance of assigned equipment.',
+          'Inspect equipment and identify faults, defects and abnormal conditions.',
+          'Perform basic troubleshooting, repair, replacement and adjustment.',
+          'Support maintenance of electrical, mechanical, HVAC or station equipment.',
+          'Maintain accurate maintenance logs, checklists and service records.',
+          'Coordinate with supervisors and maintenance teams for major technical issues.',
+          'Respond to equipment breakdowns and support timely fault rectification.',
+          'Follow approved maintenance schedules and technical procedures.',
+          'Use tools, testing equipment and personal protective equipment appropriately.',
+          'Follow applicable safety, electrical, technical, emergency and workplace procedures.',
+          'Report major equipment faults and safety concerns immediately to the appropriate supervisor.',
+          'Maintain proper housekeeping and safe working conditions within assigned maintenance areas.'
+        ]
+      }
     ]
   },
 
@@ -224,17 +474,190 @@ export const DIVISION_ROLES = [
     roles: [
       {
         title: 'Hotel General Manager',
+        code: 'GGIPL-HOT-GM-001',
         level: 'L4',
         salary: '₹60,000–₹1,50,000+',
-        qualification: 'Hotel Management or Graduate',
-        experience: '7–12 years'
+        vacancies: 100,
+        fee: 99,
+        qualification: 'Degree or diploma in hotel management, hospitality, tourism or business management, or a Graduate qualification.',
+        experience: '7–12 years in hotel operations, hospitality or resort management. Managerial experience preferred.',
+        extraDocuments: ['Hotel Management / Hospitality qualification certificate'],
+        summary: 'Responsible for the overall management and performance of the hotel — operations, guest experience, staff leadership, financial performance and compliance.',
+        duties: [
+          'Lead and supervise overall hotel operations across departments.',
+          'Manage front office, housekeeping, food and beverage, and administration.',
+          'Develop and monitor operational, revenue and occupancy targets.',
+          'Ensure high standards of guest satisfaction and service quality.',
+          'Recruit, train, supervise and motivate staff and departmental managers.',
+          'Monitor budgets, operating costs and revenue performance.',
+          'Develop strategies to improve occupancy, revenue and customer retention.',
+          'Coordinate with vendors, suppliers, travel agencies and partners.',
+          'Handle guest complaints and ensure timely resolution of service issues.',
+          'Ensure compliance with applicable hotel, safety, hygiene, fire-safety, security and labour requirements.',
+          'Prepare and review operational and management reports.',
+          'Conduct regular departmental meetings and performance reviews.',
+          'Identify operational risks and implement appropriate corrective measures.',
+          'Represent the hotel in meetings with management, clients, partners and other authorised stakeholders.'
+        ]
       },
-      { title: 'Operations Manager',        level: 'L6',  salary: '₹35,000–₹75,000' },
-      { title: 'Front Office Manager',      level: 'L6',  salary: '₹30,000–₹60,000' },
-      { title: 'Front Office Executive',    level: 'L8',  salary: '₹18,000–₹30,000', qualification: '12th or Graduate' },
-      { title: 'Housekeeping Supervisor',   level: 'L9',  salary: '₹20,000–₹35,000' },
-      { title: 'Chef / Cook',               level: 'L11', salary: '₹18,000–₹50,000' },
-      { title: 'Guest Relations Executive', level: 'L8',  salary: '₹18,000–₹35,000' }
+      {
+        title: 'Operations Manager',
+        code: 'GGIPL-HOT-OM-002',
+        level: 'L6',
+        salary: '₹35,000–₹75,000',
+        vacancies: 110,
+        fee: 199,
+        qualification: 'Graduate in hotel management, hospitality, business administration or tourism management.',
+        experience: 'Experience in hotel operations, hospitality, administration or customer service preferred.',
+        extraDocuments: ['Hotel Management / Hospitality qualification certificate'],
+        summary: 'Coordinates and supervises day-to-day hotel operations, ensuring efficient departmental performance and consistent service standards.',
+        duties: [
+          'Supervise and coordinate daily hotel operations.',
+          'Coordinate with front office, housekeeping, food and beverage, and security.',
+          'Monitor departmental performance, staff deployment and schedules.',
+          'Ensure consistent guest-service and hospitality standards.',
+          'Handle customer concerns and coordinate timely resolution.',
+          'Coordinate with maintenance on repairs and service requirements.',
+          'Maintain operational records, reports and checklists.',
+          'Support management in monitoring revenue, operating costs, productivity and performance targets.',
+          'Coordinate with vendors, suppliers, service providers and other authorised stakeholders.',
+          'Assist in staff training, operational briefings and performance monitoring.',
+          'Support hotel operations during peak periods, special events, emergencies and service disruptions.',
+          'Ensure adherence to applicable safety, hygiene, security, fire-safety and hospitality procedures.',
+          'Prepare routine operational updates and reports for senior management.',
+          'Identify operational challenges and recommend appropriate corrective actions.'
+        ]
+      },
+      {
+        title: 'Front Office Manager',
+        code: 'GGIPL-HOT-FOM-003',
+        level: 'L6',
+        salary: '₹30,000–₹60,000',
+        vacancies: 120,
+        fee: 121,
+        qualification: 'Graduate or diploma in hotel management, hospitality or tourism management.',
+        experience: 'Experience in front office operations, hotel management or guest relations preferred.',
+        extraDocuments: ['Hotel Management / Hospitality qualification certificate'],
+        summary: 'Supervises front-office operations, manages guest services and coordinates reservations and check-in and check-out activities.',
+        duties: [
+          'Supervise and coordinate daily front office operations.',
+          'Manage guest check-in, check-out, reservations and room allocation.',
+          'Supervise front office executives, receptionists and guest relations staff.',
+          'Ensure accurate maintenance of guest records and booking information.',
+          'Handle guest queries, complaints and special requests professionally.',
+          'Coordinate with housekeeping, food and beverage, and maintenance.',
+          'Monitor staff schedules, duty rosters, attendance and departmental performance.',
+          'Ensure proper communication of guest requirements and operational updates between departments.',
+          'Monitor service quality and maintain high standards of guest satisfaction and hospitality.',
+          'Assist with billing, payment coordination and other front-office procedures as applicable.',
+          'Prepare routine front-office reports and operational updates for management.',
+          'Support staff training, operational briefings and performance monitoring.',
+          'Handle front-office operations during peak periods, special events, emergencies and service disruptions.',
+          'Ensure compliance with applicable hotel policies, safety, security and guest-service procedures.'
+        ]
+      },
+      {
+        title: 'Front Office Executive',
+        code: 'GGIPL-HOT-FOE-004',
+        level: 'L8',
+        salary: '₹18,000–₹30,000',
+        vacancies: 130,
+        fee: 125,
+        qualification: '12th pass / Intermediate or Graduate from a recognised board or institution.',
+        experience: '0–3 years in hotel front office, hospitality, guest relations or reception. Freshers may be considered.',
+        summary: 'Handles reception and guest-service activities, assists with check-in and check-out, and maintains front-office records.',
+        duties: [
+          'Welcome and assist guests in a professional and courteous manner.',
+          'Handle guest check-in and check-out procedures.',
+          'Assist with reservations, room allocation and guest requests.',
+          'Provide accurate information about hotel facilities and services.',
+          'Handle guest queries, complaints and service requests professionally.',
+          'Coordinate with housekeeping, food and beverage, and maintenance.',
+          'Maintain accurate guest records, reservation details and front-office documentation.',
+          'Assist with billing, payment coordination and related front-office procedures as applicable.',
+          'Maintain proper communication during guest arrivals, departures, special requests and service issues.',
+          'Support the Front Office Manager in daily operational activities.',
+          'Prepare routine reports and maintain assigned registers and logs.',
+          'Follow applicable hotel safety, security and guest-service procedures.',
+          'Maintain professional appearance, communication and hospitality standards.'
+        ]
+      },
+      {
+        title: 'Housekeeping Supervisor',
+        code: 'GGIPL-HOT-HKS-005',
+        level: 'L9',
+        salary: '₹20,000–₹35,000',
+        vacancies: 170,
+        fee: 188,
+        qualification: '12th / Intermediate or equivalent. Diploma or certificate in hotel management, hospitality or housekeeping preferred.',
+        experience: '2–5 years in hotel housekeeping, hospitality or facility management. Supervisory experience preferred.',
+        summary: 'Supervises daily housekeeping operations and staff, and monitors cleanliness and hygiene standards across the hotel.',
+        duties: [
+          'Supervise daily housekeeping operations and housekeeping staff.',
+          'Allocate duties, shifts, rooms and work areas to team members.',
+          'Monitor cleanliness of guest rooms, public areas and facilities.',
+          'Inspect rooms to ensure required cleanliness and hygiene standards.',
+          'Coordinate with front office on room status and priority rooms.',
+          'Coordinate with maintenance on repairs and equipment issues.',
+          'Handle guest housekeeping requests and complaints professionally.',
+          'Monitor supplies, linen, cleaning materials and inventory.',
+          'Maintain housekeeping records, checklists, inspection reports and daily operational reports.',
+          'Train and brief housekeeping staff on service standards, hygiene, safety and workplace procedures.',
+          'Ensure proper use of cleaning equipment, chemicals and personal protective equipment.',
+          'Report operational issues, damages, shortages or incidents to the concerned manager.',
+          'Maintain professional conduct and ensure high standards of guest service.'
+        ]
+      },
+      {
+        title: 'Chef / Cook',
+        code: 'GGIPL-HOT-CC-006',
+        level: 'L11',
+        salary: '₹18,000–₹50,000',
+        vacancies: 170,
+        fee: 180,
+        qualification: '10th / 12th or equivalent. Certificate or diploma in culinary arts, food production or hotel management preferred.',
+        experience: '1–5 years in hotel kitchens, restaurants, catering or food production. Freshers with culinary training may be considered.',
+        summary: 'Prepares food to approved recipes, menus and quality standards, and maintains kitchen hygiene and food-safety practices.',
+        duties: [
+          'Prepare food according to approved recipes, menus and quality standards.',
+          'Handle daily kitchen preparation, cooking, plating and presentation.',
+          'Maintain proper taste, quality, hygiene and portion standards.',
+          'Ensure proper storage and handling of food ingredients.',
+          'Monitor freshness and quality of raw materials.',
+          'Coordinate with kitchen staff and other hotel departments.',
+          'Maintain cleanliness and hygiene of the kitchen and cooking equipment.',
+          'Follow applicable food safety, hygiene and workplace safety procedures.',
+          'Minimise food wastage and support effective inventory usage.',
+          'Assist in menu preparation and special food requirements as assigned.',
+          'Maintain kitchen records and report shortages or operational issues to the concerned supervisor.',
+          'Support smooth kitchen operations during regular and peak service hours.'
+        ]
+      },
+      {
+        title: 'Guest Relations Executive',
+        code: 'GGIPL-HOT-GRE-007',
+        level: 'L8',
+        salary: '₹18,000–₹35,000',
+        vacancies: 170,
+        fee: 180,
+        qualification: '12th / Intermediate or Graduate. Diploma or certificate in hotel management, hospitality or tourism preferred.',
+        experience: '0–3 years in hotel guest relations, hospitality, customer service or front office. Freshers may be considered.',
+        summary: 'Provides professional assistance to guests throughout their stay, handles enquiries and feedback, and supports a positive guest experience.',
+        duties: [
+          'Welcome guests and provide courteous assistance throughout their stay.',
+          'Handle guest enquiries, requests, feedback and service-related concerns.',
+          'Maintain strong guest relationships and support a positive guest experience.',
+          'Assist guests with hotel facilities, services, amenities and general information.',
+          'Coordinate with front office, housekeeping, food and beverage, and maintenance.',
+          'Follow up on guest requests to ensure timely resolution.',
+          'Handle complaints professionally and escalate complex issues.',
+          'Maintain accurate guest records, feedback, requests and service-related reports.',
+          'Support VIP guest arrangements and special guest requirements as assigned.',
+          'Assist during check-in, check-out, special events and peak operational periods.',
+          'Collect guest feedback and communicate service improvement suggestions to management.',
+          'Maintain professional appearance, communication, confidentiality and hospitality standards.'
+        ]
+      }
     ]
   },
 
@@ -246,9 +669,62 @@ export const DIVISION_ROLES = [
     status: 'active',
     certificate: 'MITC',
     roles: [
-      { title: 'Healthcare Business Head',            level: 'L3',  salary: '₹60,000–₹1,50,000+' },
+      {
+        title: 'Healthcare Business Head',
+        code: 'GGIPL-HC-BH-001',
+        level: 'L3',
+        salary: '₹60,000–₹1,50,000+',
+        vacancies: 180,
+        fee: 190,
+        qualification: 'Graduate or postgraduate in healthcare management, hospital administration, business administration, life sciences or public health.',
+        experience: '7–12 years in healthcare management, hospital operations or healthcare business development.',
+        summary: 'Leads the business and operational activities of the Healthcare Division — strategy, growth plans, partnerships and service quality.',
+        duties: [
+          'Lead and manage the business and operational activities of the division.',
+          'Develop and implement healthcare business strategies and growth plans.',
+          'Identify new business opportunities, partnerships and service areas.',
+          'Monitor business performance, revenue targets and service quality.',
+          'Build and maintain professional relationships with healthcare organisations, service providers, vendors and partners.',
+          'Lead, supervise and develop healthcare teams and departmental managers.',
+          'Establish performance targets and monitor achievement across relevant functions.',
+          'Coordinate with internal departments to ensure smooth delivery of healthcare-related services.',
+          'Monitor customer and patient service standards and address escalated service issues.',
+          'Ensure applicable legal, regulatory, safety, quality, privacy and organisational requirements are followed.',
+          'Review operational reports, financial information, performance data and business KPIs.',
+          'Support budgeting, cost management, resource planning and business forecasting.',
+          'Conduct management reviews and provide strategic recommendations for business improvement.',
+          'Identify operational risks and implement appropriate mitigation and improvement measures.',
+          'Represent the Healthcare division in meetings with management, business partners and relevant stakeholders.'
+        ]
+      },
+      {
+        title: 'Healthcare Operations Manager',
+        code: 'GGIPL-HC-OM-002',
+        level: 'L6',
+        salary: '₹35,000–₹75,000',
+        vacancies: 180,
+        fee: 290,
+        qualification: 'Graduate in healthcare management, hospital administration, business administration, life sciences or public health.',
+        experience: '3–7 years in healthcare operations, hospital administration or facility management.',
+        summary: 'Manages day-to-day healthcare operational activities, departmental coordination and service quality.',
+        duties: [
+          'Manage and supervise day-to-day healthcare operational activities.',
+          'Coordinate with healthcare, administration and support teams.',
+          'Monitor operational efficiency, service quality and departmental performance.',
+          'Prepare staff schedules, duty assignments and operational work plans.',
+          'Monitor patient and customer service standards and resolve concerns.',
+          'Handle escalated complaints and coordinate timely resolution.',
+          'Maintain operational records, reports, documentation and performance data.',
+          'Monitor resources, equipment, supplies and operational requirements.',
+          'Coordinate with vendors, service providers and external stakeholders where required.',
+          'Support budgeting, cost control, resource planning and operational improvement.',
+          'Ensure applicable healthcare, safety, hygiene, privacy and organisational procedures are followed.',
+          'Identify operational risks and report incidents or issues to senior management.',
+          'Conduct team briefings, support staff training and monitor employee performance.',
+          'Prepare regular operational reports and provide recommendations for improvement.'
+        ]
+      },
       { title: 'Hospital / Healthcare Administrator', level: 'L5',  salary: '₹35,000–₹80,000', qualification: 'Healthcare or Hospital Administration, or Graduate' },
-      { title: 'Healthcare Operations Manager',       level: 'L6',  salary: '₹35,000–₹75,000' },
       { title: 'Staff Nurse',                         level: 'L8',  salary: '₹20,000–₹40,000', qualification: 'Applicable nursing qualification and registration' },
       { title: 'Medical Assistant',                   level: 'L10', salary: '₹18,000–₹30,000' },
       { title: 'Lab Technician',                      level: 'L11', salary: '₹18,000–₹35,000', qualification: 'Relevant recognised qualification' },
@@ -839,6 +1315,65 @@ export const HR_DOCUMENTS = [
 ];
 
 /**
+ * APPLICATION FEE.
+ * ---------------------------------------------------------------------------
+ * Each vacancy notice carries a non-refundable application fee, set per post by
+ * the client and confirmed by their Director of Legal & Compliance.
+ *
+ * WHY THIS BLOCK EXISTS AND WHY IT IS LONG
+ * Charging a job applicant is the single highest-risk thing on this site. It is
+ * also the thing a fraudulent scheme does, which means a legitimate one has to
+ * work visibly harder to look unlike one. Everything here is a protection:
+ *
+ *   - the fee is disclosed with the post, before a candidate enters any data
+ *   - it is stated as a processing charge, never as consideration for a job
+ *   - a payment reference is promised, so a candidate has proof
+ *   - a named grievance route is published
+ *   - the refund position is stated rather than left ambiguous
+ *
+ * `refundPolicy` is a labelled placeholder on purpose. "Non-refundable" is what
+ * the notices say, but a refund position has to be written by the client's
+ * lawyer and stated exactly — silence here is what consumer complaints are
+ * built on. It renders through resolve(), so nothing shows until it is real.
+ *
+ * NOTHING IN THIS BUILD TAKES A PAYMENT. The frontend displays the fee and the
+ * terms; the gateway itself is specified in BACKEND_PROMPT.md.
+ */
+export const APPLICATION_FEE = {
+  heading: 'About the application fee',
+  intro:
+    'Each vacancy notice carries a one-time application processing fee, shown on the post itself. ' +
+    'The amount differs by post and is stated before you begin an application.',
+  points: [
+    {
+      title: 'What the fee covers',
+      text: 'Processing and administration of your application — screening against the stated eligibility, record-keeping, and scheduling through the recruitment stages.'
+    },
+    {
+      title: 'What the fee does not buy',
+      text: 'It does not buy a position, an interview, a shortlisting or any assurance of employment. Selection is decided only by the published recruitment process, and paying the fee gives no advantage within it.'
+    },
+    {
+      title: 'You will get a reference',
+      text: 'Every payment returns an application reference and a receipt to the email address you register. Keep it. It is your proof of payment and the reference any query about your application will be tracked against.'
+    },
+    {
+      title: 'Refunds',
+      text: '{{APPLICATION_FEE_REFUND_POLICY — to be drafted and confirmed by the company’s legal adviser, stating the circumstances in which the fee is and is not refundable, and the timeline for a refund.}}'
+    },
+    {
+      title: 'Pay only through this website',
+      text: 'The fee is payable only through the payment page linked from a vacancy notice on this website. No employee, agent or representative of Global Growth Industries is authorised to collect an application fee in cash, by bank transfer, or through any other channel. If anyone asks you to, do not pay — report it to the address below.'
+    }
+  ],
+  grievance: {
+    label: 'Questions or complaints about a fee',
+    email: 'hr@globalgrowthindustries.com',
+    phone: '+91 92048 04718'
+  }
+};
+
+/**
  * CAREERS DISCLAIMER — client-approved wording.
  * ---------------------------------------------------------------------------
  * This is a legal notice. Reproduce it as written. Do not shorten it, split it
@@ -917,9 +1452,44 @@ export const ALL_ROLES = DIVISION_ROLES.flatMap(division =>
     status:        division.status,
     regulator:     division.regulator || null,
     certificate:   division.certificate,
-    documents:     [...STANDARD_DOCUMENTS, `${division.certificate} Certificate`]
+    // The four standard documents, the division's training certificate, and
+    // anything a particular post adds on top (an ITI certificate, say).
+    documents: [
+      ...STANDARD_DOCUMENTS,
+      ...(role.extraDocuments || []),
+      `${division.certificate} Certificate`
+    ]
   }))
 );
+
+/**
+ * Every vacancy notice the client has issued is Full-Time, and every one
+ * carries the same compensation caveat. Held once rather than repeated on each
+ * role — if a future notice differs, give that role its own `employmentType`.
+ */
+export const EMPLOYMENT_TYPE = 'Full-Time';
+
+export const COMPENSATION_NOTE =
+  'Final compensation may vary based on qualifications, relevant experience, skills, ' +
+  'role responsibilities and organisational policies.';
+
+/** Posts advertised against a role, or null where none has been notified. */
+export const isVacancy = role => Number.isFinite(role.vacancies) && role.vacancies > 0;
+
+/** Every role with a live vacancy notice — a post count and an application fee. */
+export const OPEN_VACANCIES = ALL_ROLES.filter(role => isVacancy(role) && role.status === 'active');
+
+export const VACANCY_TOTALS = {
+  notices:   OPEN_VACANCIES.length,
+  posts:     OPEN_VACANCIES.reduce((n, r) => n + r.vacancies, 0),
+  divisions: new Set(OPEN_VACANCIES.map(r => r.divisionId)).size,
+  feeLow:    OPEN_VACANCIES.length ? Math.min(...OPEN_VACANCIES.map(r => r.fee).filter(Number.isFinite)) : 0,
+  feeHigh:   OPEN_VACANCIES.length ? Math.max(...OPEN_VACANCIES.map(r => r.fee).filter(Number.isFinite)) : 0
+};
+
+/** Format a rupee amount the way an Indian reader expects it. */
+export const rupees = amount =>
+  `₹${Number(amount).toLocaleString('en-IN')}`;
 
 /** Filter options for the careers page. */
 export const DIVISION_FILTERS = DIVISION_ROLES.map(d => ({

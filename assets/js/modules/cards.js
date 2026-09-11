@@ -221,7 +221,9 @@ export const roleCard = role => {
       <div class="gg-job-card__meta">
         <span class="gg-badge gg-badge--number">${escapeHtml(role.level)}</span>
         <span class="gg-badge gg-badge--meta">${escapeHtml(role.salary)}</span>
-        ${role.experience ? `<span class="gg-badge gg-badge--meta">${escapeHtml(role.experience)}</span>` : ''}
+        ${Number.isFinite(role.vacancies)
+          ? `<span class="gg-badge gg-badge--active"><span class="gg-badge__dot"></span>${role.vacancies} posts</span>`
+          : ''}
         ${planned
           ? `<span class="gg-badge gg-badge--planned">Planned · ${escapeHtml(role.regulator || 'approval required')}</span>`
           : ''}

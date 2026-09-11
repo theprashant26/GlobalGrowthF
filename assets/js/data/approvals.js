@@ -19,6 +19,9 @@
  */
 
 import { VACANCY_TOTALS, DIVISION_ROLES, OPEN_VACANCIES } from './jobs.js';
+import { REFUND_DOCUMENT } from './refund.js';
+
+export { REFUND_DOCUMENT };
 
 const count = n => Number(n).toLocaleString('en-IN');
 const crore = paise => (paise / 1e7).toFixed(1).replace(/\.0$/, '');
@@ -60,7 +63,11 @@ export const APPROVALS_INTRO = {
    =========================================================================== */
 
 export const REFUND_POLICY = {
-  status: 'Draft — not published. The live site says a policy is being finalised.',
+  status:
+    'Published at /legal#refund, because a payment gateway will not open a merchant ' +
+    'account without a reachable refund policy. The terms below are live; the six ' +
+    'periods and named officers are not — those render on the public page as marked ' +
+    'gaps, never as invented values. Confirming them is what closes this item.',
 
   why: {
     title: 'Why this matters more than it looks',
@@ -71,47 +78,12 @@ export const REFUND_POLICY = {
     ]
   },
 
-  /** The draft itself, presented as the document it would become. */
-  draft: {
-    title: 'Refund policy — application fee',
-    opening:
-      'The application fee is a processing charge. It covers the cost of receiving and ' +
-      'screening your application and is payable once per application.',
-    notRefundable: {
-      heading: 'The fee is not refundable if',
-      items: [
-        'your application is screened and you are not shortlisted;',
-        'you attend, or do not attend, any stage of the recruitment process;',
-        'you are not selected at any stage, for any reason;',
-        'you withdraw your application after it has been submitted;',
-        'you are found ineligible because the information you provided does not match the documents produced at verification.'
-      ]
-    },
-    refundable: {
-      heading: 'The fee is refundable in full if',
-      items: [
-        'you are charged more than once for the same application;',
-        'payment is taken but no application is recorded against it;',
-        'Global Growth Industries withdraws or cancels the vacancy before applications are screened;',
-        'the post is not filled because the vacancy is withdrawn by the Company;',
-        'the payment was made without your authorisation and this is established.'
-      ]
-    },
-    procedure: [
-      {
-        heading: 'How to request a refund',
-        body: 'Write to hr@globalgrowthindustries.com with your application reference and payment reference. Requests are acknowledged within {{DECISION_ACKNOWLEDGEMENT_PERIOD}} and decided within {{DECISION_DECISION_PERIOD}}.'
-      },
-      {
-        heading: 'How refunds are paid',
-        body: 'Approved refunds are returned to the original payment method within {{DECISION_SETTLEMENT_PERIOD}} of approval. We do not refund by any other route, and we will never ask for your bank details, card number, OTP or UPI PIN to process a refund.'
-      },
-      {
-        heading: 'Grievance',
-        body: 'If you are not satisfied with a refund decision, write to {{DECISION_GRIEVANCE_OFFICER}} at {{DECISION_GRIEVANCE_EMAIL}}. We respond within {{DECISION_STATUTORY_RESPONSE_PERIOD}}.'
-      }
-    ]
-  },
+  /**
+   * The draft itself. Held in refund.js because /legal publishes the same
+   * document, and a legal text kept in two files is how the wrong version gets
+   * approved. What stays here is only the material for reviewing it.
+   */
+  draft: REFUND_DOCUMENT,
 
   decisions: [
     ['Acknowledgement period', 'Suggested: 2 working days', 'Consumer forums look for a stated turnaround'],
@@ -143,10 +115,11 @@ export const REFUND_POLICY = {
   ],
 
   onceApproved:
-    'Replace the placeholder in assets/js/data/jobs.js → APPLICATION_FEE → the Refunds entry. ' +
-    'It renders through resolve(), so the page switches from “being finalised” to the real ' +
-    'policy on its own with no other change. If the policy runs longer than a paragraph — and ' +
-    'it probably should — it gets its own section on /careers rather than a card.'
+    'Fill the six values in assets/js/data/refund.js — the three periods and the grievance ' +
+    'officer’s name and email — replacing each placeholder with the agreed term. ' +
+    'Nothing else changes: /legal#refund and this page both render from that one file, so ' +
+    'the amber gaps become ordinary sentences on both at the same moment. The two officers ' +
+    'named in /legal#grievance are set the same way.'
 };
 
 /* ===========================================================================

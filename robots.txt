@@ -17,7 +17,13 @@ Disallow: /assets/images/offices/_masters/
 Disallow: /assets/images/global/_masters/
 
 # The legal notices are withheld from the index until they have been reviewed
-# by the company's legal adviser. Remove this line once that is done.
+# by the company's legal adviser.
+#
+# REMOVE THIS LINE BEFORE APPLYING FOR A PAYMENT GATEWAY, together with the
+# noindex in legal.html. /legal now carries the refund & cancellation policy,
+# the grievance route and the corporate identifiers, which is the set an
+# acquirer checks for; leaving them uncrawlable works against the application.
+# Both are one-line changes and both wait on the same legal sign-off.
 Disallow: /legal
 
 Sitemap: https://www.globalgrowthindustries.com/sitemap.xml

@@ -1,0 +1,283 @@
+/**
+ * GLOBAL GROWTH — LEGAL PAGE
+ * ---------------------------------------------------------------------------
+ * Renders the three sections of /legal that are built from data rather than
+ * written into the markup:
+ *
+ *   #refund     the refund & cancellation policy, from refund.js
+ *   #grievance  the grievance route, from site.js and refund.js
+ *   #corporate  the statutory identifiers, from site.js
+ *
+ * The first three notices on the page — privacy, terms, disclaimer — stay as
+ * markup. They are prose a lawyer edits directly, and putting them behind a
+ * renderer would make them harder to review, not easier.
+ *
+ * WHY THIS PAGE EXISTS IN THIS SHAPE
+ * A payment gateway will not open a merchant account without a reachable
+ * refund policy, a named grievance route and the company's statutory
+ * identifiers. All three were scattered or absent: the refund draft lived only
+ * on the internal review page, the grievance contact only inside a careers
+ * data file, and the CIN and GSTIN only in a footer that never printed them.
+ *
+ * PENDING VALUES
+ * Several terms here are still the client's to set. This module never prints a
+ * raw {{TOKEN}} and never invents a value to fill one — it renders the gap as
+ * a marked, readable phrase and keeps the token in `data-pending` for us. A
+ * period invented here and shown to an applicant as policy is a term the
+ * company would be held to.
+ */
+
+import { qs, escapeHtml } from './utils.js';
+import { BRAND, OFFICE, CERTIFICATIONS } from '../data/site.js';
+import { REFUND_DOCUMENT } from '../data/refund.js';
+
+/* ==========================================================================
+   PENDING TEXT
+   ========================================================================== */
+
+/**
+ * Replace every {{TOKEN}} inside a run of prose with a readable marker.
+ *
+ * Unlike resolve(), which handles a value that is *entirely* a token, these
+ * sit mid-sentence: "decided within {{DECISION_DECISION_PERIOD}}". Blanking
+ * them would leave a sentence that reads as finished but says nothing, which
+ * is worse than an honest gap — so the gap is shown as one.
+ *
+ * The token's own label becomes the visible text where it carries one:
+ * {{LEGAL_REVIEW — jurisdiction}} reads "jurisdiction", so the sentence still
+ * tells you what is missing.
+ */
+export const markPending = text => escapeHtml(text).replace(
+  /\{\{\s*([A-Z_]+)\s*(?:[—–-]\s*([^}]*))?\}\}/g,
+  (_, name, label) => {
+    const words = (label || name.replace(/^(DECISION|LEGAL_REVIEW)_?/, ''))
+      .replace(/_/g, ' ').trim().toLowerCase();
+    return `<span class="gg-pending" data-pending="${escapeHtml(name)}"
+      title="Awaiting confirmation from Legal &amp; Compliance"
+      >${escapeHtml(words || 'to be confirmed')}</span>`;
+  });
+
+/** True when a value from the data files is still an unfilled token. */
+const pending = value => typeof value === 'string' && /\{\{[\s\S]*\}\}/.test(value);
+
+/**
+ * A statutory identifier, or an honest note that it is not published yet.
+ * Printed in a <dd> either way, so the list never has a hole in it.
+ */
+const identifier = (value, missing) => pending(value)
+  ? `<span class="gg-pending" data-pending="${escapeHtml(value)}">${escapeHtml(missing)}</span>`
+  : `<span class="gg-mono">${escapeHtml(value)}</span>`;
+
+
+/* ==========================================================================
+   REFUND & CANCELLATION
+   ========================================================================== */
+
+const listBlock = block => `
+  <h3 class="gg-h4 gg-mt-4">${escapeHtml(block.heading)}</h3>
+  <ul class="gg-bullets">
+    ${block.items.map(item => `<li>${escapeHtml(item)}</li>`).join('')}
+  </ul>`;
+
+const refundMarkup = () => {
+  const d = REFUND_DOCUMENT;
+  return `
+    <p class="gg-lead">${escapeHtml(d.opening)}</p>
+    ${listBlock(d.notRefundable)}
+    ${listBlock(d.refundable)}
+    ${d.procedure.map(p => `
+      <h3 class="gg-h4 gg-mt-4">${escapeHtml(p.heading)}</h3>
+      <p>${markPending(p.body)}</p>`).join('')}
+    <div class="gg-reg-note gg-mt-6">
+      <h3 class="gg-h4">Pay only through this website</h3>
+      <p>${escapeHtml(d.warning)}</p>
+    </div>`;
+};
+
+
+/* ==========================================================================
+   GRIEVANCE REDRESSAL
+   ========================================================================== */
+
+/**
+ * Two routes, deliberately separated. A fee dispute and a data-protection
+ * complaint go to different people under different statutes, and a single
+ * "contact us" line serving both is what makes a grievance route unusable.
+ */
+const GRIEVANCE_ROUTES = [
+  {
+    title: 'Applications, fees and refunds',
+    body: 'Questions or complaints about an application, an application fee or a refund.',
+    officer: '{{DECISION_GRIEVANCE_OFFICER — name and designation}}',
+    email: 'hr@globalgrowthindustries.com',
+    phone: OFFICE.helpline,
+    within: '{{DECISION_STATUTORY_RESPONSE_PERIOD — response time}}'
+  },
+  {
+    title: 'Personal data — Digital Personal Data Protection Act, 2023',
+    body: 'To ask what we hold about you, to have it corrected or erased, or to complain about how it has been handled.',
+    officer: '{{LEGAL_REVIEW — Grievance Officer name and designation}}',
+    email: 'legal@globalgrowthindustries.com',
+    phone: null,
+    within: '{{LEGAL_REVIEW — statutory response period}}'
+  }
+];
+
+const grievanceMarkup = () => `
+  <p class="gg-lead">
+    If something has gone wrong, these are the routes for raising it and the people
+    responsible for answering. Every complaint is acknowledged in writing.
+  </p>
+  <div class="gg-grievance">
+    ${GRIEVANCE_ROUTES.map(r => `
+      <div class="gg-grievance__route">
+        <h3 class="gg-h4">${escapeHtml(r.title)}</h3>
+        <p class="gg-small">${escapeHtml(r.body)}</p>
+        <dl class="gg-deflist gg-mt-3">
+          <dt>Officer</dt><dd>${markPending(r.officer)}</dd>
+          <dt>Email</dt><dd><a href="mailto:${escapeHtml(r.email)}">${escapeHtml(r.email)}</a></dd>
+          ${r.phone ? `<dt>Telephone</dt><dd><a href="tel:${escapeHtml(r.phone.replace(/\s/g, ''))}">${escapeHtml(r.phone)}</a></dd>` : ''}
+          <dt>We respond within</dt><dd>${markPending(r.within)}</dd>
+        </dl>
+      </div>`).join('')}
+  </div>
+  <p class="gg-small gg-muted gg-mt-4">
+    Write to the ${escapeHtml(OFFICE.label.toLowerCase())} below if you would rather write on paper.
+    Please include enough detail to identify the application or the enquiry concerned.
+  </p>`;
+
+
+/* ==========================================================================
+   CORPORATE INFORMATION
+   ========================================================================== */
+
+/**
+ * Registrations whose issuing authority is actually established.
+ *
+ * Two entries reached the build with the authority itself unconfirmed — the
+ * client supplied "SSC" and "UGC" as bare initials. Those are not listed here.
+ * A missing certificate number can be shown as "in progress" honestly, because
+ * the registration is still a known thing; a missing *name* cannot, because
+ * there is then no claim to qualify. The UGC entry matters most: the
+ * University Grants Commission recognises degree-awarding institutions rather
+ * than private limited companies, so publishing it on a compliance page a
+ * payment gateway reads would assert something that may not be true.
+ *
+ * They stay in site.js with their caveats, and appear the moment the authority
+ * is named.
+ */
+const namedCertifications = () => CERTIFICATIONS.filter(c => !pending(c.name));
+const unnamedCertifications = () => CERTIFICATIONS.filter(c => pending(c.name));
+
+const corporateMarkup = () => `
+  <p class="gg-lead">
+    The registered particulars of the company operating this website.
+  </p>
+  <dl class="gg-deflist gg-deflist--wide">
+    <dt>Registered name</dt>
+    <dd>${escapeHtml(BRAND.legalName)}</dd>
+
+    <dt>Entity type</dt>
+    <dd>Private company limited by shares, incorporated under the Companies Act, 2013</dd>
+
+    <dt>Corporate Identity Number (CIN)</dt>
+    <dd>${identifier(BRAND.cin, 'Published once issued by the Ministry of Corporate Affairs')}</dd>
+
+    <dt>GSTIN</dt>
+    <dd>${identifier(BRAND.gstin, 'Published once GST registration is complete')}</dd>
+
+    <dt>Year of incorporation</dt>
+    <dd>${identifier(BRAND.incorporationYear, 'To be confirmed')}</dd>
+
+    <dt>${escapeHtml(OFFICE.label)}</dt>
+    <dd>${OFFICE.lines.map(escapeHtml).join('<br>')}</dd>
+
+    <dt>Telephone</dt>
+    <dd><a href="tel:${escapeHtml(OFFICE.phone.replace(/\s/g, ''))}">${escapeHtml(OFFICE.phone)}</a></dd>
+
+    <dt>Email</dt>
+    <dd><a href="mailto:${escapeHtml(BRAND.primaryEmail)}">${escapeHtml(BRAND.primaryEmail)}</a></dd>
+
+    <dt>Website</dt>
+    <dd><a href="${escapeHtml(BRAND.websiteUrl)}">${escapeHtml(BRAND.website)}</a></dd>
+  </dl>
+
+  <h3 class="gg-h4 gg-mt-6">Registrations and certifications</h3>
+  <p class="gg-small gg-muted">
+    Registration numbers are published as each certificate is issued. Where a number is
+    not yet shown, the registration is in progress and the entry says so rather than
+    displaying a number that cannot be verified.
+  </p>
+  <div class="gg-table-wrap gg-mt-3">
+    <table class="gg-table">
+      <thead>
+        <tr><th scope="col">Authority</th><th scope="col">Registration</th><th scope="col">Reference</th></tr>
+      </thead>
+      <tbody>
+        ${namedCertifications().map(c => `
+          <tr>
+            <td>${escapeHtml(c.abbr)}</td>
+            <td>${escapeHtml(c.name)}</td>
+            <td>${identifier(c.ref, 'In progress')}</td>
+          </tr>`).join('')}
+      </tbody>
+    </table>
+  </div>
+  ${unnamedCertifications().length ? `
+    <p class="gg-small gg-muted gg-mt-3">
+      A further ${unnamedCertifications().length} registration${unnamedCertifications().length === 1 ? ' is' : 's are'}
+      being confirmed and will be listed here once the issuing authority and the
+      reference are established.
+    </p>` : ''}`;
+
+
+/* ==========================================================================
+   BOOT
+   ========================================================================== */
+
+const mount = (name, markup) => {
+  const host = qs(`[data-legal="${name}"]`);
+  if (host) host.innerHTML = markup;
+};
+
+export const init = () => {
+  mount('refund', refundMarkup());
+  mount('grievance', grievanceMarkup());
+  mount('corporate', corporateMarkup());
+
+  markProseTokens();
+};
+
+/**
+ * Rewrite the {{LEGAL_REVIEW}} markers written directly into the prose notices,
+ * where no renderer would otherwise reach them.
+ *
+ * Text nodes only. Reading a paragraph's textContent and writing back innerHTML
+ * would be shorter, and would silently delete every link inside it — the
+ * privacy notice's mailto: addresses among them — as well as re-parsing the
+ * page's own text as markup. Walking the text nodes touches the tokens and
+ * nothing else, and leaves them greppable in the source, which is how the
+ * outstanding clauses are tracked.
+ */
+const markProseTokens = () => {
+  const scope = qs('[data-legal-prose]');
+  if (!scope) return;
+
+  const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT, {
+    acceptNode: node => node.nodeValue.includes('{{')
+      ? NodeFilter.FILTER_ACCEPT
+      : NodeFilter.FILTER_REJECT
+  });
+
+  const targets = [];
+  while (walker.nextNode()) targets.push(walker.currentNode);
+
+  for (const node of targets) {
+    // A <code>{{LEGAL_REVIEW}}</code> in the review banner is explaining the
+    // convention to the reader. That one is meant to be read as a token.
+    if (node.parentElement.closest('code')) continue;
+    const html = markPending(node.nodeValue);
+    const fragment = document.createRange().createContextualFragment(html);
+    node.parentNode.replaceChild(fragment, node);
+  }
+};

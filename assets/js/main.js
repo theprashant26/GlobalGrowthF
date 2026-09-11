@@ -78,6 +78,7 @@ onReady(async () => {
     boot('csr',          () => import('./modules/csr.js'),          page === 'csr'),
     boot('styleguide',   () => import('./modules/styleguide.js'),   page === 'styleguide'),
     boot('approvals',    () => import('./modules/approvals.js'),    page === 'approvals'),
+    boot('legal',        () => import('./modules/legal.js'),        page === 'legal'),
     boot('photos',       () => import('./modules/photos.js'),       Boolean(qs('[data-photo], [data-gallery]'))),
     boot('sectorGrid',   () => import('./modules/sectorGrid.js'),   Boolean(qs('[data-sector-grid]'))),
     boot('divisionPage', () => import('./modules/divisionPage.js'), Boolean(qs('[data-division]')))

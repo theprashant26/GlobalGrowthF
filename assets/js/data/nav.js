@@ -22,10 +22,17 @@ export const PRIMARY_NAV = [
 /** The navbar's terminal call to action. */
 export const NAV_CTA = { label: 'Contact Us', href: '/contact' };
 
-/** Footer column 2 — group pages. */
+/**
+ * Footer column 2 — group pages.
+ *
+ * "Our Services" is the sectors page under the name a payment gateway's
+ * onboarding checklist asks for. The navbar keeps "Our Sectors", which is the
+ * client's own language for it; this is the same page reachable by the name a
+ * reviewer will look for, not a second copy of it.
+ */
 export const FOOTER_LINKS = [
   { label: 'About the Group',  href: '/about' },
-  { label: 'Our Sectors',      href: '/sectors' },
+  { label: 'Our Services',     href: '/sectors' },
   { label: 'Growth Roadmap',   href: '/roadmap' },
   { label: 'CSR & Sustainability', href: '/csr' },
   { label: 'Careers',          href: '/careers' },
@@ -33,15 +40,26 @@ export const FOOTER_LINKS = [
 ];
 
 /**
- * Footer bottom bar. All three are sections of a single /legal page rather
- * than three near-empty pages — and they point at real anchors, so the footer
- * carries no dead links. The page itself still needs legal review before
- * launch; every clause requiring it is marked in the markup.
+ * Footer bottom bar — the compliance notices.
+ *
+ * All six are sections of a single /legal page rather than six near-empty
+ * pages, and they point at real anchors, so the footer carries no dead links.
+ *
+ * The list is what a payment gateway checks for by name at onboarding: no
+ * account is opened without a reachable refund policy, a grievance route and
+ * the company's statutory identifiers. Renaming "Terms of Use" to "Terms &
+ * Conditions" is for the same reason — it is the phrase on the checklist.
+ *
+ * The page still needs legal review before launch; every clause requiring it
+ * is marked in the markup and renders as a marked gap rather than a token.
  */
 export const LEGAL_LINKS = [
-  { label: 'Privacy Policy', href: '/legal#privacy' },
-  { label: 'Terms of Use',   href: '/legal#terms' },
-  { label: 'Disclaimer',     href: '/legal#disclaimer' }
+  { label: 'Privacy Policy',        href: '/legal#privacy' },
+  { label: 'Terms & Conditions',    href: '/legal#terms' },
+  { label: 'Refund & Cancellation', href: '/legal#refund' },
+  { label: 'Grievance Redressal',   href: '/legal#grievance' },
+  { label: 'Disclaimer',            href: '/legal#disclaimer' },
+  { label: 'Corporate Information', href: '/legal#corporate' }
 ];
 
 /**

@@ -11,7 +11,6 @@ SOCIAL in assets/js/data/site.js — those are what the rendered pages use, and
 structured data that disagrees with the visible page is worse than none.
 
 Deliberate omissions:
-  * No LinkedIn in sameAs — no page has been supplied.
   * No aggregateRating, foundingDate or numberOfEmployees — unverifiable.
   * No legalName identifier — the CIN is still a placeholder.
 Each is listed in CLIENT_CHECKLIST.md so the client can supply real values.
@@ -39,7 +38,7 @@ PAGES = [
     ('careers.html',  '/careers',  'Careers'),
     ('contact.html',  '/contact',  'Contact'),
     ('csr.html',      '/csr',      'CSR & Sustainability'),
-    ('legal.html',    '/legal',    'Legal'),
+    ('legal.html',    '/legal',    'Legal & Compliance'),
 ]
 for name, slug, page in DIVISIONS:
     PAGES.append((page.strip('/') + '/index.html', page.rstrip('/'), name))
@@ -74,6 +73,7 @@ ORGANISATION = {
     },
     "telephone": "+91-92048-04718",
     "sameAs": [
+        "https://www.linkedin.com/company/global-growth-industries-consulting/",
         "https://x.com/Globalgrowth121",
         "https://www.youtube.com/@GlobalGrowthIndustries",
         "https://www.instagram.com/globalgrowthindustries/",

@@ -308,7 +308,12 @@ const feeMarkup = () => `
         return `
         <div${text.attr}>
           <dt>${escapeHtml(point.title)}</dt>
-          <dd>${escapeHtml(text.text)}</dd>
+          <dd>
+            ${escapeHtml(text.text)}
+            ${point.link && !text.pending
+              ? ` <a href="${escapeHtml(point.link.href)}">${escapeHtml(point.link.label)}</a>.`
+              : ''}
+          </dd>
         </div>`;
       }).join('')}
     </dl>

@@ -471,3 +471,117 @@
    and a tint so they read as a form rather than as missing data. */
 .gg-approve-group .gg-table td:empty { background: var(--gg-off); min-inline-size: 110px; }
 .gg-approve-group .gg-table td:empty::after { content: ""; display: block; block-size: 20px; }
+
+/* ==========================================================================
+   LEGAL & COMPLIANCE  (/legal)
+   Six notices on one page rather than six thin pages, because they are read
+   together: an applicant checking the refund terms wants the grievance route
+   next to them, and a payment gateway's reviewer wants all of it at one URL.
+   ========================================================================== */
+
+/* Every notice is a jump target from the footer and the contents list, so the
+   heading must clear the sticky navbar. Was repeated as an inline style on
+   each <article>; it belongs here once. */
+.gg-legal { scroll-margin-block-start: calc(var(--gg-nav-h-sm) + var(--sp-3)); }
+
+/* --- Contents ------------------------------------------------------------- */
+.gg-legal-toc {
+  padding: var(--sp-4) var(--sp-5);
+  margin-block-start: var(--sp-6);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+}
+.gg-legal-toc ol {
+  margin: var(--sp-3) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--sp-2) var(--sp-4);
+  counter-reset: toc;
+}
+.gg-legal-toc li { counter-increment: toc; }
+.gg-legal-toc li::before {
+  content: counter(toc, decimal-leading-zero);
+  margin-inline-end: var(--sp-2);
+  font-size: var(--fs-xs);
+  font-variant-numeric: tabular-nums;
+  color: var(--gg-grey-500);
+}
+.gg-legal-toc a { font-weight: 600; }
+
+/* --- A value the client has not supplied yet ------------------------------
+   The convention is that a {{TOKEN}} never reaches a reader. These notices
+   carry theirs mid-sentence, so the gap is shown as a gap: readable, marked,
+   and obviously not a term that has been agreed. Deliberately the same amber
+   as every other pending state on the site. */
+.gg-pending {
+  background: var(--gg-planned-soft);
+  color: var(--gg-planned);
+  border-block-end: 1px dashed var(--gg-planned);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+  white-space: normal;
+}
+.gg-pending::before { content: "["; }
+.gg-pending::after  { content: " — to be confirmed]"; font-weight: 500; opacity: .8; }
+
+/* --- Definition lists (corporate information, grievance routes) ------------ */
+.gg-deflist {
+  display: grid;
+  grid-template-columns: minmax(0, 14rem) minmax(0, 1fr);
+  gap: var(--sp-2) var(--sp-4);
+  margin: 0;
+}
+.gg-deflist dt {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--gg-grey-700);
+}
+.gg-deflist dd { margin: 0; }
+/* One column on a phone: a 14rem label beside a value does not fit, and a
+   two-column grid here is what pushes the page into horizontal scroll. */
+@media (max-width: 640px) {
+  .gg-deflist { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+  .gg-deflist dd { margin-block-end: var(--sp-3); }
+}
+.gg-mono {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .02em;
+  font-weight: 600;
+}
+
+/* --- Grievance routes ----------------------------------------------------- */
+.gg-grievance {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--sp-4);
+  margin-block-start: var(--sp-4);
+}
+/* A grid item defaults to min-width:auto, so a long officer title stretches
+   its own cell and takes the page with it. Same fix as .gg-approve-groups. */
+.gg-grievance > * { min-inline-size: 0; }
+.gg-grievance__route {
+  padding: var(--sp-4);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+}
+.gg-grievance__route .gg-deflist { grid-template-columns: minmax(0, 1fr); gap: 2px; }
+.gg-grievance__route .gg-deflist dd { margin-block-end: var(--sp-2); }
+
+/* --- The refund draft, on /approvals -------------------------------------- */
+.gg-doc__sub {
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-500);
+  margin-block-start: -4px;
+}
+.gg-doc__warn {
+  margin-block-start: var(--sp-4);
+  padding: var(--sp-3);
+  border-inline-start: 3px solid var(--gg-planned);
+  background: var(--gg-planned-soft);
+  font-size: var(--fs-sm);
+}

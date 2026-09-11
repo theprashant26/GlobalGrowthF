@@ -5529,8 +5529,12 @@ export const APPLICATION_FEE = {
       text: 'Every payment returns an application reference and a receipt to the email address you register. Keep it. It is your proof of payment and the reference any query about your application will be tracked against.'
     },
     {
+      // Summarised, not restated. The policy itself is one document at
+      // /legal#refund, rendered from assets/js/data/refund.js — a refund term
+      // that says one thing here and another there is worth nothing.
       title: 'Refunds',
-      text: '{{APPLICATION_FEE_REFUND_POLICY — to be drafted and confirmed by the company’s legal adviser, stating the circumstances in which the fee is and is not refundable, and the timeline for a refund.}}'
+      text: 'The fee is refunded in full if you are charged more than once for the same application, if a payment is taken but no application is recorded against it, or if the vacancy is withdrawn before applications are screened. It is not refunded once your application has been screened — including if you are not shortlisted, not selected, or you withdraw.',
+      link: { href: '/legal#refund', label: 'Read the full Refund & Cancellation Policy' }
     },
     {
       title: 'Pay only through this website',

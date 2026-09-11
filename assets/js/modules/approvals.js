@@ -64,14 +64,16 @@ const draftMarkup = () => {
 
   return `
   <div class="gg-doc">
-    <p class="gg-doc__label">Proposed wording</p>
+    <p class="gg-doc__label">Proposed wording — published at /legal#refund</p>
     <h3 class="gg-doc__title">${escapeHtml(d.title)}</h3>
+    ${d.subtitle ? `<p class="gg-doc__sub">${escapeHtml(d.subtitle)}</p>` : ''}
     <p>${escapeHtml(d.opening)}</p>
     ${list(d.notRefundable)}
     ${list(d.refundable)}
     ${d.procedure.map(p => `
       <h4 class="gg-doc__h">${escapeHtml(p.heading)}</h4>
       <p>${markDecisions(p.body)}</p>`).join('')}
+    ${d.warning ? `<p class="gg-doc__warn">${escapeHtml(d.warning)}</p>` : ''}
   </div>`;
 };
 

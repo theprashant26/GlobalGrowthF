@@ -12,7 +12,34 @@
  *
  * Anything in `{{...}}` renders through resolve(), so an unanswered decision
  * shows as a decision rather than as a token.
+ *
+ * Figures about the notices are read from jobs.js rather than written here.
+ * This page is sent to the client to be signed against, so a number that has
+ * gone stale since the last batch landed is worse than no number at all.
  */
+
+import { VACANCY_TOTALS, DIVISION_ROLES, OPEN_VACANCIES } from './jobs.js';
+
+const count = n => Number(n).toLocaleString('en-IN');
+const crore = paise => (paise / 1e7).toFixed(1).replace(/\.0$/, '');
+
+/**
+ * What the published notices would collect, at one application per post.
+ *
+ * Summed from each notice's own fee rather than from an average, and stated
+ * per applicant so the reader can scale it themselves — the point of putting
+ * it on this page is that nobody signing it should have to work it out.
+ */
+const FEE_PER_APPLICANT = OPEN_VACANCIES.reduce((n, r) => n + r.vacancies * r.fee, 0);
+
+/** Notices held back because their division has no licence. */
+const WITHHELD = DIVISION_ROLES
+  .filter(d => d.status === 'planned')
+  .reduce((n, d) => n + d.roles.length, 0);
+
+const WITHHELD_DIVISIONS = DIVISION_ROLES
+  .filter(d => d.status === 'planned')
+  .map(d => d.division);
 
 export const APPROVALS_INTRO = {
   eyebrow: 'For approval',
@@ -23,7 +50,8 @@ export const APPROVALS_INTRO = {
     'to members of the public. Both need a decision from Global Growth.',
   items: [
     { n: '01', label: 'Refund policy', who: 'Director — Legal & Compliance', status: 'Draft ready for review' },
-    { n: '02', label: 'Vacancy notices', who: 'HR and Legal & Compliance', status: '126 posts awaiting data' }
+    { n: '02', label: 'Vacancy notices', who: 'HR and Legal & Compliance',
+      status: `All ${VACANCY_TOTALS.notices} received — scale needs confirming` }
   ]
 };
 
@@ -106,7 +134,7 @@ export const REFUND_POLICY = {
     },
     {
       title: 'Can one fee cover more than one application?',
-      body: 'Twenty-two notices are live and more are coming. A candidate eligible for four posts currently pays four times. That is defensible, but it must be stated, or it reads as a charge per attempt rather than per application.'
+      body: `${VACANCY_TOTALS.notices} notices are live across ${VACANCY_TOTALS.divisions} divisions. A candidate eligible for four posts currently pays four times. That is defensible, but it must be stated, or it reads as a charge per attempt rather than per application.`
     },
     {
       title: 'Does the placement agency licence impose its own refund terms?',
@@ -129,9 +157,10 @@ export const VACANCY_REQUEST = {
   cannot: {
     title: 'Two fields the build team cannot fill in',
     body:
-      'Everything else in the tables below can be drafted from the existing structure if ' +
-      'Global Growth would rather review than write. These two cannot, because they are not ' +
-      'copy — they are the commercial terms of a transaction with the public.',
+      'Every notice sent has now been published, so nothing below is still being asked for. ' +
+      'It stays here as the specification for the next batch, and because these two fields ' +
+      'are the ones the build team can never supply — they are not copy, they are the ' +
+      'commercial terms of a transaction with the public.',
     fields: [
       {
         field: 'Vacancies',
@@ -139,7 +168,7 @@ export const VACANCY_REQUEST = {
       },
       {
         field: 'Application fee',
-        why: 'This is money taken from job-seekers. Across 126 posts at the rates already set, the difference between a guessed number and the real one runs into lakhs — collected from people who cannot easily spare ₹250.'
+        why: `This is money taken from job-seekers. Across ${count(VACANCY_TOTALS.posts)} posts at the rates already set, the difference between a guessed number and the real one runs into crores — collected from people who cannot easily spare ₹250.`
       }
     ]
   },
@@ -156,16 +185,17 @@ export const VACANCY_REQUEST = {
 
   notes: [
     'Salary, grade and required documents are already built and only need changing if they have moved. Aviation’s salaries rose sharply between the September structure and these notices — say if the same applies elsewhere.',
-    'Send in batches of three or four divisions. A single message hits the 50,000-character limit, which is what truncated the last one part-way through Healthcare’s third role.',
-    'Banking, Pharmacy, Finance and Insurance are excluded deliberately. They are planned divisions awaiting regulatory approval and must not carry vacancies or fees until licensed.'
+    'Send the next batch as a shared document rather than as a message. A message hits the 50,000-character limit, which is what truncated an earlier one part-way through Healthcare’s third role; the document holding these notices ran to roughly 390,000 characters and came through intact.',
+    `${WITHHELD_DIVISIONS.join(', ')} were sent and have deliberately not been published. Between them the document carries ${WITHHELD} notices with fees attached. They are planned divisions awaiting regulatory approval, and a vacancy notice charging an application fee for an unlicensed activity is the one thing this site is built not to do. They will go live on the day the licences are produced, and not before.`
   ],
 
   scale: {
-    title: 'One thing worth deciding before the rest arrive',
+    title: 'The one decision left, now that the full figure is known',
     body: [
-      'At the four divisions already published, 4,140 posts are advertised. The remaining twenty divisions are broadly the same size, so the finished total will land somewhere near 25,000–30,000 posts, each carrying a ₹99–₹299 fee.',
-      'That is a large number to stand behind. It is worth confirming that the placement licence and the legal sign-off were given against a figure of that order, and not against the four divisions published so far.',
-      'If some of these are indicative headcount plans rather than posts being recruited now, they should not be published as vacancies with fees attached. The site already distinguishes the two: a post with a count and a fee shows as an open notice, everything else shows as position structure. It needs only a decision about which is which.'
+      `All ${VACANCY_TOTALS.notices} notices are published: ${count(VACANCY_TOTALS.posts)} posts across ${VACANCY_TOTALS.divisions} divisions, each carrying a fee of ₹99 to ₹299. This is no longer an estimate — it is what the site now advertises.`,
+      `At one application per post the fees come to about ₹${crore(FEE_PER_APPLICANT)} crore; at ten per post, which is modest for advertised vacancies, about ₹${crore(FEE_PER_APPLICANT * 10)} crore. This is the order of number the placement licence and the legal sign-off need to have been given against. If they were given in September, they were given against 4,140 posts — one-tenth of what is now published — and they should be looked at again before applications open.`,
+      'If some of these are indicative headcount plans rather than posts being recruited now, they should not be published as vacancies with fees attached. The site already distinguishes the two: a post with a count and a fee shows as an open notice, everything else shows as position structure. It needs only a decision about which is which — and removing a count and a fee is a one-line change per post.',
+      `The figure to check each division against is on /careers: every division heading carries its own post count and fee range, so a wrong number can be spotted without opening anything.`
     ]
   }
 };

@@ -144,9 +144,13 @@ const vacancyMarkup = () => {
 
   return `
   <p class="gg-approve-status">
-    ${posts} posts across ${groups.length} divisions still need a notice.
-    ${VACANCY_TOTALS.notices} notices covering ${VACANCY_TOTALS.posts.toLocaleString('en-IN')} posts are already live,
+    ${VACANCY_TOTALS.notices} notices are live, covering
+    ${VACANCY_TOTALS.posts.toLocaleString('en-IN')} posts across ${VACANCY_TOTALS.divisions} divisions,
     with fees from ${rupees(VACANCY_TOTALS.feeLow)} to ${rupees(VACANCY_TOTALS.feeHigh)}.
+    ${posts
+      ? `${posts} position${posts === 1 ? '' : 's'} in ${groups.length} division${groups.length === 1 ? '' : 's'}
+         ${posts === 1 ? 'is' : 'are'} still published as structure only, with no count and no fee.`
+      : 'Every published position now carries a notice.'}
   </p>
 
   <div class="gg-notice gg-notice--fee gg-mt-6">

@@ -22,7 +22,7 @@
  * filtered-out role leaves the tab order and the accessibility tree.
  */
 
-import { qs, qsa, icon, escapeHtml, resolve } from './utils.js';
+import { qs, qsa, icon, escapeHtml, resolve, url } from './utils.js';
 import {
   ALL_ROLES, DIVISION_FILTERS, GRADE_FILTERS, GRADE_MATRIX, GRADE_LABELS,
   CORPORATE_LEVELS, SALARY_BANDS, CORPORATE_DEPARTMENTS, QUALIFICATION_MATRIX,
@@ -311,7 +311,7 @@ const feeMarkup = () => `
           <dd>
             ${escapeHtml(text.text)}
             ${point.link && !text.pending
-              ? ` <a href="${escapeHtml(point.link.href)}">${escapeHtml(point.link.label)}</a>.`
+              ? ` <a href="${escapeHtml(url(point.link.href))}">${escapeHtml(point.link.label)}</a>.`
               : ''}
           </dd>
         </div>`;

@@ -541,8 +541,21 @@ in the final phase) specifies the server work.
 
 ## Legal pages
 
-`/legal` carries the privacy policy, terms of use and disclaimer as three
-anchored sections, and the footer links point at those anchors. **It must be
-reviewed by the company's legal adviser before launch** — every clause needing
-input is marked `{{LEGAL_REVIEW}}` in the markup, and the page carries a
-visible notice saying so. The page is `noindex` until that review happens.
+Seven notices, one page each, indexed at `/legal`: `/privacy`, `/terms`,
+`/refund`, `/grievance`, `/disclaimer`, `/corporate` and `/certificates`. One
+page per policy rather than one page of anchors because a payment gateway's
+onboarding form asks for a URL per policy, and a fragment is not one.
+
+`/refund`, `/grievance`, `/corporate` and `/certificates` render from the data
+files via `modules/legal.js`; `/privacy`, `/terms` and `/disclaimer` keep their
+text as markup, because a lawyer edits those directly.
+
+The refund document lives in `assets/js/data/refund.js` and is rendered by both
+`/refund` and `/approvals` — one source, because a legal text kept in two files
+is how the wrong version gets approved.
+
+**All of them must be reviewed by the company's legal adviser before launch.**
+Every term needing input is marked in the source and renders in amber as the
+thing that is missing — never as a raw token and never as an invented value.
+The pages are `noindex` and blocked in `robots.txt` until that review happens,
+which also blocks the payment gateway application.

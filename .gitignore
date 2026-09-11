@@ -1,1 +1,5 @@
 tools/__pycache__/
+
+# Written by tools/check-pages.py while it runs; removed when it finishes.
+# Listed here so an interrupted run cannot leave it staged.
+_check-harness.html

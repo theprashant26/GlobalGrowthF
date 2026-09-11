@@ -21,6 +21,12 @@
 
 import { onReady, prefersReducedMotion, injectSprite, qs } from './modules/utils.js';
 
+/** The compliance notices, which share one module. See modules/legal.js. */
+const LEGAL_PAGES = new Set([
+  'legal', 'privacy', 'terms', 'refund', 'grievance', 'disclaimer',
+  'corporate', 'certificates'
+]);
+
 /** Marks the document as JS-capable. Reveal styles key off this class, so
  *  setting it early (not on DOMContentLoaded) avoids a flash of visible
  *  content before the reveal animations take over. */
@@ -78,7 +84,7 @@ onReady(async () => {
     boot('csr',          () => import('./modules/csr.js'),          page === 'csr'),
     boot('styleguide',   () => import('./modules/styleguide.js'),   page === 'styleguide'),
     boot('approvals',    () => import('./modules/approvals.js'),    page === 'approvals'),
-    boot('legal',        () => import('./modules/legal.js'),        page === 'legal'),
+    boot('legal',        () => import('./modules/legal.js'),        LEGAL_PAGES.has(page)),
     boot('photos',       () => import('./modules/photos.js'),       Boolean(qs('[data-photo], [data-gallery]'))),
     boot('sectorGrid',   () => import('./modules/sectorGrid.js'),   Boolean(qs('[data-sector-grid]'))),
     boot('divisionPage', () => import('./modules/divisionPage.js'), Boolean(qs('[data-division]')))

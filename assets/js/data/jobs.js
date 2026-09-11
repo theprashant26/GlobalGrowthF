@@ -5530,11 +5530,11 @@ export const APPLICATION_FEE = {
     },
     {
       // Summarised, not restated. The policy itself is one document at
-      // /legal#refund, rendered from assets/js/data/refund.js — a refund term
-      // that says one thing here and another there is worth nothing.
+      // /refund, rendered from assets/js/data/refund.js — a refund term that
+      // says one thing here and another there is worth nothing.
       title: 'Refunds',
       text: 'The fee is refunded in full if you are charged more than once for the same application, if a payment is taken but no application is recorded against it, or if the vacancy is withdrawn before applications are screened. It is not refunded once your application has been screened — including if you are not shortlisted, not selected, or you withdraw.',
-      link: { href: '/legal#refund', label: 'Read the full Refund & Cancellation Policy' }
+      link: { href: '/refund', label: 'Read the full Refund & Cancellation Policy' }
     },
     {
       title: 'Pay only through this website',

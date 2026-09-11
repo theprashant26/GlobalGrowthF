@@ -64,7 +64,7 @@ const draftMarkup = () => {
 
   return `
   <div class="gg-doc">
-    <p class="gg-doc__label">Proposed wording — published at /legal#refund</p>
+    <p class="gg-doc__label">Proposed wording — published at /refund</p>
     <h3 class="gg-doc__title">${escapeHtml(d.title)}</h3>
     ${d.subtitle ? `<p class="gg-doc__sub">${escapeHtml(d.subtitle)}</p>` : ''}
     <p>${escapeHtml(d.opening)}</p>

@@ -24,9 +24,18 @@ export const BASE = new URL('../../../', import.meta.url).pathname;
  */
 const CLEAN_URLS = false;
 
-/** Pages that exist as <name>.html at the site root. */
+/**
+ * Pages that exist as <name>.html at the site root.
+ *
+ * A page missing from this set keeps its extensionless href and 404s on a host
+ * that does not rewrite — which is every host this site is deployed to. Add a
+ * page here when you add it to the root, or its footer link is dead.
+ */
 const ROOT_PAGES = new Set(['about', 'sectors', 'roadmap', 'careers', 'contact',
-                            'csr', 'legal', 'styleguide', '404']);
+                            'csr', 'legal', 'styleguide', '404',
+                            // the compliance notices, one page each
+                            'privacy', 'terms', 'refund', 'grievance',
+                            'disclaimer', 'corporate', 'certificates']);
 
 /**
  * Resolve a site-absolute path ("/about", "/assets/x.css", "/aviation/") to

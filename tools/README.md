@@ -12,8 +12,12 @@ them from anywhere. Only `build-images.py` has a dependency: Pillow
 | Script | Generates | Run it when |
 |---|---|---|
 | `build-images.py` | Responsive WebP + JPEG variants in `assets/images/{divisions,team,og}/` | A photograph is added or replaced |
-| `build-seo.py` | The JSON-LD block in all 20 pages, plus `sitemap.xml` | A page is added, or `sectors.js` / the office / social data changes |
+| `build-seo.py` | The JSON-LD block in all 27 pages, plus `sitemap.xml` | A page is added, or `sectors.js` / the office / social data changes |
 | `build-partials.py` | `partials/header.html` and `partials/footer.html` | `navbar.js` or `footer.js` changes |
+| `new-page.py` | A new root page carrying the shared head, nav, hero and footer | A page is added — then add it to `PAGES` in `build-seo.py` |
+| `check-pages.py` | Nothing; reports overflow, visible `{{tokens}}`, console errors and empty sections | Before every commit that touches markup, CSS or a renderer |
+| `import-vacancies.py` | JSON of the client's vacancy notices | A batch of notices arrives |
+| `merge-vacancies.py` | Splices those notices into `assets/js/data/jobs.js` | After `import-vacancies.py`, once its report looks right |
 
 ---
 

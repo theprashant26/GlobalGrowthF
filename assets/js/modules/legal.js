@@ -1,23 +1,29 @@
 /**
- * GLOBAL GROWTH — LEGAL PAGE
+ * GLOBAL GROWTH — THE COMPLIANCE PAGES
  * ---------------------------------------------------------------------------
- * Renders the three sections of /legal that are built from data rather than
- * written into the markup:
+ * Drives the notices that live at their own addresses:
  *
- *   #refund     the refund & cancellation policy, from refund.js
- *   #grievance  the grievance route, from site.js and refund.js
- *   #corporate  the statutory identifiers, from site.js
+ *   /legal         an index of all seven
+ *   /refund        the refund & cancellation policy, from refund.js
+ *   /grievance     the grievance routes
+ *   /corporate     the statutory identifiers, from site.js
+ *   /certificates  the registrations, from site.js
  *
- * The first three notices on the page — privacy, terms, disclaimer — stay as
- * markup. They are prose a lawyer edits directly, and putting them behind a
- * renderer would make them harder to review, not easier.
+ * and marks the pending terms on the three that are prose — /privacy, /terms
+ * and /disclaimer. Those keep their text as markup: a lawyer edits them
+ * directly, and putting them behind a renderer would make them harder to
+ * review, not easier.
  *
- * WHY THIS PAGE EXISTS IN THIS SHAPE
- * A payment gateway will not open a merchant account without a reachable
- * refund policy, a named grievance route and the company's statutory
- * identifiers. All three were scattered or absent: the refund draft lived only
- * on the internal review page, the grievance contact only inside a careers
- * data file, and the CIN and GSTIN only in a footer that never printed them.
+ * WHY ONE PAGE PER NOTICE
+ * A payment gateway's onboarding form asks for one URL per policy, and a
+ * fragment of a shared page is not one. They were sections of /legal until
+ * that was established; /legal is now the index that links them.
+ *
+ * WHAT WAS MISSING BEFORE ANY OF THIS
+ * No refund policy anywhere public, no grievance route, no statutory
+ * identifiers. The refund draft existed but lived only on the internal review
+ * page, the grievance contact only inside a careers data file, and the CIN and
+ * GSTIN only in a data file no page printed.
  *
  * PENDING VALUES
  * Several terms here are still the client's to set. This module never prints a
@@ -27,9 +33,10 @@
  * company would be held to.
  */
 
-import { qs, escapeHtml } from './utils.js';
+import { qs, escapeHtml, url } from './utils.js';
 import { BRAND, OFFICE, CERTIFICATIONS } from '../data/site.js';
 import { REFUND_DOCUMENT } from '../data/refund.js';
+import { LEGAL_LINKS } from '../data/nav.js';
 
 /* ==========================================================================
    PENDING TEXT
@@ -202,48 +209,113 @@ const corporateMarkup = () => `
     <dd><a href="${escapeHtml(BRAND.websiteUrl)}">${escapeHtml(BRAND.website)}</a></dd>
   </dl>
 
-  <h3 class="gg-h4 gg-mt-6">Registrations and certifications</h3>
-  <p class="gg-small gg-muted">
-    Registration numbers are published as each certificate is issued. Where a number is
-    not yet shown, the registration is in progress and the entry says so rather than
-    displaying a number that cannot be verified.
+  <p class="gg-mt-6">
+    The group's registrations and certifications, each with the reference against which
+    it can be checked, are listed at
+    <a href="certificates.html">Certificates &amp; Registrations</a>.
+  </p>`;
+
+
+/* ==========================================================================
+   CERTIFICATES & REGISTRATIONS
+   ========================================================================== */
+
+const certificatesMarkup = () => `
+  <p class="gg-lead">
+    Each entry names the issuing authority and the reference the registration can be
+    checked against. A certification nobody can verify is a logo, not a credential.
   </p>
-  <div class="gg-table-wrap gg-mt-3">
+  <p class="gg-small gg-muted gg-mt-3">
+    References are published as each certificate is issued. Where one is not yet shown,
+    the registration is in progress and the entry says so rather than displaying a number
+    that cannot be checked.
+  </p>
+  <div class="gg-table-wrap gg-mt-4">
     <table class="gg-table">
       <thead>
-        <tr><th scope="col">Authority</th><th scope="col">Registration</th><th scope="col">Reference</th></tr>
+        <tr>
+          <th scope="col">Authority</th>
+          <th scope="col">Registration</th>
+          <th scope="col">Reference</th>
+        </tr>
       </thead>
       <tbody>
         ${namedCertifications().map(c => `
           <tr>
             <td>${escapeHtml(c.abbr)}</td>
-            <td>${escapeHtml(c.name)}</td>
+            <td>${escapeHtml(c.name)}<br><span class="gg-small gg-muted">${escapeHtml(c.detail)}</span></td>
             <td>${identifier(c.ref, 'In progress')}</td>
           </tr>`).join('')}
       </tbody>
     </table>
   </div>
   ${unnamedCertifications().length ? `
-    <p class="gg-small gg-muted gg-mt-3">
+    <p class="gg-small gg-muted gg-mt-4">
       A further ${unnamedCertifications().length} registration${unnamedCertifications().length === 1 ? ' is' : 's are'}
-      being confirmed and will be listed here once the issuing authority and the
-      reference are established.
-    </p>` : ''}`;
+      not listed. For ${unnamedCertifications().length === 1 ? 'it' : 'those'} the issuing authority itself is
+      still being confirmed, and naming a registration whose authority is unsettled would
+      state something the company cannot yet stand behind.
+      ${unnamedCertifications().length === 1 ? 'It' : 'They'} will appear here once established.
+    </p>` : ''}
+  <p class="gg-small gg-muted gg-mt-4">
+    Company registration details are at
+    <a href="corporate.html">Corporate Information</a>.
+  </p>`;
+
+
+/* ==========================================================================
+   INDEX  (/legal)
+   ========================================================================== */
+
+/**
+ * One card per notice, built from the same list the footer renders.
+ *
+ * Deriving it from LEGAL_LINKS rather than writing it out again means a notice
+ * cannot be added to the footer and missed here, or renamed in one place only.
+ */
+const SUMMARIES = {
+  '#privacy':     'What this site collects, why it is held, and for how long.',
+  '#terms':       'The terms on which you may use this website.',
+  '#refund':      'When an application fee is returned and when it is not.',
+  '#grievance':   'How to raise a complaint, and who answers it.',
+  '#disclaimer':  'What is operational, and what is planned and awaiting approval.',
+  '#corporate':   'Registered name, statutory identifiers and registered office.',
+  '#certificates':'Registrations held, each with its verifiable reference.'
+};
+
+const summaryFor = href => {
+  const key = Object.keys(SUMMARIES).find(k => href.includes(k.slice(1)));
+  return key ? SUMMARIES[key] : '';
+};
+
+// href goes through url(): LEGAL_LINKS holds site-absolute paths, and the host
+// serves /privacy.html rather than /privacy. Writing the raw href here renders
+// a link that 404s on every deployment — which is what it did.
+const indexMarkup = () => LEGAL_LINKS.map(link => `
+  <a class="gg-legal-card" href="${escapeHtml(url(link.href))}">
+    <span class="gg-legal-card__title">${escapeHtml(link.label)}</span>
+    <span class="gg-legal-card__text">${escapeHtml(summaryFor(link.href))}</span>
+  </a>`).join('');
 
 
 /* ==========================================================================
    BOOT
    ========================================================================== */
 
-const mount = (name, markup) => {
+const mount = (name, build) => {
   const host = qs(`[data-legal="${name}"]`);
-  if (host) host.innerHTML = markup;
+  if (host) host.innerHTML = build();
 };
 
 export const init = () => {
-  mount('refund', refundMarkup());
-  mount('grievance', grievanceMarkup());
-  mount('corporate', corporateMarkup());
+  // Only one of these is present on any given page; the rest are no-ops. The
+  // markup is built lazily so a page never pays to render four notices it does
+  // not show.
+  mount('index', indexMarkup);
+  mount('refund', refundMarkup);
+  mount('grievance', grievanceMarkup);
+  mount('corporate', corporateMarkup);
+  mount('certificates', certificatesMarkup);
 
   markProseTokens();
 };

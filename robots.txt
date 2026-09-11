@@ -16,14 +16,21 @@ Disallow: /tools/
 Disallow: /assets/images/offices/_masters/
 Disallow: /assets/images/global/_masters/
 
-# The legal notices are withheld from the index until they have been reviewed
-# by the company's legal adviser.
+# The compliance notices are withheld from the index until they have been
+# reviewed by the company's legal adviser.
 #
-# REMOVE THIS LINE BEFORE APPLYING FOR A PAYMENT GATEWAY, together with the
-# noindex in legal.html. /legal now carries the refund & cancellation policy,
-# the grievance route and the corporate identifiers, which is the set an
-# acquirer checks for; leaving them uncrawlable works against the application.
-# Both are one-line changes and both wait on the same legal sign-off.
+# REMOVE THESE LINES BEFORE APPLYING FOR A PAYMENT GATEWAY, together with the
+# noindex in each of the pages. This is the set an acquirer checks for — the
+# refund policy, the grievance route and the corporate identifiers among them —
+# and leaving them uncrawlable works against the application. Every one is a
+# one-line change and all of them wait on the same legal sign-off.
 Disallow: /legal
+Disallow: /privacy
+Disallow: /terms
+Disallow: /refund
+Disallow: /grievance
+Disallow: /disclaimer
+Disallow: /corporate
+Disallow: /certificates
 
 Sitemap: https://www.globalgrowthindustries.com/sitemap.xml

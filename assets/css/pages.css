@@ -585,3 +585,38 @@
   background: var(--gg-planned-soft);
   font-size: var(--fs-sm);
 }
+
+/* --- The index at /legal -------------------------------------------------- */
+.gg-legal-index {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: var(--sp-3);
+  margin-block-start: var(--sp-6);
+}
+.gg-legal-index > * { min-inline-size: 0; }
+.gg-legal-card {
+  display: block;
+  padding: var(--sp-4);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-legal-card:hover,
+.gg-legal-card:focus-visible {
+  border-color: var(--gg-green-500);
+  box-shadow: var(--gg-shadow-sm);
+}
+.gg-legal-card__title {
+  display: block;
+  font-weight: 600;
+  margin-block-end: 4px;
+}
+.gg-legal-card__text {
+  display: block;
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-700);
+}

@@ -117,8 +117,12 @@ qualification is exactly the misreading the careers notice exists to prevent.
 
 ## 4. Legal review — BLOCKS LAUNCH
 
-`/legal` carries the privacy policy, terms and disclaimer. It is `noindex`
-until reviewed. **8 clauses** need a lawyer, marked `{{LEGAL_REVIEW}}`:
+The compliance notices are one page each — `/privacy`, `/terms`, `/refund`,
+`/grievance`, `/disclaimer`, `/corporate` and `/certificates`, indexed at
+`/legal`. All are `noindex` until reviewed. Nothing outstanding renders as a
+raw token: each gap shows in amber as the thing that is missing.
+
+**Data protection and general terms** — a lawyer's call:
 
 - Data retention period for enquiries
 - Grievance Officer under the DPDP Act 2023 — name, designation, address
@@ -128,8 +132,23 @@ until reviewed. **8 clauses** need a lawyer, marked `{{LEGAL_REVIEW}}`:
 - Confirmation that the "no third-party analytics" statement stays true
 - Last-reviewed date
 
-Once signed off, remove `Disallow: /legal` from `robots.txt` and delete the
-review notice at the top of the page.
+**Refund terms** — set these in `assets/js/data/refund.js` and both `/refund`
+and `/approvals` update together:
+
+- Acknowledgement period for a refund request
+- Decision period
+- Refund settlement period
+- Grievance officer for fee disputes — name and designation
+- Grievance email — should differ from the applications inbox
+
+Once signed off, remove the `Disallow:` lines for these pages from
+`robots.txt`, remove the `noindex` from each page, and delete the review
+notices.
+
+**This blocks the payment gateway, not just launch.** No acquirer opens a
+merchant account without a reachable refund policy, a named grievance route and
+the company's statutory identifiers, and right now `robots.txt` deliberately
+hides all three.
 
 **Also worth a lawyer's eye:** the careers notice on `/careers` is published
 exactly as supplied. It is the strongest protection on the site against the

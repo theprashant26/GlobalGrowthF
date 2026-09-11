@@ -64,7 +64,7 @@ export const APPROVALS_INTRO = {
 
 export const REFUND_POLICY = {
   status:
-    'Published at /legal#refund, because a payment gateway will not open a merchant ' +
+    'Published at /refund, because a payment gateway will not open a merchant ' +
     'account without a reachable refund policy. The terms below are live; the six ' +
     'periods and named officers are not — those render on the public page as marked ' +
     'gaps, never as invented values. Confirming them is what closes this item.',
@@ -79,7 +79,7 @@ export const REFUND_POLICY = {
   },
 
   /**
-   * The draft itself. Held in refund.js because /legal publishes the same
+   * The draft itself. Held in refund.js because /refund publishes the same
    * document, and a legal text kept in two files is how the wrong version gets
    * approved. What stays here is only the material for reviewing it.
    */
@@ -117,9 +117,9 @@ export const REFUND_POLICY = {
   onceApproved:
     'Fill the six values in assets/js/data/refund.js — the three periods and the grievance ' +
     'officer’s name and email — replacing each placeholder with the agreed term. ' +
-    'Nothing else changes: /legal#refund and this page both render from that one file, so ' +
+    'Nothing else changes: /refund and this page both render from that one file, so ' +
     'the amber gaps become ordinary sentences on both at the same moment. The two officers ' +
-    'named in /legal#grievance are set the same way.'
+    'named in /grievance are set the same way.'
 };
 
 /* ===========================================================================

@@ -4,17 +4,17 @@
  * The document itself, and nothing else. It is read by two pages that must
  * never disagree:
  *
- *   /legal#refund      the public policy a payment gateway and an applicant read
+ *   /refund            the public policy a payment gateway and an applicant read
  *   /approvals#refund  the same text, presented for Legal & Compliance to sign
  *
- * It lives here rather than inside approvals.js because /legal must not import
+ * It lives here rather than inside approvals.js because /refund must not import
  * that file: approvals.js reads jobs.js for its figures, and jobs.js is 400 KB
  * of vacancy notices that a legal page has no use for.
  *
  * PENDING VALUES
  * Six terms are still the client's to set, and they are carried as
  * {{DECISION_*}} tokens. On /approvals they render as the decisions being
- * asked for; on /legal they render as "being confirmed". Neither page ever
+ * asked for; on /refund they render as "being confirmed". Neither page ever
  * prints the raw token, and no suggested value is ever published as though it
  * had been agreed — a period this file invented, shown to an applicant as
  * policy, is a term the company would be held to.

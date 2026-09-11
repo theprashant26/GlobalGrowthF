@@ -42,24 +42,26 @@ export const FOOTER_LINKS = [
 /**
  * Footer bottom bar — the compliance notices.
  *
- * All six are sections of a single /legal page rather than six near-empty
- * pages, and they point at real anchors, so the footer carries no dead links.
+ * One page each, not sections of a shared one. A payment gateway's onboarding
+ * form asks for a URL per policy and a fragment of a combined page does not
+ * satisfy it, so each notice has its own address; /legal is the index that
+ * links them and is where anyone arriving at the old anchors still lands.
  *
- * The list is what a payment gateway checks for by name at onboarding: no
- * account is opened without a reachable refund policy, a grievance route and
- * the company's statutory identifiers. Renaming "Terms of Use" to "Terms &
- * Conditions" is for the same reason — it is the phrase on the checklist.
+ * The labels are the ones an acquirer checks for by name — which is also why
+ * "Terms of Use" became "Terms & Conditions". No account is opened without a
+ * reachable refund policy, a grievance route and the statutory identifiers.
  *
- * The page still needs legal review before launch; every clause requiring it
- * is marked in the markup and renders as a marked gap rather than a token.
+ * These still need legal review before launch; every term requiring it renders
+ * as a marked gap rather than as a token or an invented value.
  */
 export const LEGAL_LINKS = [
-  { label: 'Privacy Policy',        href: '/legal#privacy' },
-  { label: 'Terms & Conditions',    href: '/legal#terms' },
-  { label: 'Refund & Cancellation', href: '/legal#refund' },
-  { label: 'Grievance Redressal',   href: '/legal#grievance' },
-  { label: 'Disclaimer',            href: '/legal#disclaimer' },
-  { label: 'Corporate Information', href: '/legal#corporate' }
+  { label: 'Privacy Policy',        href: '/privacy' },
+  { label: 'Terms & Conditions',    href: '/terms' },
+  { label: 'Refund & Cancellation', href: '/refund' },
+  { label: 'Grievance Redressal',   href: '/grievance' },
+  { label: 'Disclaimer',            href: '/disclaimer' },
+  { label: 'Corporate Information', href: '/corporate' },
+  { label: 'Certificates & Registrations', href: '/certificates' }
 ];
 
 /**
@@ -73,5 +75,7 @@ export const PAGE_TITLES = {
   '/roadmap':  'Growth Roadmap',
   '/careers':  'Careers',
   '/contact':  'Contact',
-  '/csr':      'CSR & Sustainability'
+  '/csr':      'CSR & Sustainability',
+  '/legal':    'Legal & Compliance',
+  ...Object.fromEntries(LEGAL_LINKS.map(link => [link.href, link.label]))
 };

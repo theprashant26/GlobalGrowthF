@@ -348,3 +348,126 @@
   margin-block-end: var(--sp-3);
 }
 .sg-note .gg-icon { color: var(--gg-info); margin-block-start: 2px; }
+
+/* ==========================================================================
+   APPROVALS  (/approvals)
+   A review page, not part of the public site. Styled as a document to be
+   signed rather than as marketing: quieter than the rest of the site, with
+   the things needing a decision made impossible to skim past.
+   ========================================================================== */
+.page-approvals { background: var(--gg-white); }
+
+/* --- The two items, as a summary at the top ------------------------------- */
+.gg-approve-items {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-3);
+}
+@media (min-width: 700px) { .gg-approve-items { grid-template-columns: repeat(2, 1fr); } }
+
+.gg-approve-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-lg);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  border-block-start: 3px solid var(--gg-planned);
+}
+.gg-approve-item__num {
+  font-family: var(--gg-font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--gg-line);
+  font-variant-numeric: tabular-nums;
+}
+.gg-approve-item__label { font-size: var(--fs-h3); margin: 0; }
+.gg-approve-item__who {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-grey-500);
+  margin-block-end: var(--sp-1);
+}
+
+/* --- Section status line -------------------------------------------------- */
+.gg-approve-status {
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--gg-r-sm);
+  background: var(--gg-planned-soft);
+  border-inline-start: 3px solid var(--gg-planned);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--gg-grey-700);
+  max-inline-size: 90ch;
+}
+
+/* --- The draft, set as a document ----------------------------------------
+   Deliberately unlike the surrounding page: a bordered sheet, so a reader can
+   see where our commentary stops and the proposed wording starts. */
+.gg-doc {
+  padding: var(--sp-4);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  border: 1px solid var(--gg-line);
+  box-shadow: var(--gg-shadow-sm);
+}
+.gg-doc__label {
+  font-size: var(--fs-xs);
+  font-weight: 700;
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+  color: var(--gg-grey-500);
+}
+.gg-doc__title { font-size: var(--fs-h4); margin-block: 6px var(--sp-3); }
+.gg-doc__h {
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--gg-ink);
+  margin-block: var(--sp-3) 6px;
+}
+.gg-doc p, .gg-doc li { font-size: var(--fs-sm); color: var(--gg-grey-700); }
+
+/* An unanswered decision inside the draft. On this page the gap IS the
+   content — it is what the reader is being asked to fill in — so it is
+   marked rather than hidden. */
+.gg-decision {
+  background: var(--gg-planned-soft);
+  color: var(--gg-planned);
+  border-block-end: 1px dashed var(--gg-planned);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 600;
+  font-style: normal;
+}
+.gg-decision::before { content: "decide: "; opacity: .7; font-weight: 500; }
+
+/* --- Outstanding posts, grouped by division ------------------------------- */
+.gg-approve-groups { display: grid; gap: var(--sp-5); }
+/* A grid item defaults to min-width:auto, so the 640px-wide table inside each
+   group stretches its own cell rather than scrolling within .gg-table-wrap —
+   which takes the whole page with it at 375px. Same fix as .gg-split > *. */
+.gg-approve-groups > * { min-inline-size: 0; }
+.gg-approve-group__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-h4);
+  margin-block-end: var(--sp-2);
+}
+.gg-approve-group__count {
+  margin-inline-start: auto;
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--gg-grey-500);
+  font-variant-numeric: tabular-nums;
+}
+/* The blank cells are the point — give them enough height to be written into
+   and a tint so they read as a form rather than as missing data. */
+.gg-approve-group .gg-table td:empty { background: var(--gg-off); min-inline-size: 110px; }
+.gg-approve-group .gg-table td:empty::after { content: ""; display: block; block-size: 20px; }

@@ -7,6 +7,7 @@ Allow: /
 # Development and reference pages — not part of the public site.
 Disallow: /styleguide.html
 Disallow: /division-template.html
+Disallow: /approvals.html
 Disallow: /partials/
 Disallow: /tools/
 

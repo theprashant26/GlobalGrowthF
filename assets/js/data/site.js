@@ -384,7 +384,7 @@ export const LEADERSHIP = [
     bio: '{{CHAIRMAN_BIO — background, sector experience and the mandate held at group level.}}'
   },
   {
-    name: 'Paresh Nath Sutradhar',
+    name: 'Paresh Nath',
     role: 'Managing Director',
     bio: '{{MD_BIO — operating background and the divisions reporting into this role.}}'
   },

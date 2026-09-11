@@ -145,15 +145,14 @@ be reviewed alongside the rest.
 | Role | Name |
 |---|---|
 | Chairman | Sahil Yadav |
-| Managing Director | Paresh Nath Sutradhar |
+| Managing Director | Paresh Nath |
 | Director — Operations | Lavkush Kumar |
 | Director — Finance | Sagar Singh |
 | Director — Legal & Compliance | Ashwini Kumar |
 | Director — Human Resources | Riya Modak |
 
-**One thing to confirm:** "PareshNath" was supplied as a single word. We have
-published it as **Paresh Nath Sutradhar**, on the assumption a space was
-intended. Say the word and it goes back exactly as you wrote it.
+**Settled 11 September 2026:** the Managing Director is published as
+**Paresh Nath** — two words, no surname — at the client's instruction.
 
 ### The stock portraits have been removed
 

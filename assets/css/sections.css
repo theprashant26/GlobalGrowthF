@@ -2290,3 +2290,89 @@
   color: var(--gg-grey-500);
   max-inline-size: 70ch;
 }
+
+/* ==========================================================================
+   32. POSITION CATALOGUE — GROUPED BY DIVISION
+   A flat list of every position ran to ~63,000px and ~6,000 DOM elements.
+   Each division is now a <details> that starts closed: native, keyboard
+   operable, announced correctly, and it still works with no JavaScript.
+   ========================================================================== */
+.gg-div-group {
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+  overflow: hidden;
+  transition: border-color var(--gg-dur-fast) var(--gg-ease),
+              box-shadow var(--gg-dur-fast) var(--gg-ease);
+}
+.gg-div-group + .gg-div-group { margin-block-start: var(--sp-2); }
+.gg-div-group[open] { border-color: var(--gg-green-500); box-shadow: var(--gg-shadow-sm); }
+.gg-div-group.is-planned { opacity: .78; }
+.gg-div-group.is-planned[open] { border-color: var(--gg-planned); }
+
+.gg-div-group__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-1) var(--sp-2);
+  padding: var(--sp-3);
+  cursor: pointer;
+  list-style: none;
+  background: var(--gg-off);
+}
+.gg-div-group__head::-webkit-details-marker { display: none; }
+.gg-div-group__head::marker { content: ""; }
+.gg-div-group__head:hover { background: var(--gg-success-soft); }
+.gg-div-group.is-planned .gg-div-group__head:hover { background: var(--gg-planned-soft); }
+
+.gg-div-group__icon { color: var(--gg-grey-500); flex: none; transition: transform var(--gg-dur-fast) var(--gg-ease); }
+.gg-div-group[open] .gg-div-group__icon { transform: rotate(180deg); }
+
+.gg-div-group__name {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h4);
+  font-weight: 700;
+  color: var(--gg-ink);
+}
+.gg-div-group__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px var(--sp-2);
+  margin-inline-start: auto;
+  font-size: var(--fs-sm);
+  color: var(--gg-grey-500);
+}
+/* The two facts that decide whether a reader opens the section. */
+.gg-div-group__open {
+  font-weight: 700;
+  color: var(--gg-green-700);
+  font-variant-numeric: tabular-nums;
+}
+.gg-div-group__fee {
+  font-weight: 600;
+  color: var(--gg-planned);
+  font-variant-numeric: tabular-nums;
+}
+.gg-div-group__matches {
+  padding: 3px 10px;
+  border-radius: var(--gg-r-pill);
+  background: var(--gg-navy-700);
+  color: var(--gg-white);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+}
+
+.gg-div-group__body { padding: var(--sp-3); display: grid; gap: var(--sp-2); }
+/* A card inside a group no longer needs to repeat the division name — the
+   section heading directly above it already says so. */
+.gg-div-group__body .gg-job-card__dept { display: none; }
+
+@media (max-width: 640px) {
+  /* Below this the summary wraps to three or four lines and the auto margin
+     pushes the meta into a column of its own. Let it start on a new line
+     instead, aligned with the name. */
+  .gg-div-group__meta { margin-inline-start: 0; inline-size: 100%; }
+}
+
+.gg-jobs-head { flex-wrap: wrap; gap: var(--sp-2); }

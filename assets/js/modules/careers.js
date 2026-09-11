@@ -29,7 +29,7 @@ import {
   STANDARD_DOCUMENTS, HR_DOCUMENTS, RECRUITMENT_PROCESS, PROBATION,
   PROMOTION_PATH, EMPLOYEE_CODE, CAREERS_DISCLAIMER, BENEFITS, ROLE_COUNTS,
   APPLICATION_FEE, VACANCY_TOTALS, isVacancy, rupees,
-  EMPLOYMENT_TYPE, COMPENSATION_NOTE
+  EMPLOYMENT_TYPE, COMPENSATION_NOTE, DIVISION_ROLES
 } from '../data/jobs.js';
 
 /* ==========================================================================
@@ -168,6 +168,79 @@ const roleMarkup = role => {
       </div>
     </details>
   </article>`;
+};
+
+/**
+ * The catalogue, grouped by division.
+ *
+ * A flat list of every position ran to roughly 63,000 pixels and 6,000 DOM
+ * elements — forty screen-heights of scrolling, and past the point where
+ * Lighthouse starts calling the DOM excessive. With the full 27 divisions it
+ * would have been three times that.
+ *
+ * So each division is a <details> that starts closed. The summary carries
+ * everything needed to decide whether to open it: how many positions, how many
+ * posts are actually open, and the fee range. <details> rather than a scripted
+ * accordion because it is keyboard-operable, announced correctly, and still
+ * works if this module never runs.
+ */
+const groupMarkup = division => {
+  const roles = ALL_ROLES.filter(r => r.divisionId === division.id);
+  if (!roles.length) return '';
+
+  const planned = division.status === 'planned';
+  const open = roles.filter(r => isVacancy(r) && !planned);
+  const posts = open.reduce((n, r) => n + r.vacancies, 0);
+  const fees = open.map(r => r.fee).filter(Number.isFinite);
+
+  return `
+  <details class="gg-div-group${planned ? ' is-planned' : ''}"
+           id="division-${escapeHtml(division.id)}"
+           data-division-group="${escapeHtml(division.id)}">
+    <summary class="gg-div-group__head">
+      <span class="gg-div-group__icon">${icon('chevron-down', 'gg-icon gg-icon--sm')}</span>
+      <span class="gg-div-group__name">${escapeHtml(division.brandName)}</span>
+      <span class="gg-div-group__meta">
+        ${roles.length} ${roles.length === 1 ? 'position' : 'positions'}
+        ${open.length
+          ? `<span class="gg-div-group__open">${posts.toLocaleString('en-IN')} posts open</span>`
+          : ''}
+        ${fees.length
+          ? `<span class="gg-div-group__fee">${
+              Math.min(...fees) === Math.max(...fees)
+                ? rupees(fees[0])
+                : `${rupees(Math.min(...fees))}–${rupees(Math.max(...fees))}`
+            }</span>`
+          : ''}
+        ${planned
+          ? `<span class="gg-badge gg-badge--planned">Planned · ${escapeHtml(division.regulator || 'approval required')}</span>`
+          : ''}
+      </span>
+      <span class="gg-div-group__matches" data-group-matches hidden></span>
+    </summary>
+    <div class="gg-div-group__body" data-group-body></div>
+  </details>`;
+};
+
+const groupedMarkup = () => DIVISION_ROLES.map(groupMarkup).join('');
+
+/**
+ * Fill a division's body the first time it is opened.
+ *
+ * <details> keeps its children in the DOM whether open or closed, so rendering
+ * all 1,100+ cards up front costs ~6,700 elements on a page where every other
+ * page is ~1,200 — past the point Lighthouse calls the DOM excessive, and all
+ * of it invisible. Bodies are populated on demand instead.
+ *
+ * Filtering counts matches from the data rather than from the DOM precisely so
+ * that an unopened division can still be filtered correctly.
+ */
+const fillGroup = group => {
+  const body = qs('[data-group-body]', group);
+  if (!body || body.dataset.filled) return;
+  const id = group.dataset.divisionGroup;
+  body.innerHTML = ALL_ROLES.filter(r => r.divisionId === id).map(roleMarkup).join('');
+  body.dataset.filled = 'yes';
 };
 
 const selectMarkup = (id, label, options) => `
@@ -338,10 +411,73 @@ export const init = () => {
   }
 
   if (!list) return;
-  list.innerHTML = ALL_ROLES.map(roleMarkup).join('');
+  list.innerHTML = groupedMarkup();
 
   const count = qs('[data-careers="count"]');
   const empty = qs('[data-careers="empty"]');
+  const groups = qsa('[data-division-group]', list);
+
+  /* --- Expand and collapse ------------------------------------------------
+     A control rather than a link, because it changes state on this page. */
+  const toggleAll = qs('[data-careers="toggle-all"]');
+  const syncToggle = () => {
+    if (!toggleAll) return;
+    const openCount = groups.filter(g => g.open && !g.hidden).length;
+    const all = openCount === groups.filter(g => !g.hidden).length && openCount > 0;
+    toggleAll.textContent = all ? 'Collapse all divisions' : 'Expand all divisions';
+    toggleAll.setAttribute('aria-expanded', String(all));
+  };
+  toggleAll?.addEventListener('click', () => {
+    const shouldOpen = toggleAll.getAttribute('aria-expanded') !== 'true';
+    groups.forEach(g => {
+      if (g.hidden) return;
+      if (shouldOpen) fillGroup(g);
+      g.open = shouldOpen;
+    });
+    if (shouldOpen) applyFilterTo(qsa('.gg-job-card', list));
+    syncToggle();
+  });
+
+  // Capture phase: `toggle` does not bubble, so the listener has to see it on
+  // the way down. Fill before the browser paints the opened section.
+  list.addEventListener('toggle', event => {
+    const group = event.target.closest?.('[data-division-group]');
+    if (group?.open) {
+      fillGroup(group);
+      applyFilterTo(qsa('.gg-job-card', group));
+    }
+    syncToggle();
+  }, true);
+
+  /* --- Deep links ---------------------------------------------------------
+     A link to #aviation-3 must open the division that holds it, or it lands on
+     a collapsed section and looks broken. Runs on load and on every hashchange.
+     Sector-scoped ids (#division-aviation) open that division whole. */
+  const openFromHash = () => {
+    const id = location.hash.slice(1);
+    if (!id) return;
+    // The target may be a role inside a group, or the group itself. A role's
+    // id belongs to a card that does not exist until its group is filled, so
+    // resolve the division from the id rather than from the DOM.
+    const divisionId = id.startsWith('division-')
+      ? id.slice('division-'.length)
+      : ALL_ROLES.find(r => r.id === id)?.divisionId;
+    const group = divisionId && list.querySelector(`[data-division-group="${CSS.escape(divisionId)}"]`);
+    if (!group) return;
+
+    fillGroup(group);
+    group.open = true;
+    applyFilterTo(qsa('.gg-job-card', group));
+    syncToggle();
+
+    const target = list.querySelector(`#${CSS.escape(id)}`);
+    if (!target) return;
+    // The section was closed when the browser tried to scroll, so do it again
+    // now that the target has a position.
+    requestAnimationFrame(() => target.scrollIntoView({ block: 'center' }));
+  };
+  window.addEventListener('hashchange', openFromHash);
+  openFromHash();
 
   if (filters) {
     filters.innerHTML = `
@@ -357,27 +493,63 @@ export const init = () => {
         })))}</div>`;
   }
 
-  const apply = () => {
+  /** The current filter state, read from the selects. */
+  const chosenNow = () => {
     const chosen = {};
     qsa('[data-role-filter]', filters || document).forEach(select => {
       chosen[select.dataset.roleFilter] = select.value;
     });
+    return chosen;
+  };
 
-    let shown = 0;
-    qsa('.gg-job-card', list).forEach(card => {
-      const visible =
-        (chosen.division === 'all' || !chosen.division || card.dataset.division === chosen.division) &&
-        (chosen.grade === 'all'    || !chosen.grade    || card.dataset.grade === chosen.grade);
-      card.hidden = !visible;
-      if (visible) shown += 1;
+  const matchesFilter = (role, chosen) =>
+    (chosen.division === 'all' || !chosen.division || role.divisionId === chosen.division) &&
+    (chosen.grade === 'all'    || !chosen.grade    || role.level === chosen.grade);
+
+  /** Hide or show cards that are already in the DOM. */
+  function applyFilterTo(cards) {
+    const chosen = chosenNow();
+    cards.forEach(card => {
+      card.hidden = !matchesFilter(
+        { divisionId: card.dataset.division, level: card.dataset.grade }, chosen);
+    });
+  }
+
+  const apply = () => {
+    const chosen = chosenNow();
+    const filtering = Object.values(chosen).some(v => v && v !== 'all');
+
+    // Counted from the data, not the DOM — a division that has never been
+    // opened has no cards to count, and it still has to filter correctly.
+    const shown = ALL_ROLES.filter(r => matchesFilter(r, chosen)).length;
+
+    groups.forEach(group => {
+      const id = group.dataset.divisionGroup;
+      const matches = ALL_ROLES.filter(r => r.divisionId === id && matchesFilter(r, chosen)).length;
+      group.hidden = matches === 0;
+
+      // A filter that appears to return nothing is worse than no filter, so a
+      // division with matches opens itself and renders them.
+      if (filtering && matches > 0) {
+        fillGroup(group);
+        group.open = true;
+      }
+      applyFilterTo(qsa('.gg-job-card', group));
+
+      const tally = qs('[data-group-matches]', group);
+      if (tally) {
+        tally.textContent = filtering ? `${matches} matching` : '';
+        tally.hidden = !filtering;
+      }
     });
 
     if (count) {
       count.textContent = shown === ALL_ROLES.length
-        ? `${ALL_ROLES.length} positions across the group`
+        ? `${ALL_ROLES.length} positions across ${groups.length} divisions`
         : `${shown} of ${ALL_ROLES.length} positions`;
     }
     if (empty) empty.hidden = shown > 0;
+    syncToggle();
   };
 
   filters?.addEventListener('change', apply);

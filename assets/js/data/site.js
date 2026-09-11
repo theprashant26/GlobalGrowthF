@@ -247,10 +247,10 @@ export const REGULATORY = {
  *
  * Only accounts that actually exist are listed. An inert icon in the footer
  * looks like a broken link, and a link to an unclaimed handle is worse — so
- * LinkedIn is absent rather than pending. Add it here when the page exists and
- * it appears in the footer and in the Organization JSON-LD at the same time.
+ * All four profiles are confirmed and live.
  */
 export const SOCIAL = [
+  { name: 'LinkedIn',  href: 'https://www.linkedin.com/company/global-growth-industries-consulting/', icon: 'linkedin' },
   { name: 'X',         href: 'https://x.com/Globalgrowth121',                   icon: 'x' },
   { name: 'YouTube',   href: 'https://www.youtube.com/@GlobalGrowthIndustries', icon: 'youtube' },
   { name: 'Instagram', href: 'https://www.instagram.com/globalgrowthindustries/', icon: 'instagram' }

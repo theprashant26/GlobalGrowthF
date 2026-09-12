@@ -5,9 +5,13 @@ be reviewed today — these are the values that must be real before launch.
 
 Each item lists **where it lives**, so supplying it is a one-line edit.
 
-Last updated after the brand-architecture and HR-structure update: 27 divisions,
-the confirmed Bengaluru registered office, certifications, and the full position,
-grade and recruitment structure are now in.
+Last updated 12 September 2026, after the vacancy notices and the compliance
+pages. 146 notices covering 40,653 posts are live across 23 divisions, and the
+seven compliance pages a payment gateway requires are built.
+
+**The four items that block the payment gateway are 1, 2, 4 and the CIN/GSTIN
+in 1.** Everything else blocks launch or improves the site, but does not stop
+the merchant application.
 
 ---
 
@@ -19,7 +23,13 @@ grade and recruitment structure are now in.
 | GSTIN | `{{GSTIN_PLACEHOLDER}}` | `BRAND.gstin` |
 | Year of incorporation | `{{INCORPORATION_YEAR_PLACEHOLDER}}` | `BRAND.incorporationYear` |
 
-The CIN appears in the footer of **every page** and on `/contact`.
+The CIN appears in the footer of **every page**, on `/contact`, and on
+`/corporate` — the page a payment gateway reads.
+
+**This blocks the merchant account, not only launch.** An acquirer matches the
+CIN and GSTIN against the company's PAN and bank account at onboarding. Until
+both are real, `/corporate` says "published once issued", which is honest but
+is not what the gateway is looking for.
 
 **Done:** registered office (2nd Floor, BMTC Complex, K.H. Road, Shanti Nagar,
 Bengaluru 560027), phone `+91 92048 04718`, all 9 department mailboxes, the logo.
@@ -217,15 +227,13 @@ health camps · solar capacity installed.
 
 ---
 
-## 8. Social profiles — LinkedIn only
+## 8. Social profiles — DONE
 
-**Done:** X, YouTube and Instagram are live in the footer and in the
-Organization structured data.
+All four are live in the footer and in the Organization structured data:
+LinkedIn, X, YouTube and Instagram.
 
-Still missing: **LinkedIn**. It is the one a corporate visitor looks for first,
-and it is absent rather than shown as a dead icon. Send the page URL and it goes
-into `assets/js/data/site.js` → `SOCIAL`; the footer and the JSON-LD pick it up
-from there together.
+LinkedIn was supplied on 11 September 2026 and is at
+`linkedin.com/company/global-growth-industries-consulting`. Nothing outstanding.
 
 ---
 
@@ -276,22 +284,65 @@ Each one was rebuilt into WebP and JPEG at three widths, so a phone downloads a
 
 ---
 
+## 11. The application fees — CONFIRM BEFORE APPLICATIONS OPEN
+
+Not a missing value. A confirmation, and it is the most consequential item on
+this page.
+
+**146 vacancy notices are live: 40,653 posts across 23 divisions, each carrying
+a fee of ₹99 to ₹299.** Summed from each notice's own fee, that is about
+**₹0.7 crore at one application per post, and about ₹7 crore at ten** — which
+is modest for advertised vacancies.
+
+The placement licence and the legal sign-off were given in September, when
+4,140 posts were published. What is live now is ten times that. **Please
+confirm both were given against a figure of this order**, and not against the
+four divisions published then.
+
+If some of these are indicative headcount plans rather than posts being
+recruited now, they should not carry fees. The site already separates the two:
+a post with a count and a fee shows as an open notice, everything else shows as
+position structure. Removing a count and a fee is a one-line change per post.
+
+Every division heading on `/careers` carries its own post count and fee range,
+so a wrong number can be spotted without opening anything.
+
+### 22 notices are deliberately not published
+
+Banking, Pharmacy, Finance and Insurance were sent with fees attached and are
+held back. They are planned divisions awaiting RBI, State Pharmacy Council,
+RBI/SEBI and IRDAI authorisation, and a vacancy notice charging an application
+fee for an unlicensed activity is the one thing this site is built not to do.
+Your own document marks these four with an asterisk.
+
+**They go live the day the licences are produced.** Send a copy of each and the
+notices publish with no other change.
+
+### A copy of the placement agency licence
+
+For the file, and because two of the refund questions on `/approvals` cannot be
+answered without it: some state licensing conditions prescribe what may be
+charged to a job-seeker and on what terms it must be returned, and those
+conditions override anything drafted here.
+
+---
+
 ## THREE THINGS TO LOOK AT BEFORE LAUNCH
 
-### 1. The leadership portraits are stock models
+### 1. The leadership cards have no photographs — resolved, but worth knowing
 
-The six portraits are stock photographs of models, not the actual directors.
+The six stock portraits were removed when the real names arrived, which is the
+right outcome: a stock model beside **Sahil Yadav, Chairman** is a false
+statement about a named individual in a way that the same model beside a
+placeholder was not.
 
-Right now that is survivable, because the names beside them are still
-`{{CHAIRMAN_NAME}}` and the rest — nothing on the page claims that a particular
-person holds a particular office. The alt text says "Placeholder portrait" for
-the same reason.
+The cards now show a lettered monogram and read as finished. Nothing is broken
+and nothing is misleading.
 
-**The moment the real names go in, this stops being a placeholder and becomes a
-false statement about a named individual.** So when you send the names, send
-either the real photographs with them, or the instruction to take the stock ones
-down — the cards fall back to a lettered monogram automatically and still look
-finished.
+**Real photographs are still wanted, and are a straight improvement rather than
+a fix.** Six files, 4:5 portrait, 1600×2000 or larger. They go in
+`assets/images/global/_masters/`, one script runs, and the cards switch from
+monogram to photograph with no other change.
 
 ### 2. The logistics photograph is Hamburg
 

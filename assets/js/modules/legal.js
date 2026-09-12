@@ -161,17 +161,22 @@ const grievanceMarkup = () => `
 /**
  * Registrations whose issuing authority is actually established.
  *
- * Two entries reached the build with the authority itself unconfirmed — the
- * client supplied "SSC" and "UGC" as bare initials. Those are not listed here.
- * A missing certificate number can be shown as "in progress" honestly, because
- * the registration is still a known thing; a missing *name* cannot, because
- * there is then no claim to qualify. The UGC entry matters most: the
- * University Grants Commission recognises degree-awarding institutions rather
- * than private limited companies, so publishing it on a compliance page a
+ * Five of the thirteen reached the build as bare initials with no issuing body
+ * named — SSC, UGC, AA, FEF and NCT. Those are not listed here. A missing
+ * certificate number can be shown as "in progress" honestly, because the
+ * registration is still a known thing; a missing *name* cannot, because there
+ * is then no claim left to qualify.
+ *
+ * Two of the five are worse than merely unnamed. "UGC" reads as the University
+ * Grants Commission, which recognises degree-awarding institutions rather than
+ * private limited companies. "SSC" reads to most Indian job-seekers as the
+ * Staff Selection Commission, a Government of India recruitment body — which
+ * is the precise misreading the careers disclaimer exists to prevent, on a site
+ * that charges job-seekers an application fee. Publishing either on a page a
  * payment gateway reads would assert something that may not be true.
  *
- * They stay in site.js with their caveats, and appear the moment the authority
- * is named.
+ * All five stay in site.js with their caveats, and appear the moment the
+ * issuing authority is named.
  */
 const namedCertifications = () => CERTIFICATIONS.filter(c => !pending(c.name));
 const unnamedCertifications = () => CERTIFICATIONS.filter(c => pending(c.name));

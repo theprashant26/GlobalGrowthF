@@ -9,9 +9,29 @@ Last updated 12 September 2026, after the vacancy notices and the compliance
 pages. 146 notices covering 40,653 posts are live across 23 divisions, and the
 seven compliance pages a payment gateway requires are built.
 
-**The four items that block the payment gateway are 1, 2, 4 and the CIN/GSTIN
-in 1.** Everything else blocks launch or improves the site, but does not stop
-the merchant application.
+**The items that block the payment gateway are 1, 4 and 11.** Everything else
+blocks launch or improves the site, but does not stop the merchant application.
+
+### Settled since the last version of this list
+
+So you can see what has come off it rather than re-reading the whole thing:
+
+| | |
+|---|---|
+| Leadership names — all six | Live on `/about` since 7 September |
+| Managing Director published as **Paresh Nath** | 11 September, as instructed |
+| LinkedIn | Live in the footer and the structured data since 11 September |
+| Vacancy notices | All 146 published — 40,653 posts across 23 divisions |
+| Refund & Cancellation Policy | Written and published at `/refund` |
+| Grievance Redressal | Published at `/grievance`, two routes |
+| Corporate Information | Published at `/corporate` |
+| Certificates & Registrations | Published at `/certificates` |
+| Stock leadership portraits | Removed — see the note at the foot |
+| All 19 supplied photographs | Processed and live |
+
+Sections 5, 8 and the portrait note below have been rewritten to match. If
+something here still reads as outstanding when you have already sent it, say
+so — it means we have missed it, not that we are waiting.
 
 ---
 
@@ -66,6 +86,16 @@ placeholders in `assets/js/data/site.js` → `CERTIFICATIONS`.
 | UGC | **see below** |
 
 *(You listed ISO twice — it is one entry.)*
+
+**Where these show now.** `/certificates` is a page of its own, because a
+payment gateway asks for one. It lists the **eight** entries whose issuing body
+is known, each with its reference or an honest "in progress". The **five**
+whose issuing body is still a bare acronym — SSC, UGC, AA, FEF, NCT — are not
+listed there at all, and the page says five are being confirmed. A missing
+number can be shown as pending; a missing *issuing authority* cannot, because
+there is then no claim left to qualify. They appear the moment you name the
+body. They do still show on `/about`, which is a group overview rather than a
+compliance page.
 
 ### Two of these need more than a number
 

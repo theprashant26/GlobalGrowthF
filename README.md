@@ -536,8 +536,29 @@ size (5 MB) — with errors announced through `aria-invalid` and
 `assets/js/modules/forms.js`, which logs its payload and returns a fake
 reference after a short delay so the pending and success states are real and
 get exercised. Replacing that one function body with a `fetch()` is the only
-change the backend needs to make in this module. `BACKEND_PROMPT.md` (produced
-in the final phase) specifies the server work.
+change the backend needs to make in this module.
+
+A form may hand off after a successful submit, via `data-form-next`. The
+application form does, to the fee payment — the application is recorded first
+and paid for second, because taking money before there is anything to attach it
+to is one of the few failures the refund policy does return.
+
+## Payment
+
+`/payment`, `/payment-status`, `/pricing` and `/service-delivery`, driven by
+`modules/payment.js` from `data/payment.js`. The gateway is Razorpay.
+
+The pages, the states and the error handling are real; `createPaymentOrder()`
+and `verifyPayment()` are seams, because a Razorpay order can only be created
+with the key secret and that must never reach a browser.
+
+What the fee covers, what it does not buy, and that it is not returned if you
+are not selected are all above the pay button, none of it behind a link. The
+amount *charged* is whatever the server put on the order — this page never
+posts its own price.
+
+`BACKEND_PROMPT.md` specifies the server work; `HANDOVER.md` covers running and
+changing the site.
 
 ## Legal pages
 

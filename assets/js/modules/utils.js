@@ -35,7 +35,10 @@ const ROOT_PAGES = new Set(['about', 'sectors', 'roadmap', 'careers', 'contact',
                             'csr', 'legal', 'styleguide', '404',
                             // the compliance notices, one page each
                             'privacy', 'terms', 'refund', 'grievance',
-                            'disclaimer', 'corporate', 'certificates']);
+                            'disclaimer', 'corporate', 'certificates',
+                            // the payment flow
+                            'payment', 'payment-status', 'pricing',
+                            'service-delivery']);
 
 /**
  * Resolve a site-absolute path ("/about", "/assets/x.css", "/aviation/") to

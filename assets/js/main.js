@@ -21,6 +21,11 @@
 
 import { onReady, prefersReducedMotion, injectSprite, qs } from './modules/utils.js';
 
+/** The application-fee flow, which shares one module. See modules/payment.js. */
+const PAYMENT_PAGES = new Set([
+  'payment', 'payment-status', 'pricing', 'service-delivery'
+]);
+
 /** The compliance notices, which share one module. See modules/legal.js. */
 const LEGAL_PAGES = new Set([
   'legal', 'privacy', 'terms', 'refund', 'grievance', 'disclaimer',
@@ -85,6 +90,7 @@ onReady(async () => {
     boot('styleguide',   () => import('./modules/styleguide.js'),   page === 'styleguide'),
     boot('approvals',    () => import('./modules/approvals.js'),    page === 'approvals'),
     boot('legal',        () => import('./modules/legal.js'),        LEGAL_PAGES.has(page)),
+    boot('payment',      () => import('./modules/payment.js'),      PAYMENT_PAGES.has(page)),
     boot('photos',       () => import('./modules/photos.js'),       Boolean(qs('[data-photo], [data-gallery]'))),
     boot('sectorGrid',   () => import('./modules/sectorGrid.js'),   Boolean(qs('[data-sector-grid]'))),
     boot('divisionPage', () => import('./modules/divisionPage.js'), Boolean(qs('[data-division]')))

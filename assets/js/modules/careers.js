@@ -177,6 +177,52 @@ const roleMarkup = role => {
 };
 
 /**
+ * Point the application form at the fee payment, but only when the chosen
+ * position actually charges one.
+ *
+ * `data-form-next` is what forms.js reads after a successful submit. It is set
+ * here rather than written into the markup because only this module knows
+ * which positions carry a fee: a speculative application and a position
+ * published as structure both charge nothing, and sending either to a payment
+ * page would ask for money against no vacancy.
+ *
+ * The submit button says what happens next for the same reason — "Submit
+ * application" on a button that opens a payment window is a dark pattern,
+ * however briefly it lasts.
+ */
+const wireFeeHandoff = select => {
+  const form = select.form;
+  if (!form) return;
+  const button = qs('[type="submit"]', form);
+  const defaultLabel = button?.innerHTML;
+  const note = qs('[data-fee-note]', form);
+
+  const update = () => {
+    const role = ALL_ROLES.find(r => r.id === select.value);
+    const chargeable = role && role.status === 'active' && isVacancy(role);
+
+    if (chargeable) {
+      form.dataset.formNext = '/payment';
+      if (button) button.innerHTML = `Continue to payment — ${rupees(role.fee)}`;
+      if (note) {
+        note.hidden = false;
+        note.textContent =
+          `This position carries a ${rupees(role.fee)} application fee. Your application ` +
+          'is recorded first, then you are taken to the payment page. Nothing is charged ' +
+          'until you confirm it there.';
+      }
+    } else {
+      delete form.dataset.formNext;
+      if (button && defaultLabel) button.innerHTML = defaultLabel;
+      if (note) { note.hidden = true; note.textContent = ''; }
+    }
+  };
+
+  select.addEventListener('change', update);
+  update();
+};
+
+/**
  * The catalogue, grouped by division.
  *
  * A flat list of every position ran to roughly 63,000 pixels and 6,000 DOM
@@ -410,15 +456,20 @@ export const init = () => {
   // The form can only offer positions in divisions that are actually
   // operating. A planned division has no vacancies to apply for.
   if (roleSelect) {
+    // The value is the role id, not the label. The fee and the vacancy live on
+    // the role, and the payment step has to find them from whatever the form
+    // submits — matching a position back from "Ticketing Executive — Aviation"
+    // would break the first time two divisions name a role the same way.
     roleSelect.innerHTML =
       '<option value="">Select a position…</option>' +
       ALL_ROLES
         .filter(role => role.status === 'active')
-        .map(role => {
-          const label = `${role.title} — ${role.division}`;
-          return `<option value="${escapeHtml(label)}">${escapeHtml(label)}</option>`;
-        }).join('') +
-      '<option value="Speculative application">Speculative — none of the above</option>';
+        .map(role => `<option value="${escapeHtml(role.id)}">${
+          escapeHtml(`${role.title} — ${role.division}`)}${
+          isVacancy(role) ? ` (${rupees(role.fee)} fee)` : ''}</option>`).join('') +
+      '<option value="speculative">Speculative — none of the above</option>';
+
+    wireFeeHandoff(roleSelect);
   }
 
   if (!list) return;

@@ -61,7 +61,13 @@ export const LEGAL_LINKS = [
   { label: 'Grievance Redressal',   href: '/grievance' },
   { label: 'Disclaimer',            href: '/disclaimer' },
   { label: 'Corporate Information', href: '/corporate' },
-  { label: 'Certificates & Registrations', href: '/certificates' }
+  { label: 'Certificates & Registrations', href: '/certificates' },
+  // Razorpay asks for a pricing page and a delivery policy by name at
+  // onboarding. Both are real pages here rather than boxes ticked: the pricing
+  // table is every fee the checkout can charge, built from the notices
+  // themselves, and the delivery policy says what the fee actually buys.
+  { label: 'Pricing',                 href: '/pricing' },
+  { label: 'Service Delivery',        href: '/service-delivery' }
 ];
 
 /**

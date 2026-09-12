@@ -620,3 +620,96 @@
   font-size: var(--fs-sm);
   color: var(--gg-grey-700);
 }
+
+/* ==========================================================================
+   APPLICATION FEE PAYMENT  (/payment, /payment-status, /pricing)
+   Money taken from job-seekers, so the amount, what it buys and what it does
+   not are set above the button rather than behind a link.
+   ========================================================================== */
+
+/* --- What you are paying for ---------------------------------------------- */
+.gg-pay-summary {
+  margin-block-start: var(--sp-6);
+  padding: var(--sp-5);
+  background: var(--gg-off);
+  border: 1px solid var(--gg-line);
+  border-radius: var(--gg-r-md);
+}
+.gg-pay-summary__amount {
+  display: grid;
+  gap: 2px;
+  margin: var(--sp-4) 0 0;
+  padding-block-start: var(--sp-4);
+  border-block-start: 1px solid var(--gg-line);
+}
+.gg-pay-summary__label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--gg-grey-700);
+}
+.gg-pay-summary__figure {
+  font-family: var(--gg-font-display);
+  font-size: var(--fs-h2);
+  font-weight: 700;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+.gg-pay-summary__note { font-size: var(--fs-sm); color: var(--gg-grey-700); }
+
+/* --- The button ----------------------------------------------------------- */
+.gg-pay-action {
+  padding: var(--sp-5);
+  border: 2px solid var(--gg-green-500);
+  border-radius: var(--gg-r-md);
+  background: var(--gg-white);
+}
+.gg-pay-action .gg-btn { inline-size: 100%; justify-content: center; }
+
+/* --- The result ----------------------------------------------------------- */
+.gg-pay-result {
+  margin-block-start: var(--sp-6);
+  padding: var(--sp-5);
+  border-radius: var(--gg-r-md);
+  border: 1px solid var(--gg-line);
+  /* Amber by default, not red: "cancelled" and "pending" are not failures, and
+     a red panel for a payment the candidate simply closed reads as an error
+     they have caused. Only a real failure earns a stronger colour. */
+  border-inline-start: 4px solid var(--gg-planned);
+  background: var(--gg-planned-soft);
+}
+.gg-pay-result.is-success {
+  border-inline-start-color: var(--gg-success);
+  background: var(--gg-success-soft);
+}
+.gg-pay-result__title {
+  font-size: var(--fs-h3);
+  font-family: var(--gg-font-display);
+  margin: 0 0 var(--sp-2);
+}
+.gg-pay-result__ref {
+  display: grid;
+  gap: 2px;
+  margin-block-start: var(--sp-4);
+  padding: var(--sp-3);
+  background: var(--gg-white);
+  border-radius: var(--gg-r-sm);
+}
+.gg-pay-result__ref-label {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--gg-grey-500);
+}
+.gg-pay-result__ref .gg-mono { font-size: var(--fs-lead); }
+
+/* --- The fee warning on the application form ------------------------------ */
+.gg-form-note--fee {
+  display: block;
+  margin-block-start: var(--sp-4);
+  padding: var(--sp-3);
+  border-inline-start: 3px solid var(--gg-planned);
+  background: var(--gg-planned-soft);
+  border-radius: var(--gg-r-sm);
+  font-size: var(--fs-sm);
+}

@@ -48,6 +48,12 @@ PAGES = [
     ('disclaimer.html',   '/disclaimer',   'Disclaimer'),
     ('corporate.html',    '/corporate',    'Corporate Information'),
     ('certificates.html', '/certificates', 'Certificates & Registrations'),
+    # The payment flow. /payment and /payment-status are steps rather than
+    # documents, but they still need a canonical and a breadcrumb.
+    ('pricing.html',          '/pricing',          'Pricing'),
+    ('service-delivery.html', '/service-delivery', 'Service Delivery Policy'),
+    ('payment.html',          '/payment',          'Application Fee Payment'),
+    ('payment-status.html',   '/payment-status',   'Payment Status'),
 ]
 for name, slug, page in DIVISIONS:
     PAGES.append((page.strip('/') + '/index.html', page.rstrip('/'), name))
@@ -169,8 +175,16 @@ today = datetime.date.today().isoformat()
 PRIORITY = {'/': '1.0', '/sectors': '0.9', '/about': '0.8', '/contact': '0.8',
             '/careers': '0.8', '/roadmap': '0.7', '/csr': '0.6', '/legal': '0.3'}
 
+# Pages that are steps rather than documents. A sitemap says "index this", so
+# listing a page that robots.txt blocks is a contradiction Search Console
+# reports. /payment means nothing without a query string naming a position, and
+# /payment-status is one candidate's receipt.
+NOT_IN_SITEMAP = {'/payment', '/payment-status'}
+
 urls = []
 for filename, path, label in PAGES:
+    if path in NOT_IN_SITEMAP:
+        continue
     if not os.path.exists(os.path.join(ROOT, filename)):
         continue
     loc = SITE + ('/' if path == '/' else path)

@@ -258,6 +258,21 @@ const wireForm = form => {
         status.focus?.();
       }
 
+      // A form may hand off somewhere once it has succeeded. The application
+      // form does, to the fee payment: the application is recorded first and
+      // paid for second, because taking money before there is anything to
+      // attach it to is how a payment ends up with no application against it —
+      // which is one of the few things the refund policy does return.
+      const next = form.dataset.formNext;
+      if (next && result.reference) {
+        const target = new URL(next, location.href);
+        target.searchParams.set('ref', result.reference);
+        const role = qs('[name="role"]', form);
+        if (role?.value) target.searchParams.set('role', role.value);
+        location.href = target.toString();
+        return;
+      }
+
       form.reset();
       qsa('.gg-field', form).forEach(field => field.classList.remove('is-error', 'is-success'));
       qsa('.gg-file', form).forEach(wrap => {

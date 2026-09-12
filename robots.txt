@@ -32,5 +32,14 @@ Disallow: /grievance
 Disallow: /disclaimer
 Disallow: /corporate
 Disallow: /certificates
+Disallow: /pricing
+Disallow: /service-delivery
+
+# The payment steps. These are never index targets — /payment is meaningless
+# without the query string naming a position, and /payment-status is one
+# candidate's receipt. They stay blocked after the legal review, unlike the
+# notices above.
+Disallow: /payment
+Disallow: /payment-status
 
 Sitemap: https://www.globalgrowthindustries.com/sitemap.xml

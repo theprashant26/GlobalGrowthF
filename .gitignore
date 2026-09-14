@@ -3,3 +3,9 @@ tools/__pycache__/
 # Written by tools/check-pages.py while it runs; removed when it finishes.
 # Listed here so an interrupted run cannot leave it staged.
 _check-harness.html
+
+# Generated for the backend repository by tools/export-backend-contract.py.
+# It belongs in that repo's git history, not this one — two copies is how a fee
+# change ends up live on the site and stale in the backend.
+/contract/
+_contract-probe.html

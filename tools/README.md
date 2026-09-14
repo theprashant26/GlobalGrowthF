@@ -18,6 +18,7 @@ them from anywhere. Only `build-images.py` has a dependency: Pillow
 | `check-pages.py` | Nothing; reports overflow, visible `{{tokens}}`, console errors and empty sections | Before every commit that touches markup, CSS or a renderer |
 | `import-vacancies.py` | JSON of the client's vacancy notices | A batch of notices arrives |
 | `merge-vacancies.py` | Splices those notices into `assets/js/data/jobs.js` | After `import-vacancies.py`, once its report looks right |
+| `export-backend-contract.py` | `contract/contract.json` for the backend repo | Whenever a batch of notices lands — the backend reads fees from it |
 
 ---
 
